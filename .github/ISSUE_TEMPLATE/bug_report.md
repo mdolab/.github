@@ -6,22 +6,12 @@ labels: bug
 assignees: ''
 
 ---
-
-## Type of issue
-What types of issue is it?
-_Select the appropriate type(s) that describe this issue_
-
-- Bugfix (non-breaking change which fixes an issue)
-- New feature (non-breaking change which adds functionality)
-- Breaking change (non-backwards-compatible fix or feature)
-- Documentation update
-- Other (please describe)
-
-
 ## Description
-A description of the issue.
+_Describe the bug here_
 
 ### Steps to reproduce issue
+_Please provide a minimum working example (MWE) if possible_
+
 1. …
 2. …
 3. …
@@ -33,7 +23,7 @@ A description of the issue.
 …
 
 
-### Code version (if relevant)
-**External dependencies:**
-
-**Internal packages:**
+### Code versions
+_List versions only if relevant_
+- Python
+- …

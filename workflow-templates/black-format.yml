@@ -1,0 +1,20 @@
+name: black format check
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  black-format:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '37', '38' ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Black Code Formatter
+      uses: lgeiger/black-action@v1.0.1
+      with:
+          args: ". --check -l 120 --target-version py${{ matrix.python-version }} --exclude '/setup.py|doc/'"

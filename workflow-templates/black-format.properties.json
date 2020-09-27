@@ -1,0 +1,5 @@
+{
+    "name": "black Formatter Check",
+    "description": "Template for performing black checks",
+    "iconName": "python-logo"
+}

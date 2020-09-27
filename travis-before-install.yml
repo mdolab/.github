@@ -9,6 +9,8 @@ before_install:
   # set compiler based on docker tag
   - if [[ "$DOCKER_TAG" == *"intel"* ]]; then
       COMPILER=intel;
+      CONFIG_MK=$INTEL_CONFIG;
     else
       COMPILER=gcc;
+      CONFIG_MK=$GCC_CONFIG
     fi

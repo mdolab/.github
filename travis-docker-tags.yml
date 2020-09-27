@@ -1,6 +1,7 @@
 env:
   global:
     - REPO_NAME=$(basename $TRAVIS_REPO_SLUG)
+    - PR_FROM=$(dirname $TRAVIS_PULL_REQUEST_SLUG)
     - DOCKER_WORKING_DIR=/home/mdolabuser/repos/$REPO_NAME
     - DOCKER_MOUNT_DIR=/home/mdolabuser/travis/$REPO_NAME
   jobs:

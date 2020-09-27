@@ -12,5 +12,5 @@ before_install:
       CONFIG_MK=$INTEL_CONFIG;
     else
       COMPILER=gcc;
-      CONFIG_MK=$GCC_CONFIG
+      CONFIG_MK=$GCC_CONFIG;
     fi

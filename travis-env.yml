@@ -1,3 +1,13 @@
+os: linux
+language: generic
+
+branches:
+  only:
+  - master
+
+services:
+  - docker
+
 env:
   global:
     - REPO_NAME=$(basename $TRAVIS_REPO_SLUG)

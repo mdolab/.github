@@ -6,3 +6,9 @@ before_install:
         --mount "type=bind,src=$(pwd),target=$DOCKER_MOUNT_DIR"
         mdolab/$DOCKER_REPO:$DOCKER_TAG
         /bin/bash
+  # set compiler based on docker tag
+  - if [[ "$DOCKER_TAG" == *"intel"* ]]; then
+      COMPILER=intel;
+    else
+      COMPILER=gcc;
+    fi

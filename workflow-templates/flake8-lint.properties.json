@@ -1,0 +1,5 @@
+{
+    "name": "flake8 Linter Check",
+    "description": "Template for performing flake8 checks",
+    "iconName": "example-icon",
+}

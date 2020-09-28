@@ -19,9 +19,14 @@ env:
     - secure: hN6aDEtuap+DSgJv112VqNiCBG+8u585lsiEZCxLasoLm8B2PuyoBIQ9BaSnkfxydTDzehR6T0IAdgtG6qgGGPM9VI8LpsWbNFjghuewM78tfiAL/83jPyoLqppOjAVEm1esZeb/KJufuLthunexUDx6DtE+Oyb1MpBFxQNJT+Rv+vi47N7aynVn7wl7kojByXwQGKX5E6osbuDOhfWPH1xeC5U9Ym/iQ4O0s4stScHAAgoUcqByFeHhdxm++mwmrAI5YSjNP/GzywUbDPQCxw4PXG0GmIK+Pk1S4a0/ulFOI2Ijk5SwMiRT+kuDazfi+Z6h8s4Hb9fEgiQ0me5zQw7qJQ4/0pDQtrA+ULygLiUf+TFQYdaYvgas0XSxGqnCoQ9eLNGVig2LJLKfEN4JMS/KilEQFpr+yUJiU7JpBvF+01sXWMV9gtEJAWnefsmxPwAsn1s/nr4sqRjVBdUndiaOAVq5YDI4mMOiXpp+4qlqCsMSq6+oEy+scI9tNP5huuOr6h4znWXQ6pe6g0+AJD3IYk+Kv7Hyu41CLT5WIjkkqNbNKEPPZBpGD6f3QHq0J18fUo0gjy8qAiranhMqsLidakE5/8qUMSggEC1xmvq+y1xIitlVQLM7LF3wjbEiJlIFHoqNYU7HT6NRnnnbsCf0Lxn5nCCZp8NFrwTLAB0=
 
   jobs:
-    - DOCKER_TAG=c7-gcc-ompi-latest
-    - DOCKER_TAG=c7-intel-impi-latest
-    - DOCKER_TAG=u18-gcc-ompi-latest
-    - DOCKER_TAG=u18-gcc-ompi-stable
-    - DOCKER_TAG=u20-gcc-ompi-latest
-    - DOCKER_TAG=u20-gcc-ompi-stable
+    include:
+      - python: 3.7
+        env: DOCKER_TAG=check PY=37
+      - python: 3.8
+        env: DOCKER_TAG=check PY=38
+      - DOCKER_TAG=c7-gcc-ompi-latest
+      - DOCKER_TAG=c7-intel-impi-latest
+      - DOCKER_TAG=u18-gcc-ompi-latest
+      - DOCKER_TAG=u18-gcc-ompi-stable
+      - DOCKER_TAG=u20-gcc-ompi-latest
+      - DOCKER_TAG=u20-gcc-ompi-stable

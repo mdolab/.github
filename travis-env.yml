@@ -9,12 +9,6 @@ services:
   - docker
 
 env:
-  - DOCKER_TAG=c7-gcc-ompi-latest
-  - DOCKER_TAG=c7-intel-impi-latest
-  - DOCKER_TAG=u18-gcc-ompi-latest
-  - DOCKER_TAG=u18-gcc-ompi-stable
-  - DOCKER_TAG=u20-gcc-ompi-latest
-  - DOCKER_TAG=u20-gcc-ompi-stable
   global:
     - REPO_NAME=$(basename $TRAVIS_REPO_SLUG)
     - PR_FROM=$(dirname $TRAVIS_PULL_REQUEST_SLUG)
@@ -24,6 +18,13 @@ env:
     - PY=38
     - secure: f1UhNbkjk5RBAIZQIrxBmdWIdpsVRJX2rMHIRSZTHGparFv8bKuOKqge/09Uni9wlUmG08K8s718YoYwgM5+yPPxlnRy3MMU0fvi0Eoane//sRdYP8PbHMdaHumENO8Q9G/TdHZCJDaNGq+tdzWLNxMC+KUEum9MK++vmnFV5+EJU3roWZS37p637V/E2pOCpO4KjcRCDEVca6XV6dp67wgNMDvKHHkT1uFk4I8bqrmQ139A8+t6jNbCaiskWed8ZILn9PEqrPN33zd9G8OKPuBDU3Fay9/mxJMDHTZnmbVEj8lLsOtQIOyp9SD7wuuuZBFN0KSVRjaCBnlB72kSqVOLiZx7zsWsjuybagdTuTbz2Et8NGZ9w+CDxBT9ZSRweC721GSYg2EtCO4hRoPlxsl1vtqA+//3sAQIL2vRqzLZkJ2NewPj3UBWMjAy9T9eFNabPBa75WJMib/rGjL0u1baw+xdgYjG00prR8vUfWOZyF1P9YCUWC7ORgFgXeB6nbxCQKC/Acs1XzeU05d2Rhqln9i7V9G7b2RAeC1M5b8NQZIRi4d94yij8yGsZyWvT3FuOmaVF6dMwQkoUa6Lo/uEwtYnS7/p6efO1cqVJ/XZH0/YVdf2qT9luqR7V8c016IEQKGmfK4EP9y9lwB71VmarOjjuL+MQFifDctYqns=
     - secure: hN6aDEtuap+DSgJv112VqNiCBG+8u585lsiEZCxLasoLm8B2PuyoBIQ9BaSnkfxydTDzehR6T0IAdgtG6qgGGPM9VI8LpsWbNFjghuewM78tfiAL/83jPyoLqppOjAVEm1esZeb/KJufuLthunexUDx6DtE+Oyb1MpBFxQNJT+Rv+vi47N7aynVn7wl7kojByXwQGKX5E6osbuDOhfWPH1xeC5U9Ym/iQ4O0s4stScHAAgoUcqByFeHhdxm++mwmrAI5YSjNP/GzywUbDPQCxw4PXG0GmIK+Pk1S4a0/ulFOI2Ijk5SwMiRT+kuDazfi+Z6h8s4Hb9fEgiQ0me5zQw7qJQ4/0pDQtrA+ULygLiUf+TFQYdaYvgas0XSxGqnCoQ9eLNGVig2LJLKfEN4JMS/KilEQFpr+yUJiU7JpBvF+01sXWMV9gtEJAWnefsmxPwAsn1s/nr4sqRjVBdUndiaOAVq5YDI4mMOiXpp+4qlqCsMSq6+oEy+scI9tNP5huuOr6h4znWXQ6pe6g0+AJD3IYk+Kv7Hyu41CLT5WIjkkqNbNKEPPZBpGD6f3QHq0J18fUo0gjy8qAiranhMqsLidakE5/8qUMSggEC1xmvq+y1xIitlVQLM7LF3wjbEiJlIFHoqNYU7HT6NRnnnbsCf0Lxn5nCCZp8NFrwTLAB0=
+  jobs:
+    - DOCKER_TAG=c7-gcc-ompi-latest
+    - DOCKER_TAG=c7-intel-impi-latest
+    - DOCKER_TAG=u18-gcc-ompi-latest
+    - DOCKER_TAG=u18-gcc-ompi-stable
+    - DOCKER_TAG=u20-gcc-ompi-latest
+    - DOCKER_TAG=u20-gcc-ompi-stable
 
 python:
   - 3.8

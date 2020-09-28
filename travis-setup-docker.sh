@@ -8,10 +8,10 @@ fi
 
 docker pull mdolab/$DOCKER_REPO:$DOCKER_TAG
 # run Docker, key is we mount the current Travis directory into Docker to access content of repo
-docker run -t -d 
-    --name app
-    --mount "type=bind,src=$(pwd),target=$DOCKER_MOUNT_DIR"
-    mdolab/$DOCKER_REPO:$DOCKER_TAG
+docker run -t -d \
+    --name app \
+    --mount "type=bind,src=$(pwd),target=$DOCKER_MOUNT_DIR" \
+    mdolab/$DOCKER_REPO:$DOCKER_TAG \
     /bin/bash
 
 # set compiler based on docker tag

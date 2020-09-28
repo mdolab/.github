@@ -1,5 +1,5 @@
 install:
   - if [[ "$DOCKER_TAG" != "check" ]]; then
       wget https://raw.githubusercontent.com/mdolab/.github/master/travis-install-package.sh;
-      sh travis-install-package.sh;
+      bash travis-install-package.sh;
     fi

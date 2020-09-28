@@ -8,6 +8,16 @@ branches:
 services:
   - docker
 
+python:
+  - 3.8
+
+jobs:
+  include:
+    - python: 3.7
+      env: DOCKER_TAG=check PY=37
+    - python: 3.8
+      env: DOCKER_TAG=check PY=38
+
 env:
   global:
     - REPO_NAME=$(basename $TRAVIS_REPO_SLUG)
@@ -25,11 +35,3 @@ env:
     - DOCKER_TAG=u18-gcc-ompi-stable
     - DOCKER_TAG=u20-gcc-ompi-latest
     - DOCKER_TAG=u20-gcc-ompi-stable
-
-python:
-  - 3.8
-
-jobs:
-  include:
-    - python: 3.7
-      env: DOCKER_TAG=check PY=37

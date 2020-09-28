@@ -1,3 +1,6 @@
+#!/bin/bash
+set -ev
+
 # Copy over the correct config file and modify as needed
 docker exec -it app /bin/bash -c ". $BASHRC && cd $DOCKER_WORKING_DIR && cp $CONFIG_MK config/config.mk";
 # compile real build

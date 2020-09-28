@@ -24,9 +24,15 @@ env:
         env: DOCKER_TAG=check PY=37
       - python: 3.8
         env: DOCKER_TAG=check PY=38
-      - env: DOCKER_TAG=c7-gcc-ompi-latest
-      - env: DOCKER_TAG=c7-intel-impi-latest
-      - env: DOCKER_TAG=u18-gcc-ompi-latest
-      - env: DOCKER_TAG=u18-gcc-ompi-stable
-      - env: DOCKER_TAG=u20-gcc-ompi-latest
-      - env: DOCKER_TAG=u20-gcc-ompi-stable
+      - python: 3.8
+        env: DOCKER_TAG=c7-gcc-ompi-latest
+      - python: 3.8
+        env: DOCKER_TAG=c7-intel-impi-latest
+      - python: 3.8
+        env: DOCKER_TAG=u18-gcc-ompi-latest
+      - python: 3.8
+        env: DOCKER_TAG=u18-gcc-ompi-stable
+      - python: 3.8
+        env: DOCKER_TAG=u20-gcc-ompi-latest
+      - python: 3.8
+        env: DOCKER_TAG=u20-gcc-ompi-stable

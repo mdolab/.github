@@ -14,8 +14,10 @@ jobs:
     - stage: Lint and Code Style Checks
       python: "3.7"
       env: TEST_TYPE=check PY=37
+      install: skip
     - python: "3.8"
       env: TEST_TYPE=check PY=38
+      install: skip
     - stage: Tests
       python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=c7-gcc-ompi-latest

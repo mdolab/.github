@@ -9,12 +9,12 @@ services:
   - docker
 
 # these are two extra jobs we run just to check formatting/linting
-jobs:
-  include:
-    - python: "3.7"
-      env: DOCKER_TAG=check PY=37
-    - python: "3.8"
-      env: DOCKER_TAG=check PY=38
+# jobs:
+#   include:
+#     - python: "3.7"
+#       env: DOCKER_TAG=check PY=37
+#     - python: "3.8"
+#       env: DOCKER_TAG=check PY=38
 
 env:
   global:

@@ -1,5 +1,5 @@
 install:
   - if [[ "$TEST_TYPE" != "check" ]]; then
-      wget https://raw.githubusercontent.com/mdolab/.github/master/travis-install-package.sh;
-      bash travis-install-package.sh;
+      wget https://raw.githubusercontent.com/mdolab/.github/master/travis/install-package.sh;
+      bash install-package.sh;
     fi

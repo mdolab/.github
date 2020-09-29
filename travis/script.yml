@@ -1,5 +1,5 @@
 script:
-  - if [[ "$DOCKER_TAG" == "check" ]]; then
+  - if [[ "$TEST_TYPE" == "check" ]]; then
         wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;
         flake8 . --count --show-source --statistics;
         black . --check -l 120 --target-version py$PY;

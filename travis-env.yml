@@ -30,7 +30,8 @@ jobs:
     - python: "3.8"
       env: DOCKER_TAG=u20-gcc-ompi-stable
   allow_failures:
-    - env: DOCKER_TAG=check
+    - env: DOCKER_TAG=check PY=37
+    - env: DOCKER_TAG=check PY=38
 
 env:
   global:

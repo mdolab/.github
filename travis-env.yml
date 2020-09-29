@@ -11,7 +11,7 @@ services:
 # these are two extra jobs we run just to check formatting/linting
 jobs:
   include:
-    - stage: Lint and Code Style
+    - stage: Lint and Code Style Checks
       python: "3.7"
       env: DOCKER_TAG=check PY=37
     - python: "3.8"
@@ -29,6 +29,8 @@ jobs:
       env: DOCKER_TAG=u20-gcc-ompi-latest
     - python: "3.8"
       env: DOCKER_TAG=u20-gcc-ompi-stable
+  allow_failures:
+    - env: DOCKER_TAG=check
 
 env:
   global:

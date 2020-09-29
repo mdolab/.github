@@ -1,5 +1,5 @@
 os: linux
-language: generic
+language: python
 
 branches:
   only:

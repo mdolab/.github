@@ -8,6 +8,7 @@ branches:
 services:
   - docker
 
+# these are two extra jobs we run just to check formatting/linting
 jobs:
   include:
     - python: "3.7"

@@ -1,6 +1,5 @@
 before_install:
   - if [[ "$DOCKER_TAG" == "check" ]]; then
-        pip -V;
         pip install flake8 black;
     else
         wget https://raw.githubusercontent.com/mdolab/.github/master/travis-setup-docker.sh;

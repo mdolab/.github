@@ -8,10 +8,7 @@ branches:
 services:
   - docker
 
-python:
-  - 3.7
-  - 3.8
-
+# these are two extra jobs we run just to check formatting/linting
 jobs:
   include:
     - stage: Lint and Code Style Checks
@@ -28,24 +25,25 @@ jobs:
       env: TEST_TYPE=black PY=38
       install: skip
     - stage: Tests
-      env: TEST_TYPE=docker 
-  exclude:
-    - python: "3.7"
-      env: TEST_TYPE=docker 
-      allow_failures:
+      python: "3.8"
+      env: TEST_TYPE=docker DOCKER_TAG=c7-gcc-ompi-latest
+    - python: "3.8"
+      env: TEST_TYPE=docker DOCKER_TAG=c7-intel-impi-latest
+    - python: "3.8"
+      env: TEST_TYPE=docker DOCKER_TAG=u18-gcc-ompi-latest
+    - python: "3.8"
+      env: TEST_TYPE=docker DOCKER_TAG=u18-gcc-ompi-stable
+    - python: "3.8"
+      env: TEST_TYPE=docker DOCKER_TAG=u20-gcc-ompi-latest
+    - python: "3.8"
+      env: TEST_TYPE=docker DOCKER_TAG=u20-gcc-ompi-stable
+  allow_failures:
     - env: TEST_TYPE=black PY=37
     - env: TEST_TYPE=flake8 PY=37
     - env: TEST_TYPE=black PY=38
     - env: TEST_TYPE=flake8 PY=38
 
 env:
-  jobs:
-    - DOCKER_TAG=c7-intel-impi-latest TEST_TYPE=docker
-    - DOCKER_TAG=c7-gcc-ompi-latest TEST_TYPE=docker
-    - DOCKER_TAG=u18-gcc-ompi-latest TEST_TYPE=docker
-    - DOCKER_TAG=u18-gcc-ompi-stable TEST_TYPE=docker
-    - DOCKER_TAG=u20-gcc-ompi-latest TEST_TYPE=docker
-    - DOCKER_TAG=u20-gcc-ompi-stable TEST_TYPE=docker
   global:
     - REPO_NAME=$(basename $TRAVIS_REPO_SLUG)
     - PR_FROM=$(dirname $TRAVIS_PULL_REQUEST_SLUG)

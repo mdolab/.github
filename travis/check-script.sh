@@ -1,5 +1,4 @@
 #!/bin/bash
-set -ev
 
 # don't download the reference flake8 config if one already exists in the repo
 if [[ ! -f ".flake8" ]]; then

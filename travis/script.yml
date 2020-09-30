@@ -1,5 +1,5 @@
 script:
   - if [[ "$TEST_TYPE" == "check" ]]; then
         wget https://raw.githubusercontent.com/mdolab/.github/master/travis/check-script.sh;
-        bash check-script.sh
+        bash check-script.sh;
     fi

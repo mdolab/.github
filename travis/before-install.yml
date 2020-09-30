@@ -1,6 +1,8 @@
 before_install:
-  - if [[ "$TEST_TYPE" == "check" ]]; then
-        pip install flake8 black;
+  - if [[ "$TEST_TYPE" == "flake8" ]]; then
+        pip install flake8;
+    elif [[ "$TEST_TYPE" == "black" ]]; then
+        pip install black;
     elif [[ "$TEST_TYPE" == "docker" ]]; then
         wget https://raw.githubusercontent.com/mdolab/.github/master/travis/setup-docker.sh;
         bash setup-docker.sh;

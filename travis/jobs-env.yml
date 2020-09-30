@@ -13,10 +13,16 @@ jobs:
   include:
     - stage: Lint and Code Style Checks
       python: "3.7"
-      env: TEST_TYPE=check PY=37
+      env: TEST_TYPE=flake8 PY=37
+      install: skip
+    - python: "3.7"
+      env: TEST_TYPE=flake8 PY=37
       install: skip
     - python: "3.8"
-      env: TEST_TYPE=check PY=38
+      env: TEST_TYPE=black PY=38
+      install: skip
+    - python: "3.8"
+      env: TEST_TYPE=black PY=38
       install: skip
     - stage: Tests
       python: "3.8"
@@ -32,8 +38,10 @@ jobs:
     - python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=u20-gcc-ompi-stable
   allow_failures:
-    - env: TEST_TYPE=check PY=37
-    - env: TEST_TYPE=check PY=38
+    - env: TEST_TYPE=black PY=37
+    - env: TEST_TYPE=flake8 PY=37
+    - env: TEST_TYPE=black PY=38
+    - env: TEST_TYPE=flake8 PY=38
 
 env:
   global:

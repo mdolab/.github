@@ -16,11 +16,11 @@ docker run -t -d \
 
 # set compiler based on docker tag
 if [[ "$DOCKER_TAG" == *"intel"* ]]; then
-    COMPILER=intel;
-    CONFIG_MK=$INTEL_CONFIG;
+    export COMPILER=intel;
+    export CONFIG_MK=$INTEL_CONFIG;
 else
-    COMPILER=gcc;
-    CONFIG_MK=$GCC_CONFIG;
+    export COMPILER=gcc;
+    export CONFIG_MK=$GCC_CONFIG;
 fi
 
 # We throw away the existing repo in Docker, and copy the new one in-place

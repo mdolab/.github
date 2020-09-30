@@ -16,10 +16,10 @@ jobs:
       env: TEST_TYPE=flake8 PY=37
       install: skip
     - python: "3.7"
-      env: TEST_TYPE=flake8 PY=37
+      env: TEST_TYPE=black PY=37
       install: skip
     - python: "3.8"
-      env: TEST_TYPE=black PY=38
+      env: TEST_TYPE=flake8 PY=38
       install: skip
     - python: "3.8"
       env: TEST_TYPE=black PY=38

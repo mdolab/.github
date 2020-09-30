@@ -2,7 +2,7 @@ script:
   - if [[ "$TEST_TYPE" == "flake8" ]]; then
         if [[ ! -f ".flake8" ]]; then
             wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;
-        fi
+        fi;
         flake8 . --count --show-source --statistics;
     elif [[ "$TEST_TYPE" == "black" ]]; then
         black . --check -l 120 --target-version py$PY;

@@ -42,11 +42,3 @@ This can be used to select the Docker repo, pulling from `public` on a PR build,
 There are also some variables defined for internal use:
 - convenience variables used by some of the other imported scripts such as `DOCKER_WORKING_DIR`, `DOCKER_MOUNT_DIR`, and `BASHRC`
 - secure Docker Hub credentials for accessing private Docker images. These are only available on "trusted" builds, i.e. those triggered by the `mdolab` organization
-
-## before_install
-
-## install
-
-## script
-
-## 

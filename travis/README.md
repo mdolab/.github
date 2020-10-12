@@ -39,6 +39,7 @@ Several other environment variables are available for use:
 - `REPO_NAME` points to the name of the repository that triggered the build
 - `PR_FROM` points to the origin of the PR. If the PR is triggered from `mdolab` then it will be set to `mdolab`, and for branch builds it will be empty.
 This can be used to select the Docker repo, pulling from `public` on a PR build, but `private` for a trusted PR build or a branch build.
+
 There are also some variables defined for internal use:
 - convenience variables used by some of the other imported scripts such as `DOCKER_WORKING_DIR`, `DOCKER_MOUNT_DIR`, and `BASHRC`
 - secure Docker Hub credentials for accessing private Docker images. These are only available on "trusted" builds, i.e. those triggered by the `mdolab` organization

@@ -39,22 +39,22 @@ jobs:
       env: TEST_TYPE=docker DOCKER_TAG=u20-gcc-ompi-stable DOCKER_TEST_TYPE=real
     - python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=c7-gcc-ompi-latest DOCKER_TEST_TYPE=complex
-      if: env(HAS_COMPLEX) = true
+      if: env(SEPARATE_COMPLEX_BUILD) = true
     - python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=c7-intel-impi-latest DOCKER_TEST_TYPE=complex
-      if: env(HAS_COMPLEX) = true
+      if: env(SEPARATE_COMPLEX_BUILD) = true
     - python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=u18-gcc-ompi-latest DOCKER_TEST_TYPE=complex
-      if: env(HAS_COMPLEX) = true
+      if: env(SEPARATE_COMPLEX_BUILD) = true
     - python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=u18-gcc-ompi-stable DOCKER_TEST_TYPE=complex
-      if: env(HAS_COMPLEX) = true
+      if: env(SEPARATE_COMPLEX_BUILD) = true
     - python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=u20-gcc-ompi-latest DOCKER_TEST_TYPE=complex
-      if: env(HAS_COMPLEX) = true
+      if: env(SEPARATE_COMPLEX_BUILD) = true
     - python: "3.8"
       env: TEST_TYPE=docker DOCKER_TAG=u20-gcc-ompi-stable DOCKER_TEST_TYPE=complex
-      if: env(HAS_COMPLEX) = true
+      if: env(SEPARATE_COMPLEX_BUILD) = true
   allow_failures:
     - env: TEST_TYPE=black PY=37
     - env: TEST_TYPE=flake8 PY=37

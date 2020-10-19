@@ -1,3 +1,10 @@
+"""
+This script will read in two files
+- .flake8
+- file name passed through the command line (FL8)
+
+It will then read in the exclude section of both flake8 files, merge them, and write it out to the FL8 file
+"""
 import configparser
 import sys
 

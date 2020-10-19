@@ -1,9 +1,11 @@
 script:
-  - if [[ "$TEST_TYPE" == "flake8" ]]; then
-        if [[ ! -f ".flake8" ]]; then
-            wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;
-        fi;
-        flake8 . --count --show-source --statistics;
+  - |
+    if [[ "$TEST_TYPE" == "flake8" ]]; then
+        if [[ -f ".flake8" ]]; then
+            mv .flake8 .flake8-project # this is from the code repo, should have higher precedence in merge
+        fi
+        wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;
+        flake8 . --append-config .flake8-project --count --show-source --statistics;
     elif [[ "$TEST_TYPE" == "black" ]]; then
         black . --check -l 120 --target-version py$PY;
     fi

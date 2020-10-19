@@ -11,7 +11,7 @@ config_prj = configparser.ConfigParser()
 config_prj.read(FL8)
 
 # add the exclude sections together
-config_prj[".flake8"]["exclude"] += config_def[".flake8"]["exclude"]
+config_prj["flake8"]["exclude"] += config_def["flake8"]["exclude"]
 # overwrite the project config with added section from default config
 with open(FL8, "w") as configfile:
     config_prj.write(configfile)

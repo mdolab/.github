@@ -2,10 +2,16 @@ script:
   - |
     if [[ "$TEST_TYPE" == "flake8" ]]; then
         if [[ -f ".flake8" ]]; then
-            mv .flake8 .flake8-project # this is from the code repo, should have higher precedence in merge
+            export $FL8 = .flake8-project
+            mv .flake8 ; # this is from the code repo, should have higher precedence in merge
         fi
         wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;
-        flake8 . --append-config .flake8-project --count --show-source --statistics;
+
+        if [[ -f "$FL8" ]]; then # combine the exclude entries from both config files
+            wget https://raw.githubusercontent.com/mdolab/.github/master/travis/combine-exclude.py;
+            python combine-exclude.py $FL8 ;
+        fi
+        flake8 . --append-config $FL8 --count --show-source --statistics;
     elif [[ "$TEST_TYPE" == "black" ]]; then
         black . --check -l 120 --target-version py$PY;
     fi

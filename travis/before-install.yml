@@ -6,7 +6,7 @@ before_install:
             export DOCKER_REPO=public;
         else
             export DOCKER_REPO=private;
-        fi"
+        fi
     fi
 
     if [[ "$TEST_TYPE" == "flake8" ]]; then

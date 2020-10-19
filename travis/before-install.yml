@@ -1,7 +1,7 @@
 before_install:
   - |
     # auto select docker repo
-    if [ $AUTO_DOCKER_REPO == "true" ]; then
+    if [ $AUTO_DOCKER_REPO == true ]; then
         if [ $PR_FROM != "mdolab" ]; then
             export DOCKER_REPO=public;
         else

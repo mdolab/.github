@@ -2,7 +2,7 @@ script:
   - |
     if [[ "$TEST_TYPE" == "flake8" ]]; then
         if [[ -f ".flake8" ]]; then
-            export $FL8=.flake8-project
+            export FL8=.flake8-project
             mv .flake8 $FL8; # this is from the code repo, should have higher precedence in merge
         fi
         wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;

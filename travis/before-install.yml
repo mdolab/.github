@@ -1,5 +1,14 @@
 before_install:
   - |
+    # auto select docker repo
+    if [ $AUTO_DOCKER_REPO == "true" ]; then
+        if [ $PR_FROM != "mdolab" ]; then
+            export DOCKER_REPO=public;
+        else
+            export DOCKER_REPO=private;
+        fi"
+    fi
+
     if [[ "$TEST_TYPE" == "flake8" ]]; then
         pip install flake8;
     elif [[ "$TEST_TYPE" == "black" ]]; then

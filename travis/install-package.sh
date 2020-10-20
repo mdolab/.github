@@ -1,9 +1,6 @@
 #!/bin/bash
 set -ev
 
-# We throw away the existing repo in Docker, and copy the new one in-place
-docker exec -it app /bin/bash -c "rm -rf $DOCKER_WORKING_DIR && cp -r $DOCKER_MOUNT_DIR $DOCKER_WORKING_DIR"
-
 # Copy over the correct config file and modify as needed
 docker exec -it app /bin/bash -c ". $BASHRC && cd $DOCKER_WORKING_DIR && cp $CONFIG_MK config/config.mk";
 

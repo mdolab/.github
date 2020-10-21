@@ -22,3 +22,8 @@ else
     export COMPILER=gcc;
     export CONFIG_MK=$GCC_CONFIG;
 fi
+
+# We throw away the existing repo in Docker, and copy the new one in-place
+if [[ $SKIP_COPY_DIR != true ]]; then
+    docker exec -it app /bin/bash -c "rm -rf $DOCKER_WORKING_DIR && cp -r $DOCKER_MOUNT_DIR $DOCKER_WORKING_DIR"
+fi

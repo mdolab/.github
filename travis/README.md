@@ -14,6 +14,12 @@ This is meant to facilitate repos that would benefit from separate real and comp
 However, even for repos with both real and complex tests, it's not necessary to use this feature, since it is not activated by default and you can simply run both real and complex tests in the same job.
 In this case, you would ignore the `DOCKER_TEST_TYPE` variable and lump both tests together.
 
+The `DOCKER_REPO` variable controls whether the Docker image is `public` or `private`.
+By default this is set to `public`, to override simply set this variable in the Travis file in the repo.
+It's also possible to have Travis automatically determine the `DOCKER_REPO` value by setting `AUTO_DOCKER_REPO=true`.
+This will set `DOCKER_REPO` to `public` if it is a PR build from another user, and `private` if it's a PR build from `mdolab` or a branch build.
+This is used by pyOptSparse which performs tests using either image depending on whether the Docker Hub credentials are available.
+
 ## How do I use this?
 These scripts are designed to be somewhat flexible in nature, configurable by selectively importing files and setting various environment variables.
 The most common use case is to have Travis trigger `black`, `flake8`, and a set of Docker builds.
@@ -33,6 +39,8 @@ For some repos, the default install step may not work.
 This could be due to having just a single `config.mk` file, or requiring a totally different process to build the code.
 In such cases, do not import the `install.yml` file, and manually define everything in the `.travis.yml` file in the specific repo.
 See cgnsUtilities and pygeo for examples.
+
+In some cases, you may also want Travis to NOT replace the existing package directory in Docker. This is the case for pyOptSparse, where the proprietary codes contained in the Docker image must be backed up prior to overwriting with the content of the build. To do this, set `SKIP_COPY_DIR=true`.
 
 ## Additional environment variables
 Several other environment variables are available for use:

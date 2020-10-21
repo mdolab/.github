@@ -10,8 +10,11 @@ script:
         if [[ -f "$FL8" ]]; then # combine the exclude entries from both config files
             wget https://raw.githubusercontent.com/mdolab/.github/master/travis/combine-exclude.py;
             python combine-exclude.py $FL8;
+            flake8 . --append-config $FL8 --count --show-source --statistics;
+        else
+            flake8 . --count --show-source --statistics;
         fi
-        flake8 . --append-config $FL8 --count --show-source --statistics;
+
     elif [[ "$TEST_TYPE" == "black" ]]; then
         black . --check -l 120 --target-version py$PY;
     fi

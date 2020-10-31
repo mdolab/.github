@@ -50,3 +50,12 @@ This can be used to select the Docker repo, pulling from `public` on a PR build,
 There are also some variables defined for internal use:
 - convenience variables used by some of the other imported scripts such as `DOCKER_WORKING_DIR`, `DOCKER_MOUNT_DIR`, and `BASHRC`
 - secure Docker Hub credentials for accessing private Docker images. These are only available on "trusted" builds, i.e. those triggered by the `mdolab` organization
+
+## Black and flake8 jobs
+These jobs are triggered separately from the Docker builds.
+Right now, they test on both Python 3.7 and 3.8.
+For black, we just pass the option `-l 120` for the maximum line length.
+For flake8, there is a set of default options in the `mdolab/.github/.flake8` file which contain the rules we check.
+If there are additional files to ignore, you can simply add another `.flake8` in the repository, and those two files will be automatically merged.
+This is done by the `combine-exclude.py` script during the `script` stage.
+Check out `script.yml` for all the logic happening there.

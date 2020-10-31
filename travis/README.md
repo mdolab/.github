@@ -56,6 +56,6 @@ These jobs are triggered separately from the Docker builds.
 Right now, they test on both Python 3.7 and 3.8.
 For black, we just pass the option `-l 120` for the maximum line length.
 For flake8, there is a set of default options in the `mdolab/.github/.flake8` file which contain the rules we check.
-If there are additional files to ignore, you can simply add another `.flake8` in the repository, and those two files will be automatically merged.
-This is done by the `combine-exclude.py` script during the `script` stage.
+If there are separate options, you can simply add another `.flake8` in the repository, which will be merged with the default `.flake8` file, such that the same named fields are overwritten.
+In particular, the `exclude` section is merged by using the `combine-exclude.py` script during the `script` stage.
 Check out `script.yml` for all the logic happening there.

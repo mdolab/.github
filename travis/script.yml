@@ -16,5 +16,5 @@ script:
         fi
 
     elif [[ "$TEST_TYPE" == "black" ]]; then
-        black . --check -l 120 --target-version py$PY;
+        black . --check --diff -l 120 --target-version py$PY;
     fi

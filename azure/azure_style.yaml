@@ -1,0 +1,37 @@
+parameters:
+- name: REPO_NAME
+  type: string
+
+jobs:
+- job: flake8
+  continueOnError: true
+  steps:
+  - checkout: self
+  - checkout: azure_template
+  - script: |
+      cd ${{ parameters.REPO_NAME }}
+      python3 -m pip install -U pip
+      pip3 install flake8
+
+      if [[ -f ".flake8" ]]; then
+        export FL8=.flake8-project
+        mv .flake8 $FL8; # rename the file from code repo; should have higher precedence in merge
+      fi
+
+      cp ../.azure/.flake8 .
+
+      if [[ -f "$FL8" ]]; then # combine the exclude entries from both config files
+          cp ../.azure/combine-exclude.py .;
+          python3 combine-exclude.py $FL8;
+          python3 -m flake8 . --append-config $FL8 --count --show-source --statistics;
+      else
+          python3 -m flake8 . --count --show-source --statistics;
+      fi
+
+- job: black
+  continueOnError: true
+  steps:
+  - script: |
+      python3 -m pip install -U pip
+      pip3 install black==20.8b1
+      python3 -m black . --check --diff -l 120

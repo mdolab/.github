@@ -1,0 +1,64 @@
+parameters:
+- name: REPO_NAME
+  type: string
+- name: COMPLEX
+  type: boolean
+  default: false
+- name: GCC_CONFIG
+  type: string
+- name: INTEL_CONFIG
+  type: string
+- name: INPUT_FILES
+  type: boolean
+  default: false
+- name: STEPS_MAKE_REAL
+  type: string
+- name: STEPS_INSTALL_REAL
+  type: string
+- name: STEPS_TEST_REAL
+  type: string
+- name: STEPS_MAKE_COMPLEX
+  type: string
+- name: STEPS_INSTALL_COMPLEX
+  type: string
+- name: STEPS_TEST_COMPLEX
+  type: string
+
+stages:
+- stage:
+  dependsOn: []
+  displayName: Test Real
+  jobs:
+  - template: azure_build.yaml
+    parameters:
+      REPO_NAME: ${{ parameters.REPO_NAME }}
+      GCC_CONFIG: ${{ parameters.GCC_CONFIG }}
+      INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
+      INPUT_FILES: ${{ parameters.INPUT_FILES }}
+      STEPS_MAKE: ${{ parameters.STEPS_MAKE_REAL }}
+      STEPS_INSTALL: ${{ parameters.STEPS_INSTALL_REAL }}
+      STEPS_TEST: ${{ parameters.STEPS_TEST_REAL }}
+
+- stage:
+  dependsOn: []
+  displayName: Test Complex
+  condition: eq(${{ parameters.COMPLEX }}, true)
+  jobs:
+  - template: azure_build.yaml
+    parameters:
+      REPO_NAME: ${{ parameters.REPO_NAME }}
+      GCC_CONFIG: ${{ parameters.GCC_CONFIG }}
+      INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
+      INPUT_FILES: ${{ parameters.INPUT_FILES }}
+      STEPS_MAKE: ${{ parameters.STEPS_MAKE_COMPLEX }}
+      STEPS_INSTALL: ${{ parameters.STEPS_INSTALL_COMPLEX }}
+      STEPS_TEST: ${{ parameters.STEPS_TEST_COMPLEX }}
+
+- stage:
+  dependsOn: []
+  displayName: Style
+  condition: eq(${{ parameters.STYLE_CHECK }}, true)
+  jobs:
+  - template: azure_style.yaml
+    parameters:
+      REPO_NAME: ${{ parameters.REPO_NAME }}

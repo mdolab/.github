@@ -57,7 +57,6 @@ stages:
 - stage:
   dependsOn: []
   displayName: Style
-  condition: eq(${{ parameters.STYLE_CHECK }}, true)
   jobs:
   - template: azure_style.yaml
     parameters:

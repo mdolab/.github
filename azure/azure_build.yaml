@@ -48,7 +48,7 @@ jobs:
     condition: eq(${{ parameters.INPUT_FILES }}, true)
     displayName: Download Input Files
   - script: |
-      if ([[ BUILD_TYPE == 'real' ]] && [ -f "Makefile" ]) || ([[ BUILD_TYPE == 'complex' ]] && [ -f "Makefile_CS" ]); then
+      if { [[ ${{ parameters.BUILD_TYPE }} == 'real' ]] && [ -f "Makefile" ]; } || { [[ ${{ parameters.BUILD_TYPE }} == 'complex' ]] && [ -f "Makefile_CS" ]; }; then
         docker exec app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && cp $(CONFIG_FILE) config/config.mk";
         docker exec app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && ${{ parameters.STEPS_MAKE }}";
       fi

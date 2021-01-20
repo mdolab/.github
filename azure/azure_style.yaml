@@ -1,6 +1,4 @@
 parameters:
-- name: REPO_NAME
-  type: string
 - name: IGNORE_STYLE
   type: boolean
 
@@ -21,7 +19,6 @@ jobs:
       versionSpec: $(PYTHON_VERSION)
   - script: |
       python3 --version
-      cd ${{ parameters.REPO_NAME }}
       python3 -m pip install -U pip
       pip3 install flake8==3.8.4
 

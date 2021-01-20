@@ -67,5 +67,4 @@ stages:
   jobs:
   - template: azure_style.yaml
     parameters:
-      REPO_NAME: ${{ parameters.REPO_NAME }}
       IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}

@@ -31,9 +31,6 @@ parameters:
 - name: STEPS_TEST_COMPLEX
   type: string
 
-pool:
-    vmImage: 'ubuntu-latest'
-
 stages:
 - stage:
   dependsOn: []

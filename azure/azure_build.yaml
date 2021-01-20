@@ -16,6 +16,8 @@ parameters:
 
 jobs:
 - job:
+  pool:
+    vmImage: 'ubuntu-latest'
   strategy:
     matrix:
       'c7-gcc-ompi-latest':

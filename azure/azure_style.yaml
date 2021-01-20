@@ -6,6 +6,8 @@ parameters:
 
 jobs:
 - job: flake8
+  pool:
+    vmImage: 'ubuntu-latest'
   continueOnError: ${{ parameters.IGNORE_STYLE }}
   strategy:
     matrix:
@@ -41,6 +43,8 @@ jobs:
       fi
 
 - job: black
+  pool:
+    vmImage: 'ubuntu-latest'
   continueOnError: ${{ parameters.IGNORE_STYLE }}
   strategy:
     matrix:

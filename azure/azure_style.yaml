@@ -43,11 +43,11 @@ jobs:
 - job: black
   continueOnError: ${{ parameters.IGNORE_STYLE }}
   strategy:
-  matrix:
-    'python37':
-      PYTHON_VERSION: '3.7'
-    'python38':
-      PYTHON_VERSION: '3.8'
+    matrix:
+      'python37':
+        PYTHON_VERSION: '3.7'
+      'python38':
+        PYTHON_VERSION: '3.8'
   steps:
   - task: UsePythonVersion@0
     inputs:

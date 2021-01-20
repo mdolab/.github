@@ -1,6 +1,9 @@
 parameters:
 - name: REPO_NAME
   type: string
+- name: IGNORE_STYLE
+  type: boolean
+  default: false
 - name: COMPLEX
   type: boolean
   default: false
@@ -13,14 +16,18 @@ parameters:
   default: false
 - name: STEPS_MAKE_REAL
   type: string
+  default: make
 - name: STEPS_INSTALL_REAL
   type: string
+  default: pip install .
 - name: STEPS_TEST_REAL
   type: string
 - name: STEPS_MAKE_COMPLEX
   type: string
+  default: make -f Makefile_CS PETSC_ARCH=complex-opt-\$COMPILERS-\$PETSCVERSION
 - name: STEPS_INSTALL_COMPLEX
   type: string
+  default: pip install .
 - name: STEPS_TEST_COMPLEX
   type: string
 

@@ -45,6 +45,7 @@ stages:
       STEPS_MAKE: ${{ parameters.STEPS_MAKE_REAL }}
       STEPS_INSTALL: ${{ parameters.STEPS_INSTALL_REAL }}
       STEPS_TEST: ${{ parameters.STEPS_TEST_REAL }}
+      BUILD_TYPE: real
 
 - stage:
   dependsOn: []
@@ -60,6 +61,7 @@ stages:
       STEPS_MAKE: ${{ parameters.STEPS_MAKE_COMPLEX }}
       STEPS_INSTALL: ${{ parameters.STEPS_INSTALL_COMPLEX }}
       STEPS_TEST: ${{ parameters.STEPS_TEST_COMPLEX }}
+      BUILD_TYPE: complex
 
 - stage:
   dependsOn: []

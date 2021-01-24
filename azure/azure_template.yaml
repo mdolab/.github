@@ -11,25 +11,18 @@ parameters:
   type: string
 - name: INTEL_CONFIG
   type: string
-- name: INPUT_FILES
-  type: boolean
-  default: false
-- name: STEPS_MAKE_REAL
+- name: BUILD_REAL
   type: string
-  default: make
-- name: STEPS_INSTALL_REAL
+  default: make_real.sh
+- name: TEST_REAL
   type: string
-  default: pip install .
-- name: STEPS_TEST_REAL
+  default: test_real.sh
+- name: BUILD_COMPLEX
   type: string
-- name: STEPS_MAKE_COMPLEX
+  default: make_complex.sh
+- name: TEST_COMPLEX
   type: string
-  default: make -f Makefile_CS PETSC_ARCH=complex-opt-\$COMPILERS-\$PETSCVERSION
-- name: STEPS_INSTALL_COMPLEX
-  type: string
-  default: pip install .
-- name: STEPS_TEST_COMPLEX
-  type: string
+  default: test_complex.sh
 
 stages:
 - stage:
@@ -41,11 +34,8 @@ stages:
       REPO_NAME: ${{ parameters.REPO_NAME }}
       GCC_CONFIG: ${{ parameters.GCC_CONFIG }}
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
-      INPUT_FILES: ${{ parameters.INPUT_FILES }}
-      STEPS_MAKE: ${{ parameters.STEPS_MAKE_REAL }}
-      STEPS_INSTALL: ${{ parameters.STEPS_INSTALL_REAL }}
-      STEPS_TEST: ${{ parameters.STEPS_TEST_REAL }}
-      BUILD_TYPE: real
+      BUILD: ${{ parameters.BUILD_REAL }}
+      TEST: ${{ parameters.TEST_REAL }}
 
 - stage:
   dependsOn: []
@@ -57,11 +47,8 @@ stages:
       REPO_NAME: ${{ parameters.REPO_NAME }}
       GCC_CONFIG: ${{ parameters.GCC_CONFIG }}
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
-      INPUT_FILES: ${{ parameters.INPUT_FILES }}
-      STEPS_MAKE: ${{ parameters.STEPS_MAKE_COMPLEX }}
-      STEPS_INSTALL: ${{ parameters.STEPS_INSTALL_COMPLEX }}
-      STEPS_TEST: ${{ parameters.STEPS_TEST_COMPLEX }}
-      BUILD_TYPE: complex
+      BUILD: ${{ parameters.BUILD_COMPLEX }}
+      TEST: ${{ parameters.TEST_COMPLEX }}
 
 - stage:
   dependsOn: []

@@ -13,16 +13,16 @@ parameters:
   type: string
 - name: BUILD_REAL
   type: string
-  default: make_real.sh
+  default: .github/build_real.sh
 - name: TEST_REAL
   type: string
-  default: test_real.sh
+  default: .github/test_real.sh
 - name: BUILD_COMPLEX
   type: string
-  default: make_complex.sh
+  default: .github/build_complex.sh
 - name: TEST_COMPLEX
   type: string
-  default: test_complex.sh
+  default: .github/test_complex.sh
 
 stages:
 - stage:

@@ -31,13 +31,16 @@ jobs:
         DOCKER_TAG: u20-gcc-ompi-stable
         CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
   variables:
-    MDOLAB_USER: /home/mdolabuser/
-    DOCKER_WORKING_DIR: ${{ variables.MDOLAB_USER }}/repos/${{ parameters.REPO_NAME }}
-    DOCKER_MOUNT_DIR: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   - group: Docker
+  - name: MDOLAB_USER
+    value: /home/mdolabuser/
+  - name: DOCKER_WORKING_DIR
+    value: ${{ variables.MDOLAB_USER }}/repos/${{ parameters.REPO_NAME }}
+  - name: DOCKER_MOUNT_DIR
+    value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
-      echo ${{ variables.DOCKER_USERNAME }}
+      echo $(DOCKER_USERNAME)
       echo ${{ variables.DOCKER_PASSWORD }}
       if [[ ${{ parameters.PRIVATE }} == true ]]; then
         echo ${{ variables.DOCKER_PASSWORD }} | docker login -u ${{ variables.DOCKER_USERNAME }} --password-stdin;

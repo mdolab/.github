@@ -23,6 +23,9 @@ parameters:
 - name: TEST_COMPLEX
   type: string
   default: .github/test_complex.sh
+- name: PRIVATE
+  type: boolean
+  default: false
 
 stages:
 - stage:
@@ -36,6 +39,7 @@ stages:
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
       BUILD: ${{ parameters.BUILD_REAL }}
       TEST: ${{ parameters.TEST_REAL }}
+      PRIVATE: ${{ parameters.PRIVATE }}
 
 - stage:
   dependsOn: []
@@ -49,6 +53,7 @@ stages:
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
       BUILD: ${{ parameters.BUILD_COMPLEX }}
       TEST: ${{ parameters.TEST_COMPLEX }}
+      PRIVATE: ${{ parameters.PRIVATE }}
 
 - stage:
   dependsOn: []

@@ -40,7 +40,7 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
-      echo $(DOCKER_USERNAME)
+      echo ${{ variables.DOCKER_USERNAME }}
       echo ${{ variables.DOCKER_PASSWORD }}
       if [[ ${{ parameters.PRIVATE }} == true ]]; then
         echo ${{ variables.DOCKER_PASSWORD }} | docker login -u ${{ variables.DOCKER_USERNAME }} --password-stdin;

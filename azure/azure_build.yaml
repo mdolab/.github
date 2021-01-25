@@ -44,9 +44,9 @@ jobs:
       echo $(DOCKER_PASSWORD)
       if [[ ${{ parameters.PRIVATE }} ]]; then
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
-        docker pull mdolab/private:$(DOCKER_TAG)
+        docker pull mdolab/private:$(DOCKER_TAG);
       else
-        docker pull mdolab/public:$(DOCKER_TAG)
+        docker pull mdolab/public:$(DOCKER_TAG);
       fi
       docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/public:$(DOCKER_TAG) /bin/bash
       docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}"

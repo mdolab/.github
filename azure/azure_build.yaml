@@ -40,10 +40,10 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
-      echo ${{ variables.DOCKER_USERNAME }}
-      echo ${{ variables.DOCKER_PASSWORD }}
-      if [[ ${{ parameters.PRIVATE }} == true ]]; then
-        echo ${{ variables.DOCKER_PASSWORD }} | docker login -u ${{ variables.DOCKER_USERNAME }} --password-stdin;
+      echo $(DOCKER_USERNAME)
+      echo $(DOCKER_PASSWORD)
+      if [[ ${{ parameters.PRIVATE }} ]]; then
+        echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
         docker pull mdolab/private:$(DOCKER_TAG)
       else
         docker pull mdolab/public:$(DOCKER_TAG)

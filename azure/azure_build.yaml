@@ -41,7 +41,7 @@ jobs:
   steps:
   - script: |
       echo ${{ parameters.PRIVATE }}
-      if [[ "${{ parameters.PRIVATE }}" == "true" ]]; then
+      if [[ "${{ parameters.PRIVATE }}" == "True" ]]; then
         echo Pulling Private Images
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
         docker pull mdolab/private:$(DOCKER_TAG);

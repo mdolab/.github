@@ -40,13 +40,13 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
-      echo $(DOCKER_USERNAME)
-      echo $(DOCKER_PASSWORD)
       if [[ ${{ parameters.PRIVATE }} == true ]]; then
+        echo Pulling Private Images
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
         docker pull mdolab/private:$(DOCKER_TAG);
         docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/private:$(DOCKER_TAG) /bin/bash;
       else
+        echo Pulling Public Images
         docker pull mdolab/public:$(DOCKER_TAG);
         docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/public:$(DOCKER_TAG) /bin/bash;
       fi

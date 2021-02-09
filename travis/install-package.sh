@@ -12,7 +12,7 @@ fi
 # compile complex build iff complex makefile exists, and either TEST_TYPE=complex OR not separate build
 # we only check the makefile in the Travis VM, no need to check in Docker
 if [[ "$SEPARATE_COMPLEX_BUILD" != true || "$DOCKER_TEST_TYPE" == "complex" ]] && [ -f "Makefile_CS" ]; then
-    docker exec -it app /bin/bash -c ". $BASHRC && cd $DOCKER_WORKING_DIR && make -f Makefile_CS PETSC_ARCH=complex-opt-\$COMPILERS-\$PETSCVERSION";
+    docker exec -it app /bin/bash -c ". $BASHRC && cd $DOCKER_WORKING_DIR && make -f Makefile_CS PETSC_ARCH=\$PETSC_ARCH_COMPLEX";
 fi
 
 # Install Python interface

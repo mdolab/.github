@@ -9,8 +9,10 @@ parameters:
   default: false
 - name: GCC_CONFIG
   type: string
+  default: empty
 - name: INTEL_CONFIG
   type: string
+  default: empty
 - name: BUILD_REAL
   type: string
   default: .github/build_real.sh

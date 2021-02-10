@@ -28,9 +28,12 @@ parameters:
 - name: PRIVATE
   type: boolean
   default: false
+- name: PYPI
+  type: boolean
+  default: false
 
 stages:
-- stage:
+- stage: Test_Real
   dependsOn: []
   displayName: Test Real
   jobs:
@@ -43,7 +46,7 @@ stages:
       TEST: ${{ parameters.TEST_REAL }}
       PRIVATE: ${{ parameters.PRIVATE }}
 
-- stage:
+- stage: Test_Complex
   dependsOn: []
   displayName: Test Complex
   condition: eq(${{ parameters.COMPLEX }}, true)
@@ -57,7 +60,7 @@ stages:
       TEST: ${{ parameters.TEST_COMPLEX }}
       PRIVATE: ${{ parameters.PRIVATE }}
 
-- stage:
+- stage: Style
   dependsOn: []
   displayName: Style
   jobs:
@@ -65,3 +68,15 @@ stages:
     parameters:
       REPO_NAME: ${{ parameters.REPO_NAME }}
       IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
+
+- stage:
+  dependsOn:
+  - Test_Real
+  - Test_Complex
+  - Style
+  displayName: PyPI
+  condition: and(succeeded(), eq(${{ parameters.PYPI }}, true))
+  jobs:
+  - job:
+    step:
+    - script: echo ${{ variables['Build.Reason'] }}

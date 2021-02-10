@@ -80,8 +80,10 @@ stages:
   - job:
     steps:
     - script: |
+        python3 --version
+        python3 -m pip install -U pip
         echo ${{ variables['Build.Reason'] }}
-        pip3 install wheel twine
+        pip3 install setuptools wheel twine
         python3 setup.py bdist_wheel
     - task: TwineAuthenticate@1
       displayName: 'Twine Authenticate'

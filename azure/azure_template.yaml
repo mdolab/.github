@@ -84,7 +84,7 @@ stages:
         pip3 install wheel twine
         python3 setup.py bdist_wheel
     - task: TwineAuthenticate@1
-        displayName: 'Twine Authenticate'
-        inputs:
-          pythonUploadServiceConnection: pypitest
+      displayName: 'Twine Authenticate'
+      inputs:
+        pythonUploadServiceConnection: pypitest
     - script: python3 -m twine upload -r "pypitest" --config-file $(PYPIRC_PATH) dist/*.whl

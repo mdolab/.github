@@ -78,5 +78,5 @@ stages:
   condition: and(succeeded(), eq(${{ parameters.PYPI }}, true))
   jobs:
   - job:
-    step:
+    steps:
     - script: echo ${{ variables['Build.Reason'] }}

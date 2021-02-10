@@ -80,3 +80,17 @@ stages:
   - job:
     steps:
     - script: echo ${{ variables['Build.Reason'] }}
+
+    # Install python distributions like wheel, twine etc
+    - script: pip3 install wheel twine
+      
+    # Build the python distribution from source
+    - script: python3 setup.py bdist_wheel
+       
+    - task: TwineAuthenticate@1
+      displayName: 'Twine Authenticate'
+      inputs:
+        pythonUploadServiceConnection: pypitest
+      
+    # Use command line script to 'twine upload', use -r to pass the repository name and --config-file to pass the environment variable set by the authenticate task.
+    - script: python3 -m twine upload -r "pypitest" --config-file $(PYPIRC_PATH) dist/*.whl

@@ -86,5 +86,5 @@ stages:
     - task: TwineAuthenticate@1
       displayName: 'Twine Authenticate'
       inputs:
-        pythonUploadServiceConnection: pypitest
-    - script: python3 -m twine upload -r "pypitest" --config-file $(PYPIRC_PATH) dist/*.whl
+        pythonUploadServiceConnection: Test_PyPI
+    - script: python3 -m twine upload -r "baseclasses" --config-file $(PYPIRC_PATH) dist/*.whl

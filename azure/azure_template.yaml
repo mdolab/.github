@@ -78,6 +78,9 @@ stages:
   condition: and(succeeded(), eq(${{ parameters.PYPI }}, true), contains(variables['build.sourceBranch'], 'tags'))
   jobs:
   - job:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.8'
     steps:
     - script: |
         python3 --version

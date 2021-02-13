@@ -58,7 +58,7 @@ stages:
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
       BUILD: ${{ parameters.BUILD_COMPLEX }}
       TEST: ${{ parameters.TEST_COMPLEX }}
-      PRIVATE: ${{ parameters.IMAGE }}
+      IMAGE: ${{ parameters.IMAGE }}
 
 - stage: Style
   dependsOn: []

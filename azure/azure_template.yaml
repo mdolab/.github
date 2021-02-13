@@ -25,9 +25,9 @@ parameters:
 - name: TEST_COMPLEX
   type: string
   default: .github/test_complex.sh
-- name: PRIVATE
-  type: boolean
-  default: false
+- name: IMAGE
+  type: string
+  default: public
 - name: PYPI
   type: boolean
   default: false
@@ -44,7 +44,7 @@ stages:
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
       BUILD: ${{ parameters.BUILD_REAL }}
       TEST: ${{ parameters.TEST_REAL }}
-      PRIVATE: ${{ parameters.PRIVATE }}
+      IMAGE: ${{ parameters.IMAGE }}
 
 - stage: Test_Complex
   dependsOn: []
@@ -58,7 +58,7 @@ stages:
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
       BUILD: ${{ parameters.BUILD_COMPLEX }}
       TEST: ${{ parameters.TEST_COMPLEX }}
-      PRIVATE: ${{ parameters.PRIVATE }}
+      PRIVATE: ${{ parameters.IMAGE }}
 
 - stage: Style
   dependsOn: []

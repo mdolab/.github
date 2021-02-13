@@ -9,8 +9,8 @@ parameters:
   type: string
 - name: TEST
   type: string
-- name: PRIVATE
-  type: boolean
+- name: IMAGE
+  type: string
 
 jobs:
 - job:
@@ -40,11 +40,11 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
-      if [[ "${{ parameters.PRIVATE }}" == "True" ]]; then
+      if [[ "${{ parameters.IMAGE }}" == "public" ]]; then
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
         docker pull mdolab/private:$(DOCKER_TAG);
         docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/private:$(DOCKER_TAG) /bin/bash;
-      else
+      elif [[ "${{ parameters.IMAGE }}" == "private" ]]; then
         docker pull mdolab/public:$(DOCKER_TAG);
         docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/public:$(DOCKER_TAG) /bin/bash;
       fi

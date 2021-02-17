@@ -56,7 +56,7 @@ jobs:
       fi
       if [[ -f "${{ parameters.PRE_BUILD }}" ]]; then
         echo in if pre_build
-        docker exec app /bin/bash -c "ls \$HOME/mdolabuser && ls \$HOME/mdolabuser/repos/ && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.PRE_BUILD }}"
+        docker exec app /bin/bash -c "ls \$HOME/ && ls \$HOME/repos/ && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.PRE_BUILD }}"
       fi
       docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}"
     displayName: Prepare Repository

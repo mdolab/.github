@@ -55,7 +55,8 @@ jobs:
         docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/public:$(DOCKER_TAG) /bin/bash;
       fi
       if [[ -f "${{ parameters.PRE_BUILD }}" ]]; then
-        docker exec app /bin/bash -c "cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.PRE_BUILD }}"
+        echo in if pre_build
+        docker exec app /bin/bash -c "ls \$HOME/mdolabuser && ls \$HOME/mdolabuser/repos/ && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.PRE_BUILD }}"
       fi
       docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}"
     displayName: Prepare Repository

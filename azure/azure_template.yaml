@@ -53,7 +53,7 @@ stages:
 - stage: Test_Complex
   dependsOn: []
   displayName: Test Complex
-  condition: and(eq(${{ parameters.COMPLEX }}, true), not(${{ parameters.SKIP_TESTS }})
+  condition: and(eq(${{ parameters.COMPLEX }}, true), not(${{ parameters.SKIP_TESTS }}))
   jobs:
   - template: azure_build.yaml
     parameters:

@@ -84,14 +84,14 @@ stages:
       REPO_NAME: ${{ parameters.REPO_NAME }}
       IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
 
-- stage:
-  dependsOn:
-  - Test_Real
-  # - Test_Complex address at later date (if needed)
-  - Style
-  displayName: PyPI
-  condition: and(succeeded(), eq(${{ parameters.PYPI }}, true), contains(variables['build.sourceBranch'], 'tags'))
-  jobs:
-  - template: azure_pypi.yaml
-    parameters:
-     REPO_NAME: ${{ parameters.REPO_NAME }}
+# - stage:
+#   dependsOn:
+#   - Test_Real
+#   # - Test_Complex address at later date (if needed)
+#   - Style
+#   displayName: PyPI
+#   condition: and(succeeded(), eq(${{ parameters.PYPI }}, true), contains(variables['build.sourceBranch'], 'tags'))
+#   jobs:
+#   - template: azure_pypi.yaml
+#     parameters:
+#      REPO_NAME: ${{ parameters.REPO_NAME }}

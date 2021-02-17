@@ -5,6 +5,8 @@ parameters:
   type: string
 - name: INTEL_CONFIG
   type: string
+- name: PRE_BUILD
+  type: string
 - name: BUILD
   type: string
 - name: TEST
@@ -43,6 +45,9 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
+      if [[ -f "${{ parameters.PRE_BUILD }}" ]]; then
+        /bin/bash ${{ parameters.PRE_BUILD }}
+      fi
       # "auto" pulls the private image if DOCKER_USERNAME is defined (trusted builds only)
       if [[ "${{ parameters.IMAGE }}" == "private" ]] || [[ "${{ parameters.IMAGE }}" == "auto" && ! -z $(DOCKER_USERNAME) ]] ; then
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;

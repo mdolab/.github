@@ -92,19 +92,6 @@ stages:
 #   displayName: PyPI
 #   condition: and(succeeded(), eq(${{ parameters.PYPI }}, true), contains(variables['build.sourceBranch'], 'tags'))
 #   jobs:
-#   - job:
-#     steps:
-#     - task: UsePythonVersion@0
-#       inputs:
-#         versionSpec: '3.8'
-#     - script: |
-#         python3 --version
-#         python3 -m pip install -U pip
-#         echo ${{ variables['Build.Reason'] }}
-#         pip3 install setuptools wheel twine
-#         python3 setup.py bdist_wheel
-#     - task: TwineAuthenticate@1
-#       displayName: 'Twine Authenticate'
-#       inputs:
-#         pythonUploadServiceConnection: Test_PyPI
-#     - script: python3 -m twine upload -r "baseclasses" --config-file $(PYPIRC_PATH) dist/*.whl
+#   - template: azure_pypi.yaml
+#     parameters:
+#      REPO_NAME: ${{ parameters.REPO_NAME }}

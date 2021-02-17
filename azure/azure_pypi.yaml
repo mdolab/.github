@@ -1,0 +1,22 @@
+parameters:
+- name: REPO_NAME
+  type: string
+
+jobs:
+- job: PyPI_Deploy
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.8'
+  - script: |
+      python3 --version
+      python3 -m pip install -U pip
+      pip3 install setuptools wheel twine
+      python3 setup.py bdist_wheel
+  - task: TwineAuthenticate@1
+    displayName: 'Twine Authenticate'
+    inputs:
+      pythonUploadServiceConnection: ${{ parameters.REPO_NAME }}
+  - script: python3 -m twine upload -r ${{ parameters.REPO_NAME }} --config-file $(PYPIRC_PATH) dist/*.whl

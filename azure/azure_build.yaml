@@ -50,7 +50,7 @@ jobs:
       fi
       docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}"
     displayName: Prepare Repository
-  - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && ${{ parameters.BUILD }}"
+  - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
     displayName: Build
-  - script: docker exec app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && ${{ parameters.TEST }}"
+  - script: docker exec app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
     displayName: Run Tests

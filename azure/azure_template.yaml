@@ -34,6 +34,9 @@ parameters:
 - name: SKIP_TESTS
   type: boolean
   default: false
+- name: TIMEOUT
+  type: number
+  default: 0
 
 stages:
 - stage: Test_Real
@@ -49,6 +52,7 @@ stages:
       BUILD: ${{ parameters.BUILD_REAL }}
       TEST: ${{ parameters.TEST_REAL }}
       IMAGE: ${{ parameters.IMAGE }}
+      TIMEOUT: ${{ parameters.TIMEOUT }}
 
 - stage: Test_Complex
   dependsOn: []
@@ -63,6 +67,7 @@ stages:
       BUILD: ${{ parameters.BUILD_COMPLEX }}
       TEST: ${{ parameters.TEST_COMPLEX }}
       IMAGE: ${{ parameters.IMAGE }}
+      TIMEOUT: ${{ parameters.TIMEOUT }}
 
 - stage: Style
   dependsOn: []

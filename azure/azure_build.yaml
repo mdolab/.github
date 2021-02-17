@@ -11,11 +11,14 @@ parameters:
   type: string
 - name: IMAGE
   type: string
+- name: TIMEOUT
+  type: number
 
 jobs:
 - job:
   pool:
     vmImage: 'ubuntu-20.04'
+  timeoutInMinutes: ${{ parameters.TIMEOUT }}
   strategy:
     matrix:
       'c7-gcc-ompi-latest':

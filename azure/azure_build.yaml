@@ -45,6 +45,7 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
+      echo $AGENT_NAME
       # "auto" pulls the private image if DOCKER_USERNAME is defined (trusted builds only)
       if [[ "${{ parameters.IMAGE }}" == "private" ]] || [[ "${{ parameters.IMAGE }}" == "auto" && ! -z $(DOCKER_USERNAME) ]] ; then
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;

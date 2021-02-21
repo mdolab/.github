@@ -45,7 +45,6 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
-      echo $AGENT_NAME
       # "auto" pulls the private image if DOCKER_USERNAME is defined (trusted builds only)
       if [[ "${{ parameters.IMAGE }}" == "private" ]] || [[ "${{ parameters.IMAGE }}" == "auto" && ! -z $(DOCKER_USERNAME) ]] ; then
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
@@ -63,5 +62,5 @@ jobs:
     displayName: Prepare Repository
   - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
     displayName: Build
-  - script: docker exec app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
+  - script: docker exec -e AGENT_NAME=$(AGENT_NAME) app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
     displayName: Run Tests

@@ -1,6 +1,7 @@
 parameters:
-- name: REPO_NAME
+- name: SERVICE_CONNECTION
   type: string
+  default: pypi
 
 jobs:
 - job: PyPI_Deploy
@@ -19,6 +20,6 @@ jobs:
   - task: TwineAuthenticate@1
     displayName: 'Twine Authenticate'
     inputs:
-      pythonUploadServiceConnection: ${{ parameters.REPO_NAME }}
+      pythonUploadServiceConnection: ${{ parameters.SERVICE_CONNECTION }}
   - script: python3 -m twine upload --config-file $(PYPIRC_PATH) dist/*.whl
     displayName: 'Twine Upload'

@@ -19,4 +19,4 @@ jobs:
     displayName: 'Twine Authenticate'
     inputs:
       pythonUploadServiceConnection: ${{ parameters.REPO_NAME }}
-  - script: python3 -m twine upload -r ${{ parameters.REPO_NAME }} --config-file $(PYPIRC_PATH) dist/*.whl
+  - script: python3 -m twine upload --config-file $(PYPIRC_PATH) dist/*.whl

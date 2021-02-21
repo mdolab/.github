@@ -15,8 +15,10 @@ jobs:
       python3 -m pip install -U pip
       pip3 install setuptools wheel twine
       python3 setup.py bdist_wheel
+    displayName: 'Install Packages'
   - task: TwineAuthenticate@1
     displayName: 'Twine Authenticate'
     inputs:
       pythonUploadServiceConnection: ${{ parameters.REPO_NAME }}
   - script: python3 -m twine upload --config-file $(PYPIRC_PATH) dist/*.whl
+    displayName: 'Twine Upload'

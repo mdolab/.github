@@ -45,9 +45,12 @@ jobs:
     value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
   steps:
   - script: |
-      # "auto" pulls the private image if DOCKER_USERNAME is defined (trusted builds only)
-      if [[ "${{ parameters.IMAGE }}" == "private" ]] || [[ "${{ parameters.IMAGE }}" == "auto" && ! -z $(DOCKER_USERNAME) ]] ; then
+      # This is a trusted build if DOCKER_USERNAME is defined
+      if [[ ! -z $(DOCKER_USERNAME) ]] ; then
         echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
+      fi
+      # "auto" pulls the private image for trusted builds
+      if [[ "${{ parameters.IMAGE }}" == "private" ]] || [[ "${{ parameters.IMAGE }}" == "auto" && ! -z $(DOCKER_USERNAME) ]] ; then
         docker pull mdolab/private:$(DOCKER_TAG);
         docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/private:$(DOCKER_TAG) /bin/bash;
       else

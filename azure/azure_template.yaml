@@ -13,9 +13,6 @@ parameters:
 - name: INTEL_CONFIG
   type: string
   default: empty
-- name: PRE_BUILD
-  type: string
-  default: .github/pre_build.sh
 - name: BUILD_REAL
   type: string
   default: .github/build_real.sh
@@ -49,7 +46,6 @@ stages:
       REPO_NAME: ${{ parameters.REPO_NAME }}
       GCC_CONFIG: ${{ parameters.GCC_CONFIG }}
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
-      PRE_BUILD: ${{ parameters.PRE_BUILD }}
       BUILD: ${{ parameters.BUILD_REAL }}
       TEST: ${{ parameters.TEST_REAL }}
       IMAGE: ${{ parameters.IMAGE }}
@@ -65,7 +61,6 @@ stages:
       REPO_NAME: ${{ parameters.REPO_NAME }}
       GCC_CONFIG: ${{ parameters.GCC_CONFIG }}
       INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
-      PRE_BUILD: ${{ parameters.PRE_BUILD }}
       BUILD: ${{ parameters.BUILD_COMPLEX }}
       TEST: ${{ parameters.TEST_COMPLEX }}
       IMAGE: ${{ parameters.IMAGE }}

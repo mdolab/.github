@@ -59,5 +59,7 @@ jobs:
     displayName: Prepare Repository
   - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
     displayName: Build
+    condition: ne(${{ parameters.BUILD }}, None)
   - script: docker exec -e AGENT_NAME="$AGENT_NAME" app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
     displayName: Run Tests
+    condition: ne(${{ parameters.TEST }}, None)

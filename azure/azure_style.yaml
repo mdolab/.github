@@ -31,7 +31,7 @@ jobs:
         mv .flake8 $FL8; # rename the file from code repo; should have higher precedence in merge
       fi
       ls -a
-      cp ../.github/.flake8 .
+      cp ../.flake8 .
 
       if [[ -f "$FL8" ]]; then # combine the exclude entries from both config files
           cp ../.github/azure/combine-exclude.py .;

@@ -8,6 +8,7 @@ Azure
 The MDOLab Azure pipelines page is found on the [Azure Website](https://dev.azure.com/mdolab/) and is split into Public and Private projects, used accordingly for public and private repositories. The pipelines for each repository can be found by selecting is parent project and then the pipelines button. Each pipline is set up using the templates located in this `.github` repository so only configuration files are needed in each repository.
 
 The templates are organized into `azure_build.yaml` which handles the build and test jobs for the code, `azure_pypi.yaml` which handles the PyPI deployment if applicable, `azure_style.yaml` which handles style-checks on the code, and `azure_template.yaml` which handles the job iteself, calling the necessary subtemplates.
+
 Template Options
 ----------------
 | Name        | Type   | Default | Description.       |

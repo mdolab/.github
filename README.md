@@ -5,9 +5,11 @@ This repo stores the following shared repository settings/configurations/templat
 
 Azure
 =====
-The MDOLab Azure pipelines page is found on the [Azure Website](https://dev.azure.com/mdolab/) and is split into Public and Private projects, used accordingly for public and private repositories. The pipelines for each repository can be found by selecting is parent project and then the pipelines button. Each pipline is set up using the templates located in this `.github` repository so only configuration files are needed in each repository.
+The MDO Lab Azure Pipelines page is found on the [Azure Website](https://dev.azure.com/mdolab/) and is split into Public and Private projects, used accordingly for public and private repositories.
+The pipelines for each repository can be found by selecting is parent project and then the pipelines button.
+Each pipline is set up using the templates located in this `.github` repository so only configuration files are needed in each repository.
 
-The templates are organized into `azure_build.yaml` which handles the build and test jobs for the code, `azure_pypi.yaml` which handles the PyPI deployment if applicable, `azure_style.yaml` which handles style-checks on the code, and `azure_template.yaml` which handles the job iteself, calling the necessary subtemplates.
+The templates are organized into `azure_build.yaml` which handles the build and test jobs for the code, `azure_pypi.yaml` which handles the PyPI deployment if applicable, `azure_style.yaml` which handles style checks on the code, and `azure_template.yaml` which handles the job iteself, calling the necessary subtemplates.
 
 Template Options
 ----------------
@@ -16,13 +18,13 @@ Template Options
 | REPO_NAME   | string |         | Name of repository |
 | IGNORE_STYLE| boolean | false| Allow black and flake8 jobs to fail without failing the pipeline |
 | COMPLEX | boolean | false | Flag for triggering complex build and tests |
-| GCC_CONFIG | string | empty | Path to gcc configuration file (from repository root) |
-| INTEL_CONFIG | string | empty | Path to intel configuration file (from repository root) |
-| BUILD_REAL | string | .github/build_real.sh | Path to bash script with commands to build real code |
-| TEST_REAL | string | .github/text_real.sh | Path to bash script to run real tests |
-| BUILD_COMPLEX | string | .github/build_complex.sh | Path to bash script with commands to build complex code |
-| TEST_COMPLEX | string | .github/text_complex.sh | Path to bash script with commands to run complex tests |
-| IMAGE | string | public | Select docker image. Can be "public", "private", or "auto" |
+| GCC_CONFIG | string | None | Path to gcc configuration file (from repository root) |
+| INTEL_CONFIG | string | None | Path to intel configuration file (from repository root) |
+| BUILD_REAL | string | .github/build_real.sh | Path to bash script with commands to build real code. Using "None" will skip this step. |
+| TEST_REAL | string | .github/text_real.sh | Path to bash script to run real tests. Using "None" will skip this step. |
+| BUILD_COMPLEX | string | .github/build_complex.sh | Path to bash script with commands to build complex code. Using "None" will skip this step. |
+| TEST_COMPLEX | string | .github/text_complex.sh | Path to bash script with commands to run complex tests. Using "None" will skip this step. |
+| IMAGE | string | public | Select docker image. Can be "public", "private", or "auto". "auto" uses the private image on trusted builds and the public image otherwise. |
 | SKIP_TESTS | boolean | false | Skip all builds and tests |
 | TIMEOUT | number | 0 (360 minutes) | Runtime allowed for a job, in minutes |
 
@@ -101,7 +103,7 @@ testflo -v . -n 1
 **Step 5: Create new Pipeline on Microsoft Azure**
 
 - Go to [Azure Pipelines](https://dev.azure.com/mdolab/) and select public / private as needed by current repository
-- Select "pipelines" and "New pipeline"
+- Select "Pipelines" and "New pipeline"
 - Select "Github" and authorize the Azure Pipeline app if you have not already
 - Select correct mdolab repository (again, not personal fork)
 - Select "Existing Azure Pipelines YAML file"
@@ -113,8 +115,8 @@ testflo -v . -n 1
 - Go to the pipeline on Azure
 - Click on the three dots next to "Run pipeline"
 - Click on "status badge"
-- Set "Branch" to "Master"
-- Copy "Sample markdown" and paste it into README
+- Set "Branch" to "master"
+- Copy the text for "Sample markdown" and paste it into README
 
 **Step 7: Create PR**
 
@@ -123,7 +125,8 @@ testflo -v . -n 1
 
 PyPI with Azure
 ---------------
-If using PyPI for a repository, the yaml file does not follow this same structure, but imports components as stages instead of as an extend. An example yaml file using PyPI is:
+If using PyPI for a repository, the yaml file does not follow this same structure, but imports components as stages instead of as an extend.
+An example yaml file using PyPI is:
 
 ```
 trigger:

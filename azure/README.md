@@ -1,36 +1,40 @@
 # Azure
 The MDO Lab Azure Pipelines page is found on the [Azure Website](https://dev.azure.com/mdolab/) and is split into Public and Private projects, used accordingly for public and private repositories.
-The pipelines for each repository can be found by selecting is parent project and then the pipelines button.
-Each pipline is set up using the templates located in this `.github` repository so only configuration files are needed in each repository.
+The pipelines for each repository can be found by selecting its parent project and then the pipelines button.
+Each pipeline is set up using the templates located in this `.github` repository so only configuration files are needed in each repository.
 
-The templates are organized into `azure_build.yaml` which handles the build and test jobs for the code, `azure_pypi.yaml` which handles the PyPI deployment if applicable, `azure_style.yaml` which handles style checks on the code, and `azure_template.yaml` which handles the job iteself, calling the necessary subtemplates.
+The templates are organized into the following files:
+- `azure_build.yaml` which handles the build and test jobs for the code
+- `azure_pypi.yaml` which handles the PyPI deployment if applicable
+- `azure_style.yaml` which handles style checks on the code
+- `azure_template.yaml` which handles the job itself, calling the necessary sub-templates.
 
 ## Template Options
 | Name        | Type   | Default | Description.       |
 | :---        | :---- | :----  |               :--- |
 | REPO_NAME   | string |         | Name of repository |
-| IGNORE_STYLE| boolean | false| Allow black and flake8 jobs to fail without failing the pipeline |
-| COMPLEX | boolean | false | Flag for triggering complex build and tests |
-| GCC_CONFIG | string | None | Path to gcc configuration file (from repository root) |
-| INTEL_CONFIG | string | None | Path to intel configuration file (from repository root) |
-| BUILD_REAL | string | .github/build_real.sh | Path to bash script with commands to build real code. Using "None" will skip this step. |
-| TEST_REAL | string | .github/text_real.sh | Path to bash script to run real tests. Using "None" will skip this step. |
-| BUILD_COMPLEX | string | .github/build_complex.sh | Path to bash script with commands to build complex code. Using "None" will skip this step. |
-| TEST_COMPLEX | string | .github/text_complex.sh | Path to bash script with commands to run complex tests. Using "None" will skip this step. |
-| IMAGE | string | public | Select docker image. Can be "public", "private", or "auto". "auto" uses the private image on trusted builds and the public image otherwise. |
-| SKIP_TESTS | boolean | false | Skip all builds and tests |
-| TIMEOUT | number | 0 (360 minutes) | Runtime allowed for a job, in minutes |
+| IGNORE_STYLE| boolean | `false`| Allow black and flake8 jobs to fail without failing the pipeline |
+| COMPLEX | boolean | `false` | Flag for triggering complex build and tests |
+| GCC_CONFIG | string | `None` | Path to gcc configuration file (from repository root) |
+| INTEL_CONFIG | string | `None` | Path to intel configuration file (from repository root) |
+| BUILD_REAL | string | `.github/build_real.sh` | Path to bash script with commands to build real code. Using "None" will skip this step. |
+| TEST_REAL | string | `.github/text_real.sh` | Path to bash script to run real tests. Using "None" will skip this step. |
+| BUILD_COMPLEX | string | `.github/build_complex.sh` | Path to bash script with commands to build complex code. Using `None` will skip this step. |
+| TEST_COMPLEX | string | `.github/text_complex.sh` | Path to bash script with commands to run complex tests. Using `None` will skip this step. |
+| IMAGE | string | `public` | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
+| SKIP_TESTS | boolean | `false` | Skip all builds and tests |
+| TIMEOUT | number | `0` (this will use the full 360 minutes) | Runtime allowed for a job, in minutes |
 
 
 ## Setting up a pipeline
 ### Step 1: Setup Azure Pipelines YAML File:
 
-- Create `azure_template.yaml` in the `.github/` directory of your repository
-- Add triggers (see example below)
+1. Create `azure_template.yaml` in the `.github/` directory of your repository
+2. Add triggers (see example below)
  	- Only set triggers for the `master` branch and pull requests to `master`
-- Add resources (see example below)
+3. Add resources (see example below)
 	- This resource pulls the `azure_template` from the `mdolab/.github` repository
-- Add parameters (see example below and the options table above)
+4. Add parameters (see example below and the options table above)
 
 ```
 trigger:
@@ -58,28 +62,28 @@ extends:
 
 ### Step 2: Write Build Bash Script:
 
-- Create `build_real.sh` in the `.github/` directory of your repository
-- Add `#!/bin/bash` followed by `set -e` as the first two lines
-- Add configuration file copy (if needed) (see example below)
-- Add make command (if needed) (see example below)
-- Add python install command (see example below)
-- Repeat with `build_complex.sh` if needed
+1. Create `build_real.sh` in the `.github/` directory of your repository
+2. Add `#!/bin/bash` followed by `set -e` as the first two lines
+3. Add configuration file copy if needed (see example below). Note that the environment variable `$CONFIG_FILE` is provided by the Azure template and is automatically set depending on the compiler used for each build.
+4. Add make command if needed (see example below)
+5. Add python install command (see example below)
+6. Repeat with `build_complex.sh` if needed
 
 ```
 #!/bin/bash
 set -e
-cp $CONFIG config/config.mk
+cp $CONFIG_FILE config/config.mk
 make
 pip install .
 ```
 
 ### Step 3: Write Test Bash Script:
 
-- Create `test_real.sh` in `.github/` directory of your repository
-- Add `#!/bin/bash` followed by `set -e` as the first two lines
-- Add input file download (if needed) (see example below)
-- Add testflo command
-- Repeat with `test_complex.sh` if needed
+1. Create `test_real.sh` in `.github/` directory of your repository
+2. Add `#!/bin/bash` followed by `set -e` as the first two lines
+3. Add input file download if needed (see example below)
+4. Add `testflo` command
+5. Repeat with `test_complex.sh` if needed
 
 ```
 #!/bin/bash
@@ -90,30 +94,30 @@ testflo -v . -n 1
 
 ### Step 4: Push branch to `mdolab/` repository and create pull request
 
-- Push branch directly to `mdolab` repository, not your personal fork
+1. Push branch directly to `mdolab` repository, not your personal fork
 
 ### Step 5: Create new Pipeline on Microsoft Azure
 
-- Go to [Azure Pipelines](https://dev.azure.com/mdolab/) and select public / private as needed by current repository
-- Select "Pipelines" and "New pipeline"
-- Select "Github" and authorize the Azure Pipeline app if you have not already
-- Select correct mdolab repository (again, not personal fork)
-- Select "Existing Azure Pipelines YAML file"
-- In pop-up menu, set "Branch" to your new Azure-transition branch and "Path" to `.github/azure-pipelines.yaml`
-- Click "continue"
+1. Go to [Azure Pipelines](https://dev.azure.com/mdolab/) and select public / private as needed by current repository
+2. Select "Pipelines" and "New pipeline"
+3. Select "Github" and authorize the Azure Pipeline app if you have not already
+4. Select correct mdolab repository (again, not personal fork)
+5. Select "Existing Azure Pipelines YAML file"
+6. In pop-up menu, set "Branch" to your new Azure-transition branch and "Path" to `.github/azure-pipelines.yaml`
+7. Click "continue"
 
 ### Step 6: Add Badge to README
 
-- Go to the pipeline on Azure
-- Click on the three dots next to "Run pipeline"
-- Click on "status badge"
-- Set "Branch" to "master"
-- Copy the text for "Sample markdown" and paste it into README
+1. Go to the pipeline on Azure
+2. Click on the three dots next to "Run pipeline"
+3. Click on "status badge"
+4. Set "Branch" to "master"
+5. Copy the text for "Sample markdown" and paste it into README
 
 ### Step 7: Create PR
 
-- Create pull request to `master`
-- Ensure the Azure jobs start and appear in the pull request
+1. Create pull request to `master`
+2. Ensure the Azure jobs start and appear in the pull request
 
 ## PyPI with Azure
 If using PyPI for a repository, the yaml file does not follow this same structure, but imports components as stages instead of as an extend.

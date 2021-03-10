@@ -12,18 +12,18 @@ The templates are organized into the following files:
 ## Template Options
 | Name        | Type   | Default | Description.       |
 | :---        | :---- | :----  |               :--- |
-| REPO_NAME   | string |         | Name of repository |
-| IGNORE_STYLE| boolean | `false`| Allow black and flake8 jobs to fail without failing the pipeline |
-| COMPLEX | boolean | `false` | Flag for triggering complex build and tests |
-| GCC_CONFIG | string | `None` | Path to gcc configuration file (from repository root) |
-| INTEL_CONFIG | string | `None` | Path to intel configuration file (from repository root) |
-| BUILD_REAL | string | `.github/build_real.sh` | Path to bash script with commands to build real code. Using "None" will skip this step. |
-| TEST_REAL | string | `.github/text_real.sh` | Path to bash script to run real tests. Using "None" will skip this step. |
-| BUILD_COMPLEX | string | `.github/build_complex.sh` | Path to bash script with commands to build complex code. Using `None` will skip this step. |
-| TEST_COMPLEX | string | `.github/text_complex.sh` | Path to bash script with commands to run complex tests. Using `None` will skip this step. |
-| IMAGE | string | `public` | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
-| SKIP_TESTS | boolean | `false` | Skip all builds and tests |
-| TIMEOUT | number | `0` (this will use the full 360 minutes) | Runtime allowed for a job, in minutes |
+| `REPO_NAME`   | string |         | Name of repository |
+| `IGNORE_STYLE`| boolean | `false`| Allow black and flake8 jobs to fail without failing the pipeline |
+| `COMPLEX` | boolean | `false` | Flag for triggering complex build and tests |
+| `GCC_CONFIG` | string | `None` | Path to gcc configuration file (from repository root) |
+| `INTEL_CONFIG` | string | `None` | Path to intel configuration file (from repository root) |
+| `BUILD_REAL` | string | `.github/build_real.sh` | Path to bash script with commands to build real code. Using "None" will skip this step. |
+| `TEST_REAL` | string | `.github/text_real.sh` | Path to bash script to run real tests. Using "None" will skip this step. |
+| `BUILD_COMPLEX` | string | `.github/build_complex.sh` | Path to bash script with commands to build complex code. Using `None` will skip this step. |
+| `TEST_COMPLEX` | string | `.github/text_complex.sh` | Path to bash script with commands to run complex tests. Using `None` will skip this step. |
+| `IMAGE` | string | `public` | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
+| `SKIP_TESTS` | boolean | `false` | Skip all builds and tests |
+| `TIMEOUT` | number | `0` (this will use the full 360 minutes) | Runtime allowed for a job, in minutes |
 
 
 ## Setting up a pipeline

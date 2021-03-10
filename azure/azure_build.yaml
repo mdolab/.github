@@ -35,14 +35,14 @@ jobs:
         CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
   variables:
   - group: Docker
-  - name: MDOLAB_USER
+  - name: MDOLAB_HOMEDIR
     value: /home/mdolabuser/
   - name: DOCKER_WORKING_DIR
-    value: ${{ variables.MDOLAB_USER }}/repos/${{ parameters.REPO_NAME }}
+    value: ${{ variables.MDOLAB_HOMEDIR }}/repos/${{ parameters.REPO_NAME }}
   - name: DOCKER_MOUNT_DIR
-    value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
+    value: ${{ variables.MDOLAB_HOMEDIR }}/azure/${{ parameters.REPO_NAME }}
   - name: BASHRC
-    value: \$HOME/.bashrc_mdolab
+    value: ${{ variables.MDOLAB_HOMEDIR }}.bashrc_mdolab
   steps:
   - script: |
       # This is a trusted build if DOCKER_USERNAME is defined

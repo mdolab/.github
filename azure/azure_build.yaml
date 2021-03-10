@@ -49,12 +49,12 @@ jobs:
       fi
       # "auto" pulls the private image for trusted builds
       if [[ "${{ parameters.IMAGE }}" == "private" ]] || [[ "${{ parameters.IMAGE }}" == "auto" && ! -z $(DOCKER_USERNAME) ]] ; then
-        docker pull mdolab/private:$(DOCKER_TAG);
-        docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/private:$(DOCKER_TAG) /bin/bash;
+        export DOCKER_REPO=private
       else
-        docker pull mdolab/public:$(DOCKER_TAG);
-        docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/public:$(DOCKER_TAG) /bin/bash;
+        export DOCKER_REPO=public
       fi
+      docker pull mdolab/$DOCKER_REPO:$(DOCKER_TAG);
+      docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/$DOCKER_REPO:$(DOCKER_TAG) /bin/bash;
       docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}"
     displayName: Prepare Repository
   - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"

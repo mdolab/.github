@@ -17,8 +17,8 @@ The templates are organized into the following files:
 | `COMPLEX` | boolean | `false` | Flag for triggering complex build and tests |
 | `GCC_CONFIG` | string | `None` | Path to gcc configuration file (from repository root) |
 | `INTEL_CONFIG` | string | `None` | Path to intel configuration file (from repository root) |
-| `BUILD_REAL` | string | `.github/build_real.sh` | Path to bash script with commands to build real code. Using "None" will skip this step. |
-| `TEST_REAL` | string | `.github/text_real.sh` | Path to bash script to run real tests. Using "None" will skip this step. |
+| `BUILD_REAL` | string | `.github/build_real.sh` | Path to bash script with commands to build real code. Using `None` will skip this step. |
+| `TEST_REAL` | string | `.github/text_real.sh` | Path to bash script to run real tests. Using `None` will skip this step. |
 | `BUILD_COMPLEX` | string | `.github/build_complex.sh` | Path to bash script with commands to build complex code. Using `None` will skip this step. |
 | `TEST_COMPLEX` | string | `.github/text_complex.sh` | Path to bash script with commands to run complex tests. Using `None` will skip this step. |
 | `IMAGE` | string | `public` | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |

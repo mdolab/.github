@@ -35,12 +35,14 @@ jobs:
         CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
   variables:
   - group: Docker
-  - name: MDOLAB_USER
-    value: /home/mdolabuser/
+  - name: MDOLAB_HOMEDIR
+    value: /home/mdolabuser
   - name: DOCKER_WORKING_DIR
-    value: ${{ variables.MDOLAB_USER }}/repos/${{ parameters.REPO_NAME }}
+    value: ${{ variables.MDOLAB_HOMEDIR }}/repos/${{ parameters.REPO_NAME }}
   - name: DOCKER_MOUNT_DIR
-    value: ${{ variables.MDOLAB_USER }}/azure/${{ parameters.REPO_NAME }}
+    value: ${{ variables.MDOLAB_HOMEDIR }}/azure/${{ parameters.REPO_NAME }}
+  - name: BASHRC
+    value: ${{ variables.MDOLAB_HOMEDIR }}/.bashrc_mdolab
   steps:
   - script: |
       # This is a trusted build if DOCKER_USERNAME is defined
@@ -49,17 +51,17 @@ jobs:
       fi
       # "auto" pulls the private image for trusted builds
       if [[ "${{ parameters.IMAGE }}" == "private" ]] || [[ "${{ parameters.IMAGE }}" == "auto" && ! -z $(DOCKER_USERNAME) ]] ; then
-        docker pull mdolab/private:$(DOCKER_TAG);
-        docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/private:$(DOCKER_TAG) /bin/bash;
+        export DOCKER_REPO=private;
       else
-        docker pull mdolab/public:$(DOCKER_TAG);
-        docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/public:$(DOCKER_TAG) /bin/bash;
+        export DOCKER_REPO=public;
       fi
+      docker pull mdolab/$DOCKER_REPO:$(DOCKER_TAG);
+      docker run -t -d --name app --mount "type=bind,src=$(pwd),target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/$DOCKER_REPO:$(DOCKER_TAG) /bin/bash;
       docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}"
     displayName: Prepare Repository
-  - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
+  - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
     displayName: Build
     condition: ne('${{ parameters.BUILD }}', 'None')
-  - script: docker exec -e AGENT_NAME="$AGENT_NAME" app /bin/bash -c ". \$HOME/.bashrc_mdolab && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
+  - script: docker exec -e AGENT_NAME="$AGENT_NAME" app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
     displayName: Run Tests
     condition: ne('${{ parameters.TEST }}', 'None')

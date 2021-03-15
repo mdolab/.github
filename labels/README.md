@@ -1,6 +1,6 @@
 # Shared labels
 This directory stores scripts and definitions of shared labels for all lab repositories, which can be applied to issues and PRs.
-The script can be used to set the same labels, including description and colours, across the organization to ensure consistency.
+The script can be used to set the same labels (defined at `labels.yaml`, including description and colours, across the organization to ensure consistency.
 
 ## Using the script
 First install dependencies.
@@ -11,7 +11,8 @@ In order to authenticate with GitHub, two things must be done:
 1. Use `gh auth` to authenticate with the CLI tool
 2. Generate a PAT with write access for the organization, and save it in the environment variable `$GITHUB_TOKEN`
 
-Now you can run `bash apply-labels.sh` which will set _all_ repos to have the same set of labels defined in `labels.yaml`.
+Now you can run `bash apply-labels.sh` which will perform a _dry run_, showing what it would have done.
+To actually set the labels, run `APPLY=true bash apply-labels.sh` which will set _all_ repos to have the same set of labels defined in `labels.yaml`.
 
 ## How does it work?
 This is a 3 step process:

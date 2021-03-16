@@ -3,3 +3,4 @@ This repo stores the following shared repository settings/configurations/templat
 - Issue and pull request templates on GitHub
 - Shared flake8 settings
 - Shared configurations for Azure Pipelines
+- Issue/PR labels shared across the organization

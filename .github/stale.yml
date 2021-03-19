@@ -6,5 +6,19 @@ daysUntilClose: false
 exemptLabels:
   - bug
 
+# Set to true to ignore issues in a project (defaults to false)
+exemptProjects: true
+
 # Label to use when marking as stale
 # staleLabel: stale
+
+# Optionally, specify configuration settings that are specific to just 'issues' or 'pulls':
+# pulls:
+#   daysUntilStale: 30
+#   markComment: >
+#     This pull request has been automatically marked as stale because it has not had
+#     recent activity. It will be closed if no further activity occurs. Thank you
+#     for your contributions.
+
+issues:
+  daysUntilStale: 600

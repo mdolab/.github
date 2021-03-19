@@ -1,3 +1,6 @@
+# Number of days of inactivity before an Issue or Pull Request becomes stale
+daysUntilStale: 180
+
 # Number of days of inactivity before an Issue or Pull Request with the stale label is closed.
 # Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
 daysUntilClose: false
@@ -20,5 +23,5 @@ staleLabel: stale
 #     recent activity. It will be closed if no further activity occurs. Thank you
 #     for your contributions.
 
-issues:
-  daysUntilStale: 600
+# issues:
+#   daysUntilStale: 600

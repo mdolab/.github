@@ -10,7 +10,7 @@ exemptLabels:
 exemptProjects: true
 
 # Label to use when marking as stale
-# staleLabel: stale
+staleLabel: stale
 
 # Optionally, specify configuration settings that are specific to just 'issues' or 'pulls':
 # pulls:

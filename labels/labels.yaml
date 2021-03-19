@@ -36,3 +36,6 @@
 - name: "installation"
   color: 2b64a9
   description: "This is related to installation of the package"
+- name: "stale"
+  color: ffffff
+  description: "*crickets chirp*"

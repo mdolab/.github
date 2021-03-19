@@ -9,9 +9,6 @@ daysUntilClose: false
 exemptLabels:
   - bug
 
-# Set to true to ignore issues in a project (defaults to false)
-exemptProjects: true
-
 # Label to use when marking as stale
 staleLabel: stale
 

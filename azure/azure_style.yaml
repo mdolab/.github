@@ -47,7 +47,7 @@ jobs:
   steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: 3.8
+      versionSpec: '3.8'
   - script: |
       cd ${{ parameters.REPO_NAME }}
       pip install black==20.8b1

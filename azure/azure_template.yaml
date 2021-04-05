@@ -4,6 +4,9 @@ parameters:
   - name: IGNORE_STYLE
     type: boolean
     default: false
+  - name: IGNORE_ISORT
+    type: boolean
+    default: true
   - name: COMPLEX
     type: boolean
     default: false
@@ -75,3 +78,4 @@ stages:
         parameters:
           REPO_NAME: ${{ parameters.REPO_NAME }}
           IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
+          IGNORE_ISORT: ${{ parameters.IGNORE_ISORT }}

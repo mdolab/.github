@@ -69,6 +69,4 @@ jobs:
           cd ${{ parameters.REPO_NAME }}
           cp ../.github/.isort.cfg .
           pip install isort
-          ls -a
-          isort --show-config
           isort . -c

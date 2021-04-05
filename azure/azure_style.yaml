@@ -56,8 +56,10 @@ jobs:
   - job: isort
     pool:
       vmImage: "ubuntu-20.04"
-    continueOnError: ${{ parameters.IGNORE_ISORT }}
+    condition: not(${{ parameters.IGNORE_ISORT }})
     steps:
+      - checkout: self
+      - checkout: azure_template
       - task: UsePythonVersion@0
         inputs:
           versionSpec: "3.8"

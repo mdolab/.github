@@ -3,6 +3,8 @@ parameters:
     type: string
   - name: IGNORE_STYLE
     type: boolean
+  - name: IGNORE_ISORT
+    type: boolean
 
 jobs:
   - job: flake8

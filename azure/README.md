@@ -25,6 +25,7 @@ The templates are organized into the following files:
 | `IMAGE` | string | `public` | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
 | `SKIP_TESTS` | boolean | `false` | Skip all builds and tests |
 | `TIMEOUT` | number | `0` (this will use the full 360 minutes) | Runtime allowed for a job, in minutes |
+| `COVERAGE` | boolean | `false` | Flag to report test coverage to `codecov` |
 
 
 ## Setting up a pipeline

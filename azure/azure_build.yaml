@@ -13,6 +13,8 @@ parameters:
     type: string
   - name: TIMEOUT
     type: number
+  - name: COVERAGE
+    type: boolean
 
 jobs:
   - job:
@@ -65,3 +67,7 @@ jobs:
       - script: docker exec -e AGENT_NAME="$AGENT_NAME" app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
         displayName: Run Tests
         condition: ne('${{ parameters.TEST }}', 'None')
+      - script: |
+          ci_env=`bash <(curl -s https://codecov.io/env)`
+          docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
+        condition: ${{ parameters.COVERAGE }}

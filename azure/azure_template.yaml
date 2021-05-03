@@ -37,6 +37,9 @@ parameters:
   - name: TIMEOUT
     type: number
     default: 0
+  - name: COVERAGE
+    type: boolean
+    default: false
 
 stages:
   - stage: Test_Real
@@ -53,6 +56,7 @@ stages:
           TEST: ${{ parameters.TEST_REAL }}
           IMAGE: ${{ parameters.IMAGE }}
           TIMEOUT: ${{ parameters.TIMEOUT }}
+          COVERAGE: ${{ parameters.COVERAGE }}
 
   - stage: Test_Complex
     dependsOn: []
@@ -68,6 +72,7 @@ stages:
           TEST: ${{ parameters.TEST_COMPLEX }}
           IMAGE: ${{ parameters.IMAGE }}
           TIMEOUT: ${{ parameters.TIMEOUT }}
+          COVERAGE: ${{ parameters.COVERAGE }}
 
   - stage: Style
     dependsOn: []

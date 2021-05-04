@@ -68,7 +68,16 @@ jobs:
         displayName: Run Tests
         condition: ne('${{ parameters.TEST }}', 'None')
       - script: |
+          # validate bash script
+          curl -fLso codecov https://codecov.io/bash;
+          VERSION=$(grep -o 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
+          for i in 1 256 512
+          do
+            shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM")
+          done
+          # get the environment variable script to pass to Docker
           ci_env=`bash <(curl -s https://codecov.io/env)`
+          # run codecov inside Docker
           docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

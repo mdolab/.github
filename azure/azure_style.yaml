@@ -4,9 +4,9 @@ parameters:
   - name: IGNORE_STYLE
     type: boolean
     default: false
-  - name: IGNORE_ISORT
+  - name: ISORT
     type: boolean
-    default: true
+    default: false
 
 jobs:
   - job: flake8
@@ -60,7 +60,7 @@ jobs:
   - job: isort
     pool:
       vmImage: "ubuntu-20.04"
-    condition: not(${{ parameters.IGNORE_ISORT }})
+    condition: ${{ parameters.ISORT }}
     steps:
       - checkout: self
       - checkout: azure_template

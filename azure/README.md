@@ -14,7 +14,7 @@ The templates are organized into the following files:
 | :---        | :---- | :----  |               :--- |
 | `REPO_NAME`   | string |         | Name of repository |
 | `IGNORE_STYLE`| boolean | `false`| Allow black and flake8 jobs to fail without failing the pipeline |
-| `IGNORE_ISORT`| boolean | `true`| Skips the `isort` jobs |
+| `ISORT`| boolean | `false`| Runs the `isort` jobs if `true` |
 | `COMPLEX` | boolean | `false` | Flag for triggering complex build and tests |
 | `GCC_CONFIG` | string | `None` | Path to gcc configuration file (from repository root) |
 | `INTEL_CONFIG` | string | `None` | Path to intel configuration file (from repository root) |

@@ -71,3 +71,4 @@ jobs:
           ci_env=`bash <(curl -s https://codecov.io/env)`
           docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
         condition: ${{ parameters.COVERAGE }}
+        displayName: Coverage

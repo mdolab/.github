@@ -3,8 +3,10 @@ parameters:
     type: string
   - name: IGNORE_STYLE
     type: boolean
+    default: false # these defaults are here because the template could be used by repos directly
   - name: ISORT
     type: boolean
+    default: false # these defaults are here because the template could be used by repos directly
 
 jobs:
   - job: flake8

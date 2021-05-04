@@ -3,10 +3,8 @@ parameters:
     type: string
   - name: IGNORE_STYLE
     type: boolean
-    default: false
   - name: ISORT
     type: boolean
-    default: false
 
 jobs:
   - job: flake8

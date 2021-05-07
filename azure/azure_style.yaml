@@ -67,6 +67,11 @@ jobs:
           versionSpec: "3.8"
       - script: |
           cd ${{ parameters.REPO_NAME }}
-          cp ../.github/.isort.cfg .
+
+          # copy over the isort config file
+          if [[ ! -f ".isort.cfg" ]]; then
+            cp ../.github/.isort.cfg .
+          fi
+
           pip install isort
           isort . -c

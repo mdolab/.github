@@ -36,9 +36,7 @@ jobs:
 
           cp ../.github/.flake8 .
 
-          if [[ -f "$FL8" ]]; then # combine the exclude entries from both config files
-              cp ../.github/azure/combine-exclude.py .;
-              python combine-exclude.py $FL8;
+          if [[ -f "$FL8" ]]; then
               python -m flake8 . --append-config $FL8 --count --show-source --statistics;
           else
               python -m flake8 . --count --show-source --statistics;

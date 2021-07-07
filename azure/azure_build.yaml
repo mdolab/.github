@@ -23,9 +23,6 @@ jobs:
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     strategy:
       matrix:
-        "c7-gcc-ompi-latest":
-          DOCKER_TAG: c7-gcc-ompi-latest
-          CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
         "c7-intel-impi-latest":
           DOCKER_TAG: c7-intel-impi-latest
           CONFIG_FILE: ${{ parameters.INTEL_CONFIG }}

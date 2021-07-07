@@ -32,6 +32,9 @@ jobs:
         "u20-gcc-ompi-stable":
           DOCKER_TAG: u20-gcc-ompi-stable
           CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
+        "tacc-u18-gcc-impi-stable":
+          DOCKER_TAG: tacc-u18-gcc-impi-stable
+          CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
     variables:
       - group: Docker
       - name: MDOLAB_HOMEDIR

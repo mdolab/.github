@@ -3,3 +3,9 @@ codecov:
 
 fixes:
   - "/home/mdolabuser/repos/::"
+
+coverage:
+  status:
+    project:
+      default:
+        threshold: 5%

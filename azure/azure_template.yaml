@@ -40,6 +40,12 @@ parameters:
   - name: COVERAGE
     type: boolean
     default: false
+  - name: TAPENADE
+    type: boolean
+    default: false
+  - name: TAPENADE_SCRIPT
+    type: string
+    default: .github/tapenade.sh
 
 stages:
   - stage: Test_Real

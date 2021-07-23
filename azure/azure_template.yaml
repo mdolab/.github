@@ -90,3 +90,14 @@ stages:
           REPO_NAME: ${{ parameters.REPO_NAME }}
           IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
           ISORT: ${{ parameters.ISORT }}
+
+  - stage: Tapenade
+    dependsOn: []
+    displayName: Style
+    condition: not(${{ parameters.SKIP_TESTS }})
+    jobs:
+      - template: azure_style.yaml
+        parameters:
+          REPO_NAME: ${{ parameters.REPO_NAME }}
+          TAPENADE: ${{ parameters.TAPENADE }}
+          TAPENADE_SCRIPT: ${{ parameters.TAPENADE_SCRIPT }}

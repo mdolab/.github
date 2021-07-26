@@ -9,6 +9,8 @@ parameters:
     default: false # these defaults are here because the template could be used by repos directly
   - name: TAPENADE
     type: boolean
+  - name: TAPENADE_Version
+    type: string
   - name: TAPENADE_SCRIPT
     type: string
 
@@ -92,9 +94,14 @@ jobs:
           jdkArchitectureOption: "x86"
           jdkSourceOption: "PreInstalled"
       - script: |
-          wget http://www-sop.inria.fr/ecuador/tapenade/distrib/tapenade_3.16.tar
-          tar -xzf tapenade_3.16.tar
-          export PATH=$PATH:$(pwd)/tapenade_3.16/bin
+          if [[ "${{ parameters.TAPENADE_VERSION }}" == "3.10" ]]; then
+            wget http://umich.edu/~mdolaboratory/misc/tapenade3.10.tar
+          elif [[ "${{ parameters.TAPENADE_VERSION }}" == "3.16" ]]; then
+            wget http://www-sop.inria.fr/ecuador/tapenade/distrib/tapenade_3.16.tar
+          fi
+
+          tar -xzf tapenade_${{ parameters.TAPENADE_VERSION }}.tar
+          export PATH=$PATH:$(pwd)/tapenade_${{ parameters.TAPENADE_VERSION }}/bin
 
           cd ${{ parameters.REPO_NAME }}
           bash ${{ parameters.TAPENADE_SCRIPT }}

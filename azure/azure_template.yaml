@@ -46,6 +46,9 @@ parameters:
   - name: TAPENADE_SCRIPT
     type: string
     default: .github/tapenade.sh
+  - name: TAPENADE_VERSION
+    type: string
+    default: 3.10
 
 stages:
   - stage: Test_Real

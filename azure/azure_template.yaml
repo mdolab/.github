@@ -45,7 +45,7 @@ parameters:
     default: false
   - name: TAPENADE_SCRIPT
     type: string
-    default: .github/tapenade.sh
+    default: .github/build_tapenade.sh
   - name: TAPENADE_VERSION
     type: string
     default: 3.10

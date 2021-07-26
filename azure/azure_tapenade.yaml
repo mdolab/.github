@@ -20,7 +20,7 @@ jobs:
       - checkout: azure_template
       - task: JavaToolInstaller@0
         inputs:
-          versionSpec: "8"
+          versionSpec: "11"
           jdkArchitectureOption: "x86"
           jdkSourceOption: "PreInstalled"
       - script: |

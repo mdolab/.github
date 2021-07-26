@@ -40,11 +40,20 @@ parameters:
   - name: COVERAGE
     type: boolean
     default: false
+  - name: TAPENADE
+    type: boolean
+    default: false
+  - name: TAPENADE_SCRIPT
+    type: string
+    default: .github/tapenade.sh
+  - name: TAPENADE_VERSION
+    type: string
+    default: 3.10
 
 stages:
   - stage: Test_Real
     dependsOn: []
-    displayName: Test Real
+    displayName: Real Test
     condition: not(${{ parameters.SKIP_TESTS }})
     jobs:
       - template: azure_build.yaml
@@ -60,7 +69,7 @@ stages:
 
   - stage: Test_Complex
     dependsOn: []
-    displayName: Test Complex
+    displayName: Complex Test
     condition: and(eq(${{ parameters.COMPLEX }}, true), not(${{ parameters.SKIP_TESTS }}))
     jobs:
       - template: azure_build.yaml
@@ -76,7 +85,7 @@ stages:
 
   - stage: Style
     dependsOn: []
-    displayName: Style
+    displayName: Style Checks
     condition: not(${{ parameters.SKIP_TESTS }})
     jobs:
       - template: azure_style.yaml
@@ -84,3 +93,15 @@ stages:
           REPO_NAME: ${{ parameters.REPO_NAME }}
           IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
           ISORT: ${{ parameters.ISORT }}
+
+  - stage: Tapenade
+    dependsOn: []
+    displayName: Tapenade Checks
+    condition: not(${{ parameters.SKIP_TESTS }})
+    jobs:
+      - template: azure_tapenade.yaml
+        parameters:
+          REPO_NAME: ${{ parameters.REPO_NAME }}
+          TAPENADE: ${{ parameters.TAPENADE }}
+          TAPENADE_SCRIPT: ${{ parameters.TAPENADE_SCRIPT }}
+          TAPENADE_VERSION: ${{ parameters.TAPENADE_VERSION }}

@@ -95,13 +95,16 @@ jobs:
           jdkSourceOption: "PreInstalled"
       - script: |
           if [[ "${{ parameters.TAPENADE_VERSION }}" == "3.10" ]]; then
-            wget http://umich.edu/~mdolaboratory/misc/tapenade3.10.tar
+            export TAPENADE_URL=http://umich.edu/~mdolaboratory/misc/tapenade3.10.tar
+            export TAPENADE_HOME=$(pwd)/tapenade${{ parameters.TAPENADE_VERSION }}/bin
           elif [[ "${{ parameters.TAPENADE_VERSION }}" == "3.16" ]]; then
-            wget http://www-sop.inria.fr/ecuador/tapenade/distrib/tapenade_3.16.tar
+            export TAPENADE_URL=http://www-sop.inria.fr/ecuador/tapenade/distrib/tapenade_3.16.tar
+            export TAPENADE_HOME=$(pwd)/tapenade_${{ parameters.TAPENADE_VERSION }}/bin
           fi
 
+          wget $TAPENADE_URL
           tar -xzf tapenade_${{ parameters.TAPENADE_VERSION }}.tar
-          export PATH=$PATH:$(pwd)/tapenade_${{ parameters.TAPENADE_VERSION }}/bin
+          export PATH=$TAPENADE_HOME/bin:$PATH
 
           cd ${{ parameters.REPO_NAME }}
           bash ${{ parameters.TAPENADE_SCRIPT }}

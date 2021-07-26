@@ -35,7 +35,7 @@ jobs:
           wget $TAPENADE_URL
           tar -xzf tapenade_${{ parameters.TAPENADE_VERSION }}.tar
           export PATH=$TAPENADE_HOME/bin:$PATH
-
+          ls && pwd
           cd ${{ parameters.REPO_NAME }}
           bash ${{ parameters.TAPENADE_SCRIPT }}
           git diff --exit-code

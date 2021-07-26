@@ -7,12 +7,6 @@ parameters:
   - name: ISORT
     type: boolean
     default: false # these defaults are here because the template could be used by repos directly
-  - name: TAPENADE
-    type: boolean
-  - name: TAPENADE_Version
-    type: string
-  - name: TAPENADE_SCRIPT
-    type: string
 
 jobs:
   - job: flake8
@@ -81,31 +75,3 @@ jobs:
 
           pip install isort
           isort . -c
-
-  - job: tapenade
-    pool:
-      vmImage: "ubuntu-20.04"
-    condition: ${{ parameters.TAPENADE }}
-    steps:
-      - checkout: azure_template
-      - task: JavaToolInstaller@0
-        inputs:
-          versionSpec: "8"
-          jdkArchitectureOption: "x86"
-          jdkSourceOption: "PreInstalled"
-      - script: |
-          if [[ "${{ parameters.TAPENADE_VERSION }}" == "3.10" ]]; then
-            export TAPENADE_URL=http://umich.edu/~mdolaboratory/misc/tapenade3.10.tar
-            export TAPENADE_HOME=$(pwd)/tapenade${{ parameters.TAPENADE_VERSION }}/bin
-          elif [[ "${{ parameters.TAPENADE_VERSION }}" == "3.16" ]]; then
-            export TAPENADE_URL=http://www-sop.inria.fr/ecuador/tapenade/distrib/tapenade_3.16.tar
-            export TAPENADE_HOME=$(pwd)/tapenade_${{ parameters.TAPENADE_VERSION }}/bin
-          fi
-
-          wget $TAPENADE_URL
-          tar -xzf tapenade_${{ parameters.TAPENADE_VERSION }}.tar
-          export PATH=$TAPENADE_HOME/bin:$PATH
-
-          cd ${{ parameters.REPO_NAME }}
-          bash ${{ parameters.TAPENADE_SCRIPT }}
-          git diff --exit-code

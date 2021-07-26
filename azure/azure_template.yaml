@@ -53,7 +53,7 @@ parameters:
 stages:
   - stage: Test_Real
     dependsOn: []
-    displayName: Test Real
+    displayName: Real Test
     condition: not(${{ parameters.SKIP_TESTS }})
     jobs:
       - template: azure_build.yaml
@@ -69,7 +69,7 @@ stages:
 
   - stage: Test_Complex
     dependsOn: []
-    displayName: Test Complex
+    displayName: Complex Test
     condition: and(eq(${{ parameters.COMPLEX }}, true), not(${{ parameters.SKIP_TESTS }}))
     jobs:
       - template: azure_build.yaml
@@ -85,7 +85,7 @@ stages:
 
   - stage: Style
     dependsOn: []
-    displayName: Style
+    displayName: Style Checks
     condition: not(${{ parameters.SKIP_TESTS }})
     jobs:
       - template: azure_style.yaml
@@ -96,11 +96,12 @@ stages:
 
   - stage: Tapenade
     dependsOn: []
-    displayName: Style
+    displayName: Tapenade Checks
     condition: not(${{ parameters.SKIP_TESTS }})
     jobs:
-      - template: azure_style.yaml
+      - template: azure_tapenade.yaml
         parameters:
           REPO_NAME: ${{ parameters.REPO_NAME }}
           TAPENADE: ${{ parameters.TAPENADE }}
           TAPENADE_SCRIPT: ${{ parameters.TAPENADE_SCRIPT }}
+          TAPENADE_VERSION: ${{ parameters.TAPENADE_VERSION }}

@@ -1,4 +1,6 @@
 parameters:
+  - name: REPO_NAME
+    type: string
   - name: TAPENADE
     type: boolean
     default: false

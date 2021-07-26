@@ -80,7 +80,7 @@ jobs:
           pip install isort
           isort . -c
 
-- job: tapenade
+  - job: tapenade
     pool:
       vmImage: "ubuntu-20.04"
     condition: ${{ parameters.TAPENADE }}
@@ -88,9 +88,9 @@ jobs:
       - checkout: azure_template
       - task: JavaToolInstaller@0
         inputs:
-          versionSpec: '8'
-          jdkArchitectureOption: 'x86'
-          jdkSourceOption: 'PreInstalled'
+          versionSpec: "8"
+          jdkArchitectureOption: "x86"
+          jdkSourceOption: "PreInstalled"
       - script: |
           wget http://www-sop.inria.fr/ecuador/tapenade/distrib/tapenade_3.16.tar
           tar -xzf tapenade_3.16.tar

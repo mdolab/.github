@@ -11,6 +11,7 @@ fi
 sudo apt-get update && upgrade
 sudo apt-get install openssh-server
 sudo apt-get install vim
+sudo apt-get install cmake build-essential
 
 ### Install Docker
 sudo apt-get install \

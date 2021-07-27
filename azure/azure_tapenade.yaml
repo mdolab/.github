@@ -37,5 +37,6 @@ jobs:
           export PATH=$TAPENADE_HOME/bin:$PATH
 
           cd ${{ parameters.REPO_NAME }}
+          ls -a && pwd
           bash ${{ parameters.TAPENADE_SCRIPT }}
           git diff --exit-code

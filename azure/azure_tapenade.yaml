@@ -37,5 +37,6 @@ jobs:
           export PATH=$TAPENADE_HOME/bin:$PATH
 
           # Run Tapenade
+          cp ${{ parameters.GCC_CONFIG }} config.mk # not used for Tapenade but needed to run make
           bash ${{ parameters.TAPENADE_SCRIPT }}
           git diff --exit-code

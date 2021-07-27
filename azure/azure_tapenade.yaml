@@ -25,10 +25,10 @@ jobs:
       - script: |
           if [[ "${{ parameters.TAPENADE_VERSION }}" == "3.10" ]]; then
             export TAPENADE_URL=http://umich.edu/~mdolaboratory/misc/tapenade3.10.tar
-            export TAPENADE_HOME=$(pwd)/tapenade${{ parameters.TAPENADE_VERSION }}/bin
+            export TAPENADE_HOME=$(pwd)/tapenade${{ parameters.TAPENADE_VERSION }}
           elif [[ "${{ parameters.TAPENADE_VERSION }}" == "3.16" ]]; then
             export TAPENADE_URL=http://www-sop.inria.fr/ecuador/tapenade/distrib/tapenade_3.16.tar
-            export TAPENADE_HOME=$(pwd)/tapenade_${{ parameters.TAPENADE_VERSION }}/bin
+            export TAPENADE_HOME=$(pwd)/tapenade_${{ parameters.TAPENADE_VERSION }}
           fi
 
           # Install Tapenade

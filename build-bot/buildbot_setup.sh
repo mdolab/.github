@@ -8,7 +8,7 @@ else
 fi
 
 ### Base packages installation
-sudo apt-get update && sudo apt-get upgrade
+sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get install openssh-server vim cmake build-essential
 
 ### Install Docker

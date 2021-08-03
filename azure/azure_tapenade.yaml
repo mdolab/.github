@@ -33,7 +33,7 @@ jobs:
 
           # Install Tapenade
           wget $TAPENADE_URL
-          tar -xzf tapenade_${{ parameters.TAPENADE_VERSION }}.tar
+          tar -xzf $TAPENADE_HOME.tar
           export PATH=$TAPENADE_HOME/bin:$PATH
 
           # Run Tapenade

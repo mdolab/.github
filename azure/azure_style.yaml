@@ -52,7 +52,7 @@ jobs:
           versionSpec: "3.8"
       - script: |
           cd ${{ parameters.REPO_NAME }}
-          pip install black==21.6b0
+          pip install -r ../.github/black-requirements.txt
           black . --check --diff -l 120 --target-version py37 --target-version py38
 
   - job: isort

@@ -4,4 +4,4 @@ flake8-comprehensions
 flake8-docstrings
 flake8-return
 flake8_builtins
-rst-docstrings
+flake8-rst-docstrings

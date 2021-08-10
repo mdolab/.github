@@ -12,7 +12,7 @@ sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get install openssh-server vim cmake build-essential
 
 ### Install Docker
-sudo apt-get install \
+sudo apt-get install -yq \
     apt-transport-https \
     ca-certificates \
     curl \
@@ -25,7 +25,7 @@ echo \
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 # add docker to the sudo group
-sudo groupadd docker
+sudo groupadd docker -f
 sudo usermod -aG docker $USER
 newgrp docker
 # test that docker works

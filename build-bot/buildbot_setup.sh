@@ -5,6 +5,7 @@ if [ "$1" != "" ]; then
     TOKEN=$1
 else
     echo "Enter GitHub token as positional argument"
+    exit 1
 fi
 
 ### Base packages installation

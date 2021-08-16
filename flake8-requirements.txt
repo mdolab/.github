@@ -2,5 +2,5 @@ flake8==3.9.2
 flake8-bugbear
 flake8-comprehensions
 flake8-docstrings
-flake8_builtins
+flake8-builtins
 flake8-rst-docstrings

@@ -22,6 +22,7 @@ select =
     C4,  # flake8-comprehensions
     #D,  # pydocstyle
     RST, # flake8-rst-docstrings
+    N400,# flake8-broken-line
 
 # flake8-docstrings
 docstring-convention = numpy

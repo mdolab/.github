@@ -4,3 +4,4 @@ flake8-comprehensions
 flake8-docstrings
 flake8-builtins
 flake8-rst-docstrings
+flake8-broken-line

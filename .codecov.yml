@@ -3,7 +3,7 @@ codecov:
 
 fixes:
   - "/home/mdolabuser/repos/::"
-  - "*/site-packages/::"
+  - "**/site-packages/::"
 
 coverage:
   status:

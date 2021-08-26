@@ -1,0 +1,7 @@
+flake8==3.9.2
+flake8-bugbear
+flake8-builtins
+flake8-docstrings
+flake8-rst-docstrings
+# flake8-comprehensions
+# flake8-broken-line

@@ -27,7 +27,7 @@ jobs:
           versionSpec: $(PYTHON_VERSION)
       - script: |
           cd ${{ parameters.REPO_NAME }}
-          pip install flake8==3.9.2
+          pip install -r ../.github/flake8-requirements.txt
 
           if [[ -f ".flake8" ]]; then
             export FL8=.flake8-project

@@ -17,8 +17,8 @@ jobs:
       matrix:
         "python37":
           PYTHON_VERSION: "3.7"
-        "python38":
-          PYTHON_VERSION: "3.8"
+        "python39":
+          PYTHON_VERSION: "3.9"
     steps:
       - checkout: self
       - checkout: azure_template
@@ -49,11 +49,11 @@ jobs:
     steps:
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.8"
+          versionSpec: "3.9"
       - script: |
           cd ${{ parameters.REPO_NAME }}
           pip install black==21.6b0
-          black . --check --diff -l 120 --target-version py37 --target-version py38
+          black . --check --diff -l 120 --target-version py37 --target-version py38 --target-version py39
 
   - job: isort
     pool:
@@ -64,7 +64,7 @@ jobs:
       - checkout: azure_template
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.8"
+          versionSpec: "3.9"
       - script: |
           cd ${{ parameters.REPO_NAME }}
 

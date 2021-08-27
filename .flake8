@@ -5,6 +5,7 @@ extend-ignore =
     E203, # black
     E266, # too many leading '#' for block comment
     E302, # expected 2 blank lines, found 1
+    B006, # do not use mutable data structures for argument defaults (too many false positives)
     # TODO: to be fixed:
     W605, # invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
     E501, # line length, exceeded by some docstrings

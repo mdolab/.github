@@ -35,7 +35,7 @@ rst-roles =
     meth,
 
 # mccabe complexity
-max-complexity = 10
+# max-complexity = 10
 
 # ignored files/directories
 exclude =

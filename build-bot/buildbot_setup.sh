@@ -36,13 +36,13 @@ sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 # add docker to the sudo group
 sudo groupadd docker -f
 sudo usermod -aG docker $USER
-newgrp docker <<BLAH
+
 echo ""
 echo ""
 echo ""
 echo "Testing that docker works"
 # test that docker works
-docker run hello-world
+sudo docker run hello-world
 if [ $? -ne 0 ]; then
     echo "Docker was not installed correctly"
     exit 1
@@ -55,7 +55,7 @@ echo ""
 echo "Enabling docker service"
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
-BLAH
+
 echo ""
 echo ""
 echo ""
@@ -92,3 +92,4 @@ echo ""
 echo ""
 echo ""
 echo "SETUP COMPLETE"
+newgrp docker

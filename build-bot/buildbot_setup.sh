@@ -36,7 +36,7 @@ sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 # add docker to the sudo group
 sudo groupadd docker -f
 sudo usermod -aG docker $USER
-newgrp docker
+newgrp docker <<BLAH
 echo ""
 echo ""
 echo ""
@@ -55,6 +55,7 @@ echo ""
 echo "Enabling docker service"
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
+BLAH
 echo ""
 echo ""
 echo ""

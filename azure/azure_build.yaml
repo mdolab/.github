@@ -50,11 +50,11 @@ jobs:
       - checkout: self
       - checkout: azure_template
       - script: |
-          # Copy the common Codecov configuration file if none exists
-          if [[ ! -f "${{ parameters.REPO_NAME }}/.codecov.yml" ]]; then
-            cp .github/.codecov.yml ${{ parameters.REPO_NAME }}
+          echo "Printing list of environment variable names"
+          awk 'BEGIN{for(v in ENVIRON) print v}'
+          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
+            echo "codecov token found!"
           fi
-
           # This is a trusted build if DOCKER_USERNAME is defined
           if [[ ! -z $(DOCKER_USERNAME) ]] ; then
             echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
@@ -76,9 +76,6 @@ jobs:
         displayName: Run Tests
         condition: ne('${{ parameters.TEST }}', 'None')
       - script: |
-          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
-            echo "codecov token found!"
-          fi
           # validate bash script
           curl -fLso codecov https://codecov.io/bash;
           VERSION=$(grep -o 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);

@@ -50,11 +50,6 @@ jobs:
       - checkout: self
       - checkout: azure_template
       - script: |
-          echo "Printing list of environment variable names"
-          awk 'BEGIN{for(v in ENVIRON) print v}'
-          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
-            echo "codecov token found!"
-          fi
           # This is a trusted build if DOCKER_USERNAME is defined
           if [[ ! -z $(DOCKER_USERNAME) ]] ; then
             echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin;
@@ -85,7 +80,12 @@ jobs:
           done
           # get the environment variable script to pass to Docker
           ci_env=`bash <(curl -s https://codecov.io/env)`
+          # grab the token
+          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
+            export CODECOV_TOKEN=$(${{ parameters.REPO_NAME }}_CODECOV_TOKEN)
+            echo "codecov token found!"
+          fi
           # run codecov inside Docker
-          docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
+          docker exec $ci_env -e CI=true -e CODECOV_TOKEN="$CODECOV_TOKEN" app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

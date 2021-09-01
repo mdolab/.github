@@ -37,6 +37,7 @@ jobs:
           CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
     variables:
       - group: Docker
+      - group: Codecov
       - name: MDOLAB_HOMEDIR
         value: /home/mdolabuser
       - name: DOCKER_WORKING_DIR
@@ -75,6 +76,9 @@ jobs:
         displayName: Run Tests
         condition: ne('${{ parameters.TEST }}', 'None')
       - script: |
+          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
+            echo "codecov token found!"
+          fi
           # validate bash script
           curl -fLso codecov https://codecov.io/bash;
           VERSION=$(grep -o 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);

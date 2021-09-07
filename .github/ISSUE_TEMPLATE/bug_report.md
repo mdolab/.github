@@ -7,11 +7,12 @@ assignees: ''
 
 ---
 
+<!-- Please search on GitHub first to see if anyone else has already opened the same issue -->
 ## Description
-_Describe the bug here_
+<!-- Describe the bug here -->
 
 ### Steps to reproduce issue
-_Please provide a minimum working example (MWE) if possible_
+<!-- Please provide a minimum working example (MWE) if possible -->
 
 1. …
 2. …
@@ -25,6 +26,10 @@ _Please provide a minimum working example (MWE) if possible_
 
 
 ### Code versions
-_List versions only if relevant_
-- Python
-- …
+<!-- List any relevant versions here -->
+- Operating System: 
+- Python: 
+- OpenMPI: 
+- CGNS: 
+- PETSc: 
+- This software: 

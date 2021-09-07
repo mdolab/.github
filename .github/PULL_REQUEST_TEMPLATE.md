@@ -1,9 +1,15 @@
 ## Purpose
-Explain the goal of this PR, if it addresses an existing issue be sure to link to it. Describe the big picture of your changes here, perhaps using a bullet list if multiple changes are done to accomplish a single goal. If it accomplishes multiple goals, it may be best to create separate PR's for each. 
+<!--
+Explain the goal of this PR, if it addresses an existing issue be sure to link to it.
+Describe the big picture of your changes here, perhaps using a bullet list if multiple changes are done to accomplish a single goal.
+If this PR accomplishes multiple goals, it may be best to create separate PR's for each.
+-->
 
 ## Type of change
+<!--
 What types of change is it?
-_Select the appropriate type(s) that describe this PR_
+Select the appropriate type(s) that describe this PR
+-->
 
 - [ ] Bugfix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
@@ -15,10 +21,10 @@ _Select the appropriate type(s) that describe this PR_
 - [ ] Other (please describe)
 
 ## Testing
-Explain the steps needed to test the new code to verify that it does indeed address the issue and produce the expected behavior.
+<!-- Explain the steps needed to test the new code to verify that it does indeed address the issue and produce the expected behavior. -->
 
 ## Checklist
-_Put an `x` in the boxes that apply._
+<!-- Put an `x` in the boxes that apply. -->
 
 - [ ] I have run `flake8` and `black` to make sure the code adheres to PEP-8 and is consistently formatted
 - [ ] I have run unit and regression tests which pass locally with my changes

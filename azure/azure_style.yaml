@@ -27,6 +27,7 @@ jobs:
           versionSpec: $(PYTHON_VERSION)
       - script: |
           cd ${{ parameters.REPO_NAME }}
+          pip install wheel
           pip install -r ../.github/flake8-requirements.txt
 
           if [[ -f ".flake8" ]]; then
@@ -37,9 +38,9 @@ jobs:
           cp ../.github/.flake8 .
 
           if [[ -f "$FL8" ]]; then
-              python -m flake8 . --append-config $FL8 --count --show-source --statistics;
+              flake8 . --append-config $FL8 --count --show-source --statistics;
           else
-              python -m flake8 . --count --show-source --statistics;
+              flake8 . --count --show-source --statistics;
           fi
 
   - job: black
@@ -52,6 +53,7 @@ jobs:
           versionSpec: "3.9"
       - script: |
           cd ${{ parameters.REPO_NAME }}
+          pip install wheel
           pip install black==21.6b0
           black . --check --diff -l 120 --target-version py37 --target-version py38 --target-version py39
 
@@ -73,5 +75,6 @@ jobs:
             cp ../.github/.isort.cfg .
           fi
 
+          pip install wheel
           pip install isort
           isort . -c

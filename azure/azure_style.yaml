@@ -75,3 +75,22 @@ jobs:
 
           pip install isort
           isort . -c
+
+  - job: pylint
+    pool:
+      vmImage: "ubuntu-20.04"
+    continueOnError: true
+    steps:
+      - checkout: self
+      - checkout: azure_template
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.9"
+      - script: |
+          cd ${{ parameters.REPO_NAME }}
+
+          # copy over the pylint config file
+          cp ../.github/.pylintrc .
+
+          pip install pylint
+          find . -type f -name "*.py" | xargs pylint

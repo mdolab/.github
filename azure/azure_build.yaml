@@ -84,8 +84,11 @@ jobs:
           if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
             export CODECOV_TOKEN=$(${{ parameters.REPO_NAME }}_CODECOV_TOKEN)
             echo "codecov token found!"
+            TOKEN_ARGS="-e CODECOV_TOKEN=$CODECOV_TOKEN"
+          else
+            TOKEN_ARGS=""
           fi
           # run codecov inside Docker
-          docker exec $ci_env -e CI=true -e CODECOV_TOKEN="$CODECOV_TOKEN" app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
+          docker exec $ci_env -e CI=true $TOKEN_ARGS app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

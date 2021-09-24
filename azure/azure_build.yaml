@@ -95,6 +95,7 @@ jobs:
           curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
           # move coverage file to root
           mv \$(find . -name ".coverage" -type f) . && \
+          pwd && ls -a && \
           ./codecov $TOKEN_ARGS"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

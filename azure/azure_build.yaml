@@ -72,23 +72,26 @@ jobs:
         condition: ne('${{ parameters.TEST }}', 'None')
       - script: |
           # validate bash script
-          curl -fLso codecov https://codecov.io/bash;
-          VERSION=$(grep -o 'VERSION=\"[0-9\.]*\"' codecov | cut -d'"' -f2);
-          for i in 1 256 512
-          do
-            shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM")
-          done
+          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+          shasum -a 256 -c codecov.SHA256SUM
+
           # get the environment variable script to pass to Docker
           ci_env=`bash <(curl -s https://codecov.io/env)`
           # grab the token
-          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
+          if [[ ! -z $"${{ parameters.REPO_NAME }}_CODECOV_TOKEN" ]] ; then
             export CODECOV_TOKEN=$(${{ parameters.REPO_NAME }}_CODECOV_TOKEN)
             echo "codecov token found!"
-            TOKEN_ARGS="-e CODECOV_TOKEN=$CODECOV_TOKEN"
+            TOKEN_ARGS="-t $CODECOV_TOKEN"
           else
             TOKEN_ARGS=""
           fi
+
           # run codecov inside Docker
-          docker exec $ci_env -e CI=true $TOKEN_ARGS app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && bash <(curl -s https://codecov.io/bash)"
+          docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
+          chmod +x codecov && ./codecov $TOKEN_ARGS"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

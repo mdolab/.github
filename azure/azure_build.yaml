@@ -92,7 +92,9 @@ jobs:
 
           # run codecov inside Docker
           docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
-          curl -Os https://uploader.codecov.io/latest/linux/codecov && \
-          chmod +x codecov && ./codecov $TOKEN_ARGS"
+          curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
+          # move coverage file to root
+          mv $(find . -name ".coverage" -type f) . && \
+          ./codecov $TOKEN_ARGS"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

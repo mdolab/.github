@@ -83,7 +83,7 @@ jobs:
           ci_env=`bash <(curl -s https://codecov.io/env)`
           # grab the token
           if [[ ! -z $"${{ parameters.REPO_NAME }}_CODECOV_TOKEN" ]] ; then
-            export CODECOV_TOKEN=$(${{ parameters.REPO_NAME }}_CODECOV_TOKEN)
+            export CODECOV_TOKEN=$"${{ parameters.REPO_NAME }}_CODECOV_TOKEN"
             echo "codecov token found!"
             TOKEN_ARGS="-t $CODECOV_TOKEN"
           else
@@ -92,6 +92,7 @@ jobs:
 
           # run codecov inside Docker
           docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
+          curl -Os https://uploader.codecov.io/latest/linux/codecov && \
           chmod +x codecov && ./codecov $TOKEN_ARGS"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

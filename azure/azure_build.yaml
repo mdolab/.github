@@ -86,11 +86,8 @@ jobs:
           fi
 
           # clean validation files
-          rm codecov.SHA256SUM
-          rm codecov.SHA256SUM.sig
+          rm codecov.SHA256SUM*
 
-          # get the environment variable script to pass to Docker
-          ci_env=`bash <(curl -s https://codecov.io/env)`
           # grab the token
           if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
             echo "codecov token found!"
@@ -100,18 +97,14 @@ jobs:
             export CODECOV_ARGS=""
           fi
 
-          # run codecov inside Docker
-          sudo docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
-          # curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
-          # move coverage file to root, then convert to XML
+          # convert coverage file to xml inside Docker
+          sudo docker exec app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
           mv \$(find . -name ".coverage" -type f) . && coverage xml"
-          # && \
-          #cp coverage.xml ${{ variables.DOCKER_MOUNT_DIR }}"
-          #ls -a && pwd
 
+          # copy coverage file out of Docker
           docker cp app:${{ variables.DOCKER_WORKING_DIR }}/coverage.xml $(pwd)
 
-          #sudo mv ${{ parameters.REPO_NAME }}/coverage.xml .
+          # run codecov
           chmod +x codecov
           ./codecov $CODECOV_ARGS
         condition: ${{ parameters.COVERAGE }}

@@ -79,6 +79,16 @@ jobs:
           gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
           shasum -a 256 -c codecov.SHA256SUM
 
+          # exit if checksum fails
+          if [[ $? -ne 0 ]] ; then
+            echo "checksum failed"
+            exit 1
+          fi
+
+          # clean validation files
+          rm codecov.SHA256SUM
+          rm codecov.SHA256SUM.sig
+
           # get the environment variable script to pass to Docker
           ci_env=`bash <(curl -s https://codecov.io/env)`
           # grab the token

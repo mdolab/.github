@@ -94,7 +94,10 @@ jobs:
           docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
           curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
           # move coverage file to root, then convert to XML
-          mv \$(find . -name ".coverage" -type f) . && coverage xml && \
-          ./codecov $CODECOV_ARGS"
+          mv \$(find . -name ".coverage" -type f) . && coverage xml" && \
+          cp coverage.xml ${{ variables.DOCKER_MOUNT_DIR }}"
+          ls -a && pwd
+          mv ${{ parameters.REPO_NAME }}/coverage.xml .
+          ./codecov $CODECOV_ARGS
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

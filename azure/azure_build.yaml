@@ -82,7 +82,7 @@ jobs:
           # get the environment variable script to pass to Docker
           ci_env=`bash <(curl -s https://codecov.io/env)`
           # grab the token
-          if [[ ! -z ${${{ parameters.REPO_NAME }}_CODECOV_TOKEN} ]] ; then
+          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
             echo "codecov token found!"
             export CODECOV_TOKEN=$(${{ parameters.REPO_NAME }}_CODECOV_TOKEN)
             export CODECOV_ARGS="-t $CODECOV_TOKEN"

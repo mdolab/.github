@@ -82,9 +82,9 @@ jobs:
           # get the environment variable script to pass to Docker
           ci_env=`bash <(curl -s https://codecov.io/env)`
           # grab the token
-          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
+          if [[ ! -z "${{ parameters.REPO_NAME }}_CODECOV_TOKEN" ]] ; then
             echo "codecov token found!"
-            export CODECOV_TOKEN=$(${{ parameters.REPO_NAME }}_CODECOV_TOKEN)
+            export CODECOV_TOKEN="${{ parameters.REPO_NAME }}_CODECOV_TOKEN"
             export CODECOV_ARGS="-t $CODECOV_TOKEN"
           else
             export CODECOV_ARGS=""
@@ -92,12 +92,13 @@ jobs:
 
           # run codecov inside Docker
           docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
-          curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
+          # curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
           # move coverage file to root, then convert to XML
           mv \$(find . -name ".coverage" -type f) . && coverage xml && \
           cp coverage.xml ${{ variables.DOCKER_MOUNT_DIR }}"
           ls -a && pwd
-          mv ${{ parameters.REPO_NAME }}/coverage.xml .
+          sudo mv ${{ parameters.REPO_NAME }}/coverage.xml .
+          chmod +x codecov
           ./codecov $CODECOV_ARGS
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

@@ -85,16 +85,16 @@ jobs:
           if [[ ! -z ${${{ parameters.REPO_NAME }}_CODECOV_TOKEN} ]] ; then
             echo "codecov token found!"
             export CODECOV_TOKEN=${${{ parameters.REPO_NAME }}_CODECOV_TOKEN}
-            TOKEN_ARGS="-t $CODECOV_TOKEN"
+            export CODECOV_ARGS="-t $CODECOV_TOKEN -C $(Build.SourceVersion)"
           else
-            TOKEN_ARGS=""
+            export CODECOV_ARGS="-C $(Build.SourceVersion)"
           fi
 
           # run codecov inside Docker
-          docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
+          docker exec $ci_env -e CI=true -e CODECOV_ARGS=$CODECOV_ARGS app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
           curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
           # move coverage file to root, then convert to XML
           mv \$(find . -name ".coverage" -type f) . && coverage xml && \
-          ./codecov $TOKEN_ARGS"
+          ./codecov $CODECOV_ARGS"
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage

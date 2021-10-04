@@ -94,10 +94,14 @@ jobs:
           sudo docker exec $ci_env -e CI=true app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
           # curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && \
           # move coverage file to root, then convert to XML
-          mv \$(find . -name ".coverage" -type f) . && coverage xml && \
-          cp coverage.xml ${{ variables.DOCKER_MOUNT_DIR }}"
-          ls -a && pwd
-          sudo mv ${{ parameters.REPO_NAME }}/coverage.xml .
+          mv \$(find . -name ".coverage" -type f) . && coverage xml"
+          # && \
+          #cp coverage.xml ${{ variables.DOCKER_MOUNT_DIR }}"
+          #ls -a && pwd
+
+          docker cp app:${{ variables.DOCKER_WORKING_DIR }}/coverage.xml $(pwd)
+
+          #sudo mv ${{ parameters.REPO_NAME }}/coverage.xml .
           chmod +x codecov
           ./codecov $CODECOV_ARGS
         condition: ${{ parameters.COVERAGE }}

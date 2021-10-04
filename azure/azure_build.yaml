@@ -85,9 +85,9 @@ jobs:
           if [[ ! -z ${${{ parameters.REPO_NAME }}_CODECOV_TOKEN} ]] ; then
             echo "codecov token found!"
             export CODECOV_TOKEN=${${{ parameters.REPO_NAME }}_CODECOV_TOKEN}
-            export CODECOV_ARGS="-t $CODECOV_TOKEN -C $(Build.SourceVersion)"
+            export CODECOV_ARGS="-t $CODECOV_TOKEN"
           else
-            export CODECOV_ARGS="-C $(Build.SourceVersion)"
+            export CODECOV_ARGS=""
           fi
 
           # run codecov inside Docker

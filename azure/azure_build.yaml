@@ -71,7 +71,9 @@ jobs:
         displayName: Run Tests
         condition: ne('${{ parameters.TEST }}', 'None')
       - script: |
-          # validate bash script
+          cd ${{ parameters.REPO_NAME }}
+
+          # validate the uploader
           curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
           curl -Os https://uploader.codecov.io/latest/linux/codecov
           curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM

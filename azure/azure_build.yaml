@@ -63,17 +63,19 @@ jobs:
           docker pull mdolab/$DOCKER_IMAGE:$(DOCKER_TAG);
           docker run -t -d --name app --mount "type=bind,src=$(pwd)/${{ parameters.REPO_NAME }},target=${{ variables.DOCKER_MOUNT_DIR }}" mdolab/$DOCKER_IMAGE:$(DOCKER_TAG) /bin/bash;
           docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}";
+        displayName: Prepare Repository
+      - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
+        displayName: Build
+        condition: ne('${{ parameters.BUILD }}', 'None')
+      - script: |
+          set -e
           # Source the IMPI setup script on the TACC image
           if [[ "$(DOCKER_TAG)" =~ "tacc" ]] ; then
             export TACC_IMPI=". \$HOME/set_local_impi_vars.sh"
           else
             export TACC_IMPI=":"
           fi
-        displayName: Prepare Repository
-      - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
-        displayName: Build
-        condition: ne('${{ parameters.BUILD }}', 'None')
-      - script: docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && $(TACC_IMPI) && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
+          docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && $(TACC_IMPI) && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
         displayName: Run Tests
         condition: ne('${{ parameters.TEST }}', 'None')
       - script: |

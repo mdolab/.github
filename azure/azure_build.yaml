@@ -75,7 +75,7 @@ jobs:
           else
             export TACC_IMPI=":"
           fi
-          docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && $(TACC_IMPI) && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
+          docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && $TACC_IMPI && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
         displayName: Run Tests
         condition: ne('${{ parameters.TEST }}', 'None')
       - script: |

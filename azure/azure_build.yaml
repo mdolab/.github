@@ -65,7 +65,7 @@ jobs:
           docker exec app /bin/bash -c "rm -rf ${{ variables.DOCKER_WORKING_DIR }} && cp -r ${{ variables.DOCKER_MOUNT_DIR }} ${{ variables.DOCKER_WORKING_DIR }}"
           # Source the IMPI setup script on the TACC image
           if [[ "$(DOCKER_TAG)" == *"tacc"* ]] ; then
-            docker exec app /bin/bash -c ". ${{ variables.BASHRC }} && . \$HOME/set_local_impi_vars.sh"
+            docker exec app /bin/bash -c ". ${{ variables.BASHRC }} && . \$HOME/set_local_impi_vars.sh";
           else
         displayName: Prepare Repository
       - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"

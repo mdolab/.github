@@ -45,3 +45,7 @@ jobs:
           fi
 
           git diff --exit-code
+          if [ $? -ne 0 ]; then
+            echo "Tapenade generated files are different"
+            exit 2
+          fi

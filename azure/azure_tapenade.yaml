@@ -39,4 +39,9 @@ jobs:
           # Run Tapenade
           touch config.mk # empty config file to make "make" happy
           bash ${{ parameters.TAPENADE_SCRIPT }}
+          if [ $? -ne 0 ]; then
+            echo "Tapenade runscript failed"
+            exit 1
+          fi
+
           git diff --exit-code

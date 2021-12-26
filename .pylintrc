@@ -23,7 +23,7 @@ fail-under=10.0
 ignore=CVS
 
 # Add files or directories matching the regex patterns to the ignore-list. The
-# regex matches against paths.
+# regex matches against paths and can be in Posix or Windows format.
 ignore-paths=
 
 # Files or directories matching the regex patterns are skipped. The regex
@@ -50,8 +50,8 @@ load-plugins=
 # Pickle collected data for later comparisons.
 persistent=yes
 
-# Min Python version to use for version dependend checks. Will default to the
-# version used to run pylint.
+# Minimum Python version to use for version dependent checks. Will default to
+# the version used to run pylint.
 py-version=3.9
 
 # When enabled, pylint would attempt to guess common misconfiguration and emit
@@ -86,7 +86,6 @@ disable=invalid-name,
         missing-class-docstring,
         missing-function-docstring,
         singleton-comparison,
-        misplaced-comparison-constant,
         unidiomatic-typecheck,
         non-ascii-name,
         consider-using-enumerate,
@@ -117,11 +116,14 @@ disable=invalid-name,
         wrong-import-position,
         useless-import-alias,
         import-outside-toplevel,
-        len-as-condition,
+        use-implicit-booleaness-not-len,
+        use-implicit-booleaness-not-comparison,
         syntax-error,
         unrecognized-inline-option,
         bad-option-value,
         bad-plugin-value,
+        bad-configuration-section,
+        import-error,
         logging-unsupported-format,
         logging-format-truncated,
         logging-too-many-args,
@@ -131,6 +133,7 @@ disable=invalid-name,
         fatal,
         astroid-error,
         parse-error,
+        config-parse-error,
         raw-checker-failed,
         bad-inline-option,
         locally-disabled,
@@ -202,7 +205,10 @@ disable=invalid-name,
         logging-not-lazy,
         logging-format-interpolation,
         logging-fstring-interpolation,
-        unspecified-encoding
+        unspecified-encoding,
+        using-f-string-in-unsupported-version,
+        using-final-decorator-in-unsupported-version,
+        useless-with-lock
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -252,7 +258,6 @@ enable=init-is-generator,
        invalid-format-returned,
        invalid-getnewargs-returned,
        invalid-getnewargs-ex-returned,
-       import-error,
        relative-beyond-top-level,
        used-before-assignment,
        undefined-variable,
@@ -339,6 +344,8 @@ enable=init-is-generator,
        invalid-overridden-method,
        arguments-renamed,
        unused-private-member,
+       overridden-final-method,
+       subclassed-final-class,
        wildcard-import,
        deprecated-module,
        reimported,
@@ -440,54 +447,6 @@ max-nested-blocks=5
 never-returning-functions=sys.exit,argparse.parse_error
 
 
-[FORMAT]
-
-# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
-expected-line-ending-format=
-
-# Regexp for a line that is allowed to be longer than the limit.
-ignore-long-lines=^\s*(# )?<?https?://\S+>?$
-
-# Number of spaces of indent required inside a hanging or continued line.
-indent-after-paren=4
-
-# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
-# tab).
-indent-string='    '
-
-# Maximum number of characters on a single line.
-max-line-length=100
-
-# Maximum number of lines in a module.
-max-module-lines=1000
-
-# Allow the body of a class to be on the same line as the declaration if body
-# contains single statement.
-single-line-class-stmt=no
-
-# Allow the body of an if to be on the same line as the test if there is no
-# else.
-single-line-if-stmt=no
-
-
-[SIMILARITIES]
-
-# Comments are removed from the similarity computation
-ignore-comments=yes
-
-# Docstrings are removed from the similarity computation
-ignore-docstrings=yes
-
-# Imports are removed from the similarity computation
-ignore-imports=no
-
-# Signatures are removed from the similarity computation
-ignore-signatures=no
-
-# Minimum lines number of a similarity.
-min-similarity-lines=4
-
-
 [LOGGING]
 
 # The type of string formatting that logging methods do. `old` means using %
@@ -510,28 +469,63 @@ check-quote-consistency=no
 check-str-concat-over-line-jumps=no
 
 
-[SPELLING]
+[TYPECHECK]
 
-# Limits count of emitted suggestions for spelling mistakes.
-max-spelling-suggestions=4
+# List of decorators that produce context managers, such as
+# contextlib.contextmanager. Add to this list to register other decorators that
+# produce valid context managers.
+contextmanager-decorators=contextlib.contextmanager
 
-# Spelling dictionary name. Available dictionaries: none. To make it work,
-# install the 'python-enchant' package.
-spelling-dict=
+# List of members which are set dynamically and missed by pylint inference
+# system, and so shouldn't trigger E1101 when accessed. Python regular
+# expressions are accepted.
+generated-members=
 
-# List of comma separated words that should be considered directives if they
-# appear and the beginning of a comment and should not be checked.
-spelling-ignore-comment-directives=fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+# Tells whether missing members accessed in mixin class should be ignored. A
+# class is considered mixin if its name matches the mixin-class-rgx option.
+ignore-mixin-members=yes
 
-# List of comma separated words that should not be checked.
-spelling-ignore-words=
+# Tells whether to warn about missing members when the owner of the attribute
+# is inferred to be None.
+ignore-none=yes
 
-# A path to a file that contains the private dictionary; one word per line.
-spelling-private-dict-file=
+# This flag controls whether pylint should warn about no-member and similar
+# checks whenever an opaque object is returned when inferring. The inference
+# can return multiple potential results while evaluating a Python object, but
+# some branches might not be evaluated, which results in partial inference. In
+# that case, it might be useful to still emit no-member and other checks for
+# the rest of the inferred objects.
+ignore-on-opaque-inference=yes
 
-# Tells whether to store unknown words to the private dictionary (see the
-# --spelling-private-dict-file option) instead of raising a message.
-spelling-store-unknown-words=no
+# List of class names for which member attributes should not be checked (useful
+# for classes with dynamically set attributes). This supports the use of
+# qualified names.
+ignored-classes=optparse.Values,thread._local,_thread._local
+
+# List of module names for which member attributes should not be checked
+# (useful for modules/projects where namespaces are manipulated during runtime
+# and thus existing member attributes cannot be deduced by static analysis). It
+# supports qualified module names, as well as Unix pattern matching.
+ignored-modules=
+
+# Show a hint with possible names when a member name was not found. The aspect
+# of finding the hint is based on edit distance.
+missing-member-hint=yes
+
+# The minimum edit distance a name should have in order to be considered a
+# similar match for a missing member name.
+missing-member-hint-distance=1
+
+# The total number of similar names that should be taken in consideration when
+# showing a hint for a missing member.
+missing-member-max-choices=1
+
+# Regex pattern to define which classes are considered mixins ignore-mixin-
+# members is set to 'yes'
+mixin-class-rgx=.*[Mm]ixin
+
+# List of decorators that change the signature of a decorated function.
+signature-mutators=
 
 
 [BASIC]
@@ -658,6 +652,30 @@ variable-naming-style=snake_case
 #variable-rgx=
 
 
+[SPELLING]
+
+# Limits count of emitted suggestions for spelling mistakes.
+max-spelling-suggestions=4
+
+# Spelling dictionary name. Available dictionaries: en_CA (hunspell), en_US
+# (hunspell), he (hspell).
+spelling-dict=
+
+# List of comma separated words that should be considered directives if they
+# appear and the beginning of a comment and should not be checked.
+spelling-ignore-comment-directives=fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+
+# List of comma separated words that should not be checked.
+spelling-ignore-words=
+
+# A path to a file that contains the private dictionary; one word per line.
+spelling-private-dict-file=
+
+# Tells whether to store unknown words to the private dictionary (see the
+# --spelling-private-dict-file option) instead of raising a message.
+spelling-store-unknown-words=no
+
+
 [VARIABLES]
 
 # List of additional names supposed to be defined in builtins. Remember that
@@ -691,59 +709,34 @@ init-import=no
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
 
 
-[TYPECHECK]
+[FORMAT]
 
-# List of decorators that produce context managers, such as
-# contextlib.contextmanager. Add to this list to register other decorators that
-# produce valid context managers.
-contextmanager-decorators=contextlib.contextmanager
+# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
+expected-line-ending-format=
 
-# List of members which are set dynamically and missed by pylint inference
-# system, and so shouldn't trigger E1101 when accessed. Python regular
-# expressions are accepted.
-generated-members=
+# Regexp for a line that is allowed to be longer than the limit.
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$
 
-# Tells whether missing members accessed in mixin class should be ignored. A
-# mixin class is detected if its name ends with "mixin" (case insensitive).
-ignore-mixin-members=yes
+# Number of spaces of indent required inside a hanging or continued line.
+indent-after-paren=4
 
-# Tells whether to warn about missing members when the owner of the attribute
-# is inferred to be None.
-ignore-none=yes
+# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
+# tab).
+indent-string='    '
 
-# This flag controls whether pylint should warn about no-member and similar
-# checks whenever an opaque object is returned when inferring. The inference
-# can return multiple potential results while evaluating a Python object, but
-# some branches might not be evaluated, which results in partial inference. In
-# that case, it might be useful to still emit no-member and other checks for
-# the rest of the inferred objects.
-ignore-on-opaque-inference=yes
+# Maximum number of characters on a single line.
+max-line-length=100
 
-# List of class names for which member attributes should not be checked (useful
-# for classes with dynamically set attributes). This supports the use of
-# qualified names.
-ignored-classes=optparse.Values,thread._local,_thread._local
+# Maximum number of lines in a module.
+max-module-lines=1000
 
-# List of module names for which member attributes should not be checked
-# (useful for modules/projects where namespaces are manipulated during runtime
-# and thus existing member attributes cannot be deduced by static analysis). It
-# supports qualified module names, as well as Unix pattern matching.
-ignored-modules=
+# Allow the body of a class to be on the same line as the declaration if body
+# contains single statement.
+single-line-class-stmt=no
 
-# Show a hint with possible names when a member name was not found. The aspect
-# of finding the hint is based on edit distance.
-missing-member-hint=yes
-
-# The minimum edit distance a name should have in order to be considered a
-# similar match for a missing member name.
-missing-member-hint-distance=1
-
-# The total number of similar names that should be taken in consideration when
-# showing a hint for a missing member.
-missing-member-max-choices=1
-
-# List of decorators that change the signature of a decorated function.
-signature-mutators=
+# Allow the body of an if to be on the same line as the test if there is no
+# else.
+single-line-if-stmt=no
 
 
 [MISCELLANEOUS]
@@ -755,6 +748,24 @@ notes=FIXME,
 
 # Regular expression of note tags to take in consideration.
 #notes-rgx=
+
+
+[SIMILARITIES]
+
+# Comments are removed from the similarity computation
+ignore-comments=yes
+
+# Docstrings are removed from the similarity computation
+ignore-docstrings=yes
+
+# Imports are removed from the similarity computation
+ignore-imports=no
+
+# Signatures are removed from the similarity computation
+ignore-signatures=no
+
+# Minimum lines number of a similarity.
+min-similarity-lines=4
 
 
 [IMPORTS]
@@ -825,6 +836,10 @@ valid-metaclass-classmethod-first-arg=cls
 
 
 [DESIGN]
+
+# List of regular expressions of class ancestor names to ignore when counting
+# public methods (see R0903)
+exclude-too-few-public-methods=
 
 # List of qualified class names to ignore when counting class parents (see
 # R0901)

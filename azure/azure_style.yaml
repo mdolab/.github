@@ -7,6 +7,9 @@ parameters:
   - name: ISORT
     type: boolean
     default: false # these defaults are here because the template could be used by repos directly
+  - name: PYLINT
+    type: boolean
+    default: false # these defaults are here because the template could be used by repos directly
 
 jobs:
   - job: flake8
@@ -82,6 +85,7 @@ jobs:
   - job: pylint
     pool:
       vmImage: "ubuntu-20.04"
+    condition: ${{ parameters.PYLINT }}
     continueOnError: true
     steps:
       - checkout: self

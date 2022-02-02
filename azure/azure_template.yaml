@@ -7,6 +7,9 @@ parameters:
   - name: ISORT
     type: boolean
     default: false
+  - name: PYLINT
+    type: boolean
+    default: false
   - name: COMPLEX
     type: boolean
     default: false
@@ -93,6 +96,7 @@ stages:
           REPO_NAME: ${{ parameters.REPO_NAME }}
           IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
           ISORT: ${{ parameters.ISORT }}
+          PYLINT: ${{ parameters.PYLINT }}
 
   - stage: Tapenade
     dependsOn: []

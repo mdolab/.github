@@ -18,9 +18,9 @@ jobs:
     continueOnError: ${{ parameters.IGNORE_STYLE }}
     strategy:
       matrix:
-        "python37":
+        "py38":
           PYTHON_VERSION: "3.8"
-        "python39":
+        "py39":
           PYTHON_VERSION: "3.9"
     steps:
       - checkout: self

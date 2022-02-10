@@ -86,7 +86,6 @@ jobs:
     pool:
       vmImage: "ubuntu-20.04"
     condition: ${{ parameters.PYLINT }}
-    continueOnError: true
     steps:
       - checkout: self
       - checkout: azure_template

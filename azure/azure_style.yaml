@@ -100,4 +100,4 @@ jobs:
           cp ../.github/.pylintrc .
 
           pip install pylint
-          find . -type f -name "*.py" | xargs pylint
+          find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint

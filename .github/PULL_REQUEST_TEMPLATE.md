@@ -5,6 +5,12 @@ Describe the big picture of your changes here, perhaps using a bullet list if mu
 If this PR accomplishes multiple goals, it may be best to create separate PR's for each.
 -->
 
+## Expected time until merged
+<!--
+Comment on whether or not this change is urgent and how long you expect this PR to take to review and be merged.
+For example, a week would be a reasonable time frame for an average, non-urgent PR.
+-->
+
 ## Type of change
 <!--
 What types of change is it?

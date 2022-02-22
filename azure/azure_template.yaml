@@ -52,6 +52,9 @@ parameters:
   - name: TAPENADE_VERSION
     type: string
     default: 3.10
+  - name: CLANG_FORMAT
+    type: boolean
+    default: false
 
 stages:
   - stage: Test_Real
@@ -97,6 +100,7 @@ stages:
           IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
           ISORT: ${{ parameters.ISORT }}
           PYLINT: ${{ parameters.PYLINT }}
+          CLANG_FORMAT: ${{ parameters.CLANG_FORMAT }}
 
   - stage: Tapenade
     dependsOn: []

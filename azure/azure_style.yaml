@@ -10,6 +10,9 @@ parameters:
   - name: PYLINT
     type: boolean
     default: false # these defaults are here because the template could be used by repos directly
+  - name: CLANG_FORMAT
+    type: boolean
+    default: false # these defaults are here because the template could be used by repos directly
 
 jobs:
   - job: flake8
@@ -100,3 +103,14 @@ jobs:
 
           pip install pylint
           find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint
+
+  - job: clang-format
+      pool:
+        vmImage: "ubuntu-20.04"
+      condition: ${{ parameters.CLANG_FORMAT }}
+      steps:
+        - script: |
+            cd ${{ parameters.REPO_NAME }}
+            sudo apt-get install clang-format -y
+            bash ./.github/clang_format.sh
+

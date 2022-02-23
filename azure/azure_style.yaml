@@ -104,7 +104,7 @@ jobs:
           pip install pylint
           find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint
 
-  - job: clang-format
+  - job: clang_format
     pool:
       vmImage: "ubuntu-20.04"
     condition: ${{ parameters.CLANG_FORMAT }}

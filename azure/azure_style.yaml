@@ -109,10 +109,7 @@ jobs:
       vmImage: "ubuntu-20.04"
     condition: ${{ parameters.CLANG_FORMAT }}
     steps:
-      - checkout: self
-      - checkout: azure_template
       - script: |
-          cd ${{ parameters.REPO_NAME }}
           sudo apt-get install clang-format -y
           bash ./.github/clang_format.sh
 

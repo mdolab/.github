@@ -2,28 +2,43 @@
 max-line-length = 120
 
 extend-ignore = 
-    E203, # black
-    E266, # too many leading '#' for block comment
-    E302, # expected 2 blank lines, found 1
-    E306, # expected 1 blank line before a nested definition, found 0
-    B006, # do not use mutable data structures for argument defaults (too many false positives)
-    # TODO: to be fixed:
-    W605, # invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
-    E501, # line length, exceeded by some docstrings
+    # black
+    E203,
+    # too many leading '#' for block comment
+    E266,
+    # expected 2 blank lines, found 1
+    E302,
+    # do not use mutable data structures for argument defaults (too many false positives)
+    B006,
+    # ===== TODO: to be fixed:
+    # invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
+    W605,
+    # line length, exceeded by some docstrings
+    E501,
 
 select =
-    # built-in checks
-  # C901, # mccabe
-    E,    # pycodestyle errors
-    W,    # pycodestyle warnings
-    F,    # pyflakes
-    # plugins
-    A00,  # flake8-builtins
-    B,    # bugbear
-  # C4,   # flake8-comprehensions
-  # D,    # pydocstyle
-  # RST,  # flake8-rst-docstrings
-  # N400, # flake8-broken-line
+    # ===== built-in checks
+    # mccabe
+  # C901,
+    # pycodestyle errors
+    E,
+    # pycodestyle warnings
+    W,
+    # pyflakes
+    F,
+    # ===== plugins
+    # flake8-builtins
+    A00,
+    # bugbear
+    B,
+    # flake8-comprehensions
+  # C4,
+    # pydocstyle
+  # D,
+    # flake8-rst-docstrings
+  # RST,
+    # flake8-broken-line
+  # N400
 
 # flake8-docstrings
 docstring-convention = numpy

@@ -54,6 +54,8 @@ rst-roles =
 # max-complexity = 10
 
 # ignored files/directories
+# we use exclude here and extend-exclude in repo-specific config files
+# so that we can pass both to flake8 directly without needing to merge them first
 exclude =
     # No need to traverse the git directory
     .git,

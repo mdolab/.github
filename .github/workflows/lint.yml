@@ -62,7 +62,8 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          pip install wheel isort
+          pip install wheel
+          pip install isort
 
       - name: Run isort
         run: |
@@ -84,7 +85,8 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          pip install wheel pylint
+          pip install wheel
+          pip install pylint
       - name: Run pylint
         run: |
           # copy over the pylint config file

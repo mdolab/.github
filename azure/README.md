@@ -33,17 +33,17 @@ The templates are organized into the following files:
 
 1. Create `azure_template.yaml` in the `.github/` directory of your repository
 2. Add triggers (see example below)
- 	- Only set triggers for the `master` branch and pull requests to `master`
+ 	- Only set triggers for the `main` branch and pull requests to `main`
 3. Add resources (see example below)
 	- This resource pulls the `azure_template` from the `mdolab/.github` repository
 4. Add parameters (see example below and the options table above)
 
 ```
 trigger:
-- master
+- main
 
 pr:
-- master
+- main
 
 resources:
   repositories:

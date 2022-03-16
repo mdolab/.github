@@ -1,0 +1,110 @@
+on:
+  workflow_call:
+    inputs:
+      flake8:
+        required: false
+        type: boolean
+        default: true
+      pylint:
+        required: false
+        type: boolean
+        default: false
+      isort:
+        required: false
+        type: boolean
+        default: false
+      mypy:
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  flake8:
+    if: ${{ inputs.flake8 }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          wget https://raw.githubusercontent.com/mdolab/.github/master/flake8-requirements.txt
+          pip install -r flake8-requirements.txt
+      - name: Lint with flake8
+        run: |
+          if [[ -f ".flake8" ]]; then
+            export FL8=.flake8-project
+            mv .flake8 $FL8; # rename the file from code repo; should have higher precedence in merge
+          fi
+
+          wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;
+
+          if [[ -f "$FL8" ]]; then
+              flake8 . --append-config $FL8 --count --show-source --statistics;
+          else
+              flake8 . --count --show-source --statistics;
+          fi
+
+  isort:
+    if: ${{ inputs.isort }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          pip install isort
+
+      - name: Run isort
+        run: |
+          # copy over the isort config file
+          if [[ ! -f ".isort.cfg" ]]; then
+            wget https://raw.githubusercontent.com/mdolab/.github/master/.isort.cfg
+          fi
+
+          isort . -c
+
+  pylint:
+    if: ${{ inputs.pylint }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          pip install pylint
+      - name: Run pylint
+        run: |
+          # copy over the pylint config file
+          wget https://raw.githubusercontent.com/mdolab/.github/master/.pylintrc
+          find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint
+
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          pip install mypy
+      - name: Mypy check
+        run: |
+          mypy --any-exprs-report mypy-output .
+          cat mypy-output/any-exprs.txt

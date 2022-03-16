@@ -5,6 +5,10 @@ on:
         required: false
         type: boolean
         default: true
+      black_version:
+        required: false
+        type: string
+        default: "21.12b0"
       clang_format:
         required: false
         type: boolean
@@ -19,7 +23,7 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --diff -l 120 --target-version py38 --target-version py39"
-          version: "22.1.0"
+          version: ${{ inputs.black_version }}
 
   clang_format:
     if: ${{ inputs.clang_format }}

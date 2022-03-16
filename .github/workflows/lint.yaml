@@ -35,7 +35,7 @@ jobs:
         run: |
           pip install wheel
           wget https://raw.githubusercontent.com/mdolab/.github/master/flake8-requirements.txt
-          pip install -r ../../flake8-requirements.txt
+          pip install -r flake8-requirements.txt
       - name: Lint with flake8
         run: |
           if [[ -f ".flake8" ]]; then

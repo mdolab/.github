@@ -58,7 +58,7 @@ jobs:
         run: |
           # copy over the isort config file
           if [[ ! -f ".isort.cfg" ]]; then
-            wget https://raw.githubusercontent.com/mdolab/.github/master/.isort.cfg
+            wget https://raw.githubusercontent.com/mdolab/.github/main/.isort.cfg
           fi
 
           isort . -c

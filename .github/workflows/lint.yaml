@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install wheel
-          wget https://raw.githubusercontent.com/mdolab/.github/master/flake8-requirements.txt
+          wget https://raw.githubusercontent.com/mdolab/.github/main/flake8-requirements.txt
           pip install -r flake8-requirements.txt
       - name: Lint with flake8
         run: |
@@ -39,7 +39,7 @@ jobs:
             mv .flake8 $FL8; # rename the file from code repo; should have higher precedence in merge
           fi
 
-          wget https://raw.githubusercontent.com/mdolab/.github/master/.flake8;
+          wget https://raw.githubusercontent.com/mdolab/.github/main/.flake8;
 
           if [[ -f "$FL8" ]]; then
               flake8 . --append-config $FL8 --count --show-source --statistics;
@@ -63,7 +63,7 @@ jobs:
       - name: Run pylint
         run: |
           # copy over the pylint config file
-          wget https://raw.githubusercontent.com/mdolab/.github/master/.pylintrc
+          wget https://raw.githubusercontent.com/mdolab/.github/main/.pylintrc
           find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint
 
   mypy:

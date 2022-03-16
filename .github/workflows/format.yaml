@@ -49,16 +49,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - name: Install dependencies
-        run: |
-          pip install wheel
-          pip install isort
-
-      - name: Run isort
+      - name: Get isort config file
         run: |
           # copy over the isort config file
           if [[ ! -f ".isort.cfg" ]]; then
             wget https://raw.githubusercontent.com/mdolab/.github/main/.isort.cfg
           fi
-
-          isort . -c
+      - uses: isort/isort-action@master

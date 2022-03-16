@@ -19,7 +19,7 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --diff -l 120 --target-version py38 --target-version py39"
-          version: "21.6b0"
+          version: "22.1.0"
 
   clang_format:
     if: ${{ inputs.clang_format }}

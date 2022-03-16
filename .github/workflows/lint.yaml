@@ -94,6 +94,7 @@ jobs:
           find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint
 
   mypy:
+    if: ${{ inputs.mypy }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

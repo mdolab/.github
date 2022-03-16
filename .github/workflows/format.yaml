@@ -13,6 +13,10 @@ on:
         required: false
         type: boolean
         default: false
+      isort:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   black:
@@ -35,3 +39,26 @@ jobs:
       - name: Run clang_format
         run: |
           bash ./.github/clang_format.sh
+
+  isort:
+    if: ${{ inputs.isort }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          pip install isort
+
+      - name: Run isort
+        run: |
+          # copy over the isort config file
+          if [[ ! -f ".isort.cfg" ]]; then
+            wget https://raw.githubusercontent.com/mdolab/.github/master/.isort.cfg
+          fi
+
+          isort . -c

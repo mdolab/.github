@@ -10,22 +10,22 @@ The templates are organized into the following files:
 - `azure_template.yaml` which handles the job itself, calling the necessary sub-templates.
 
 ## Template Options
-| Name        | Type   | Default | Description.       |
-| :---        | :---- | :----  |               :--- |
-| `REPO_NAME`   | string |         | Name of repository |
-| `IGNORE_STYLE`| boolean | `false`| Allow black and flake8 jobs to fail without failing the pipeline |
-| `ISORT`| boolean | `false`| Runs the `isort` jobs if `true` |
-| `COMPLEX` | boolean | `false` | Flag for triggering complex build and tests |
-| `GCC_CONFIG` | string | `None` | Path to gcc configuration file (from repository root) |
-| `INTEL_CONFIG` | string | `None` | Path to intel configuration file (from repository root) |
-| `BUILD_REAL` | string | `.github/build_real.sh` | Path to bash script with commands to build real code. Using `None` will skip this step. |
-| `TEST_REAL` | string | `.github/text_real.sh` | Path to bash script to run real tests. Using `None` will skip this step. |
-| `BUILD_COMPLEX` | string | `.github/build_complex.sh` | Path to bash script with commands to build complex code. Using `None` will skip this step. |
-| `TEST_COMPLEX` | string | `.github/text_complex.sh` | Path to bash script with commands to run complex tests. Using `None` will skip this step. |
-| `IMAGE` | string | `public` | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
-| `SKIP_TESTS` | boolean | `false` | Skip all builds and tests |
-| `TIMEOUT` | number | `0` (this will use the full 360 minutes) | Runtime allowed for a job, in minutes |
-| `COVERAGE` | boolean | `false` | Flag to report test coverage to `codecov` |
+| Name            | Type    | Default                                  | Description.                                                                                                                                |
+| :-------------- | :------ | :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| `REPO_NAME`     | string  |                                          | Name of repository                                                                                                                          |
+| `IGNORE_STYLE`  | boolean | `false`                                  | Allow black and flake8 jobs to fail without failing the pipeline                                                                            |
+| `ISORT`         | boolean | `false`                                  | Runs the `isort` jobs if `true`                                                                                                             |
+| `COMPLEX`       | boolean | `false`                                  | Flag for triggering complex build and tests                                                                                                 |
+| `GCC_CONFIG`    | string  | `None`                                   | Path to gcc configuration file (from repository root)                                                                                       |
+| `INTEL_CONFIG`  | string  | `None`                                   | Path to intel configuration file (from repository root)                                                                                     |
+| `BUILD_REAL`    | string  | `.github/build_real.sh`                  | Path to bash script with commands to build real code. Using `None` will skip this step.                                                     |
+| `TEST_REAL`     | string  | `.github/text_real.sh`                   | Path to bash script to run real tests. Using `None` will skip this step.                                                                    |
+| `BUILD_COMPLEX` | string  | `.github/build_complex.sh`               | Path to bash script with commands to build complex code. Using `None` will skip this step.                                                  |
+| `TEST_COMPLEX`  | string  | `.github/text_complex.sh`                | Path to bash script with commands to run complex tests. Using `None` will skip this step.                                                   |
+| `IMAGE`         | string  | `public`                                 | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
+| `SKIP_TESTS`    | boolean | `false`                                  | Skip all builds and tests                                                                                                                   |
+| `TIMEOUT`       | number  | `0` (this will use the full 360 minutes) | Runtime allowed for a job, in minutes                                                                                                       |
+| `COVERAGE`      | boolean | `false`                                  | Flag to report test coverage to `codecov`                                                                                                   |
 
 
 ## Setting up a pipeline
@@ -33,17 +33,17 @@ The templates are organized into the following files:
 
 1. Create `azure_template.yaml` in the `.github/` directory of your repository
 2. Add triggers (see example below)
- 	- Only set triggers for the `master` branch and pull requests to `master`
+ 	- Only set triggers for the `main` branch and pull requests to `main`
 3. Add resources (see example below)
 	- This resource pulls the `azure_template` from the `mdolab/.github` repository
 4. Add parameters (see example below and the options table above)
 
 ```
 trigger:
-- master
+- main
 
 pr:
-- master
+- main
 
 resources:
   repositories:
@@ -113,12 +113,12 @@ testflo -v . -n 1
 1. Go to the pipeline on Azure
 2. Click on the three dots next to "Run pipeline"
 3. Click on "status badge"
-4. Set "Branch" to "master"
+4. Set "Branch" to "main"
 5. Copy the text for "Sample markdown" and paste it into README
 
 ### Step 7: Create PR
 
-1. Create pull request to `master`
+1. Create pull request to `main`
 2. Ensure the Azure jobs start and appear in the pull request
 
 ## PyPI with Azure
@@ -129,13 +129,13 @@ An example yaml file using PyPI is:
 trigger:
   branches:
     include:
-    - master
+    - main
   tags:
     include:
     - v*.*.*
 
 pr:
-- master
+- main
 
 resources:
   repositories:

@@ -24,12 +24,12 @@ assignees: ''
 ### Expected behavior
 …
 
-
 ### Code versions
 <!-- List any relevant versions here -->
-- Operating System: 
-- Python: 
-- OpenMPI: 
-- CGNS: 
-- PETSc: 
-- This software: 
+- Operating System:
+- Python:
+- OpenMPI:
+- CGNS:
+- PETSc:
+- Compiler:
+- This repository:

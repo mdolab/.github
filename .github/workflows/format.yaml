@@ -8,7 +8,7 @@ on:
       black_version:
         required: false
         type: string
-        default: "21.12b0"
+        default: "22.3.0"
       clang_format:
         required: false
         type: boolean

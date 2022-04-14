@@ -2,11 +2,15 @@ parameters:
   - name: SERVICE_CONNECTION
     type: string
     default: pypi
+  - name: TIMEOUT
+    type: number
+    default: 10
 
 jobs:
   - job: PyPI_Deploy
     pool:
       vmImage: "ubuntu-20.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
     steps:
       - task: UsePythonVersion@0
         inputs:

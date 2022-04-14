@@ -1,9 +1,6 @@
 parameters:
   - name: REPO_NAME
     type: string
-  - name: SKIP_TESTS
-    type: boolean
-    default: false
   # Build and test
   - name: COMPLEX
     type: boolean
@@ -70,7 +67,6 @@ stages:
   - stage: Test_Real
     dependsOn: []
     displayName: Real Test
-    condition: not(${{ parameters.SKIP_TESTS }})
     jobs:
       - template: azure_build.yaml
         parameters:
@@ -86,7 +82,7 @@ stages:
   - stage: Test_Complex
     dependsOn: []
     displayName: Complex Test
-    condition: and(eq(${{ parameters.COMPLEX }}, true), not(${{ parameters.SKIP_TESTS }}))
+    condition: ${{ parameters.COMPLEX }}
     jobs:
       - template: azure_build.yaml
         parameters:
@@ -102,7 +98,6 @@ stages:
   - stage: Style
     dependsOn: []
     displayName: Style Checks
-    condition: not(${{ parameters.SKIP_TESTS }})
     jobs:
       - template: azure_style.yaml
         parameters:

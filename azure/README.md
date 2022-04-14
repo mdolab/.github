@@ -10,23 +10,28 @@ The templates are organized into the following files:
 - `azure_template.yaml` which handles the job itself, calling the necessary sub-templates.
 
 ## Template Options
-| Name            | Type    | Default                                  | Description.                                                                                                                                |
-| :-------------- | :------ | :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
-| `REPO_NAME`     | string  |                                          | Name of repository                                                                                                                          |
-| `IGNORE_STYLE`  | boolean | `false`                                  | Allow black and flake8 jobs to fail without failing the pipeline                                                                            |
-| `ISORT`         | boolean | `false`                                  | Runs the `isort` jobs if `true`                                                                                                             |
-| `COMPLEX`       | boolean | `false`                                  | Flag for triggering complex build and tests                                                                                                 |
-| `GCC_CONFIG`    | string  | `None`                                   | Path to gcc configuration file (from repository root)                                                                                       |
-| `INTEL_CONFIG`  | string  | `None`                                   | Path to intel configuration file (from repository root)                                                                                     |
-| `BUILD_REAL`    | string  | `.github/build_real.sh`                  | Path to bash script with commands to build real code. Using `None` will skip this step.                                                     |
-| `TEST_REAL`     | string  | `.github/text_real.sh`                   | Path to bash script to run real tests. Using `None` will skip this step.                                                                    |
-| `BUILD_COMPLEX` | string  | `.github/build_complex.sh`               | Path to bash script with commands to build complex code. Using `None` will skip this step.                                                  |
-| `TEST_COMPLEX`  | string  | `.github/text_complex.sh`                | Path to bash script with commands to run complex tests. Using `None` will skip this step.                                                   |
-| `IMAGE`         | string  | `public`                                 | Select docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
-| `SKIP_TESTS`    | boolean | `false`                                  | Skip all builds and tests                                                                                                                   |
-| `TIMEOUT`       | number  | `0` (this will use the full 360 minutes) | Runtime allowed for a job, in minutes                                                                                                       |
-| `COVERAGE`      | boolean | `false`                                  | Flag to report test coverage to `codecov`                                                                                                   |
-
+| Name                | Type    | Default                                  | Description.                                                                                                                                |
+| :------------------ | :------ | :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| `REPO_NAME`         | string  |                                          | Name of repository                                                                                                                          |
+| `COMPLEX`           | boolean | `false`                                  | Flag for triggering complex build and tests                                                                                                 |
+| `TIMEOUT_BUILD`     | number  | `120`                                    | Runtime allowed for each build and test job, in minutes                                                                                     |
+| `GCC_CONFIG`        | string  | `None`                                   | Path to GCC configuration file (from repository root)                                                                                       |
+| `INTEL_CONFIG`      | string  | `None`                                   | Path to Intel configuration file (from repository root)                                                                                     |
+| `BUILD_REAL`        | string  | `.github/build_real.sh`                  | Path to Bash script with commands to build real code. Using `None` will skip this step.                                                     |
+| `TEST_REAL`         | string  | `.github/text_real.sh`                   | Path to Bash script to run real tests. Using `None` will skip this step.                                                                    |
+| `BUILD_COMPLEX`     | string  | `.github/build_complex.sh`               | Path to Bash script with commands to build complex code. Using `None` will skip this step.                                                  |
+| `TEST_COMPLEX`      | string  | `.github/text_complex.sh`                | Path to Bash script with commands to run complex tests. Using `None` will skip this step.                                                   |
+| `IMAGE`             | string  | `public`                                 | Select Docker image. Can be `public`, `private`, or `auto`. `auto` uses the private image on trusted builds and the public image otherwise. |
+| `COVERAGE`          | boolean | `false`                                  | Flag to report test coverage to `codecov`                                                                                                   |
+| `TIMEOUT_STYLE`     | number  | `10`                                     | Runtime allowed for each style check, in minutes                                                                                            |
+| `IGNORE_STYLE`      | boolean | `false`                                  | Flag to allow `black` and `flake8` checks to fail without failing the pipeline                                                              |
+| `ISORT`             | boolean | `false`                                  | Flag to trigger the `isort` check                                                                                                           |
+| `PYLINT`            | boolean | `false`                                  | Flag to trigger the `pylint` check                                                                                                          |
+| `CLANG_FORMAT`      | boolean | `false`                                  | Flag to trigger the `clang-format` check                                                                                                    |
+| `TAPENADE`          | boolean | `false`                                  | Flag to trigger the Tapenade check                                                                                                          |
+| `TIMEOUT_TAPENADE`  | number  | `10`                                     | Runtime allowed for the Tapenade check, in minutes                                                                                          |
+| `TAPENADE_SCRIPT`   | string  | `.github/build_tapenade.sh`              | Path to Bash script with commands to run Tapenade                                                                                           |
+| `TAPENADE_VERSION`  | string  | `3.10`                                   | Version of Tapenade to use                                                                                                                  |
 
 ## Setting up a pipeline
 ### Step 1: Setup Azure Pipelines YAML File:

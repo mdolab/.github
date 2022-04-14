@@ -1,23 +1,28 @@
 parameters:
   - name: REPO_NAME
     type: string
+  # The following parameters have defaults because this template could be used by repos directly
+  - name: TIMEOUT
+    type: number
+    default: 10
   - name: IGNORE_STYLE
     type: boolean
-    default: false # these defaults are here because the template could be used by repos directly
+    default: false
   - name: ISORT
     type: boolean
-    default: false # these defaults are here because the template could be used by repos directly
+    default: false
   - name: PYLINT
     type: boolean
-    default: false # these defaults are here because the template could be used by repos directly
+    default: false
   - name: CLANG_FORMAT
     type: boolean
-    default: false # these defaults are here because the template could be used by repos directly
+    default: false
 
 jobs:
   - job: flake8
     pool:
       vmImage: "ubuntu-20.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
     continueOnError: ${{ parameters.IGNORE_STYLE }}
     strategy:
       matrix:
@@ -52,6 +57,7 @@ jobs:
   - job: black
     pool:
       vmImage: "ubuntu-20.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
     continueOnError: ${{ parameters.IGNORE_STYLE }}
     steps:
       - task: UsePythonVersion@0
@@ -65,6 +71,7 @@ jobs:
   - job: isort
     pool:
       vmImage: "ubuntu-20.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.ISORT }}
     steps:
       - checkout: self
@@ -87,6 +94,7 @@ jobs:
   - job: pylint
     pool:
       vmImage: "ubuntu-20.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.PYLINT }}
     steps:
       - checkout: self
@@ -106,6 +114,7 @@ jobs:
   - job: clang_format
     pool:
       vmImage: "ubuntu-20.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.CLANG_FORMAT }}
     steps:
       - script: |

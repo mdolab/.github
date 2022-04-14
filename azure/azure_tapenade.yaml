@@ -1,21 +1,18 @@
 parameters:
   - name: REPO_NAME
     type: string
-  - name: TAPENADE
-    type: boolean
-    default: false
+  - name: TIMEOUT
+    type: number
   - name: TAPENADE_SCRIPT
     type: string
-    default: .github/build_tapenade.sh
   - name: TAPENADE_VERSION
     type: string
-    default: 3.10
 
 jobs:
   - job: tapenade
     pool:
       vmImage: "ubuntu-20.04"
-    condition: ${{ parameters.TAPENADE }}
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
     steps:
       - task: JavaToolInstaller@0
         inputs:

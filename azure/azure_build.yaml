@@ -1,6 +1,8 @@
 parameters:
   - name: REPO_NAME
     type: string
+  - name: TIMEOUT
+    type: number
   - name: GCC_CONFIG
     type: string
   - name: INTEL_CONFIG
@@ -11,8 +13,6 @@ parameters:
     type: string
   - name: IMAGE
     type: string
-  - name: TIMEOUT
-    type: number
   - name: COVERAGE
     type: boolean
 

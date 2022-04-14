@@ -1,12 +1,12 @@
 parameters:
   - name: REPO_NAME
     type: string
+  - name: TIMEOUT
+    type: number
   - name: TAPENADE_SCRIPT
     type: string
   - name: TAPENADE_VERSION
     type: string
-  - name: TIMEOUT
-    type: number
 
 jobs:
   - job: tapenade

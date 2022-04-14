@@ -2,12 +2,12 @@ parameters:
   - name: REPO_NAME
     type: string
   # The following parameters have defaults because this template could be used by repos directly
-  - name: IGNORE_STYLE
-    type: boolean
-    default: false
   - name: TIMEOUT
     type: number
     default: 10
+  - name: IGNORE_STYLE
+    type: boolean
+    default: false
   - name: ISORT
     type: boolean
     default: false

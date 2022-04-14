@@ -37,9 +37,15 @@ parameters:
   - name: SKIP_TESTS
     type: boolean
     default: false
-  - name: TIMEOUT
+  - name: TIMEOUT_BUILD
     type: number
-    default: 0
+    default: 120
+  - name: TIMEOUT_STYLE
+    type: number
+    default: 10
+  - name: TIMEOUT_TAPENADE
+    type: number
+    default: 10
   - name: COVERAGE
     type: boolean
     default: false
@@ -70,7 +76,7 @@ stages:
           BUILD: ${{ parameters.BUILD_REAL }}
           TEST: ${{ parameters.TEST_REAL }}
           IMAGE: ${{ parameters.IMAGE }}
-          TIMEOUT: ${{ parameters.TIMEOUT }}
+          TIMEOUT: ${{ parameters.TIMEOUT_BUILD }}
           COVERAGE: ${{ parameters.COVERAGE }}
 
   - stage: Test_Complex
@@ -81,12 +87,12 @@ stages:
       - template: azure_build.yaml
         parameters:
           REPO_NAME: ${{ parameters.REPO_NAME }}
+          TIMEOUT: ${{ parameters.TIMEOUT_BUILD }}
           GCC_CONFIG: ${{ parameters.GCC_CONFIG }}
           INTEL_CONFIG: ${{ parameters.INTEL_CONFIG }}
           BUILD: ${{ parameters.BUILD_COMPLEX }}
           TEST: ${{ parameters.TEST_COMPLEX }}
           IMAGE: ${{ parameters.IMAGE }}
-          TIMEOUT: ${{ parameters.TIMEOUT }}
           COVERAGE: ${{ parameters.COVERAGE }}
 
   - stage: Style
@@ -97,6 +103,7 @@ stages:
       - template: azure_style.yaml
         parameters:
           REPO_NAME: ${{ parameters.REPO_NAME }}
+          TIMEOUT: ${{ parameters.TIMEOUT_STYLE }}
           IGNORE_STYLE: ${{ parameters.IGNORE_STYLE }}
           ISORT: ${{ parameters.ISORT }}
           PYLINT: ${{ parameters.PYLINT }}
@@ -110,6 +117,6 @@ stages:
       - template: azure_tapenade.yaml
         parameters:
           REPO_NAME: ${{ parameters.REPO_NAME }}
-          TAPENADE: ${{ parameters.TAPENADE }}
+          TIMEOUT: ${{ parameters.TIMEOUT_TAPENADE }}
           TAPENADE_SCRIPT: ${{ parameters.TAPENADE_SCRIPT }}
           TAPENADE_VERSION: ${{ parameters.TAPENADE_VERSION }}

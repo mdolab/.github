@@ -21,7 +21,7 @@ on:
 jobs:
   black:
     if: ${{ inputs.black }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
@@ -31,7 +31,7 @@ jobs:
 
   clang_format:
     if: ${{ inputs.clang_format }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Install dependencies
         run: |
@@ -42,7 +42,7 @@ jobs:
 
   isort:
     if: ${{ inputs.isort }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python

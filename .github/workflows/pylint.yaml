@@ -1,0 +1,21 @@
+on:
+  workflow_call:
+
+jobs:
+  pylint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          pip install pylint
+      - name: Run pylint
+        run: |
+          # copy over the pylint config file
+          wget https://raw.githubusercontent.com/mdolab/.github/main/.pylintrc
+          find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint

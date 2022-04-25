@@ -1,0 +1,17 @@
+on:
+  workflow_call:
+    inputs:
+      black_version:
+        required: false
+        type: string
+        default: "22.3.0"
+
+jobs:
+  black:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: psf/black@stable
+        with:
+          options: "--check --diff -l 120 --target-version py38 --target-version py39"
+          version: ${{ inputs.black_version }}

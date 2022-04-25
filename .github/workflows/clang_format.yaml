@@ -1,0 +1,13 @@
+on:
+  workflow_call:
+
+jobs:
+  clang_format:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get install clang-format-10 -y
+      - name: Run clang_format
+        run: |
+          bash ./.github/clang_format.sh

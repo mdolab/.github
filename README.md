@@ -4,7 +4,9 @@ This repo stores the following shared repository settings/configurations/templat
 - Shared configurations for
   - `flake8`
   - `isort`
+  - `pylint`
   - `codecov`
 - Shared configurations for Azure Pipelines
+- Shared configurations for GitHub Actions
 - Issue/PR labels shared across the organization
 - Configuration script for the build bot

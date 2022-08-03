@@ -117,6 +117,8 @@ jobs:
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.CLANG_FORMAT }}
     steps:
+      - checkout: self
+      - checkout: azure_template
       - script: |
           sudo apt-get install clang-format-10 -y
           # copy over the clang-format config file

@@ -119,5 +119,7 @@ jobs:
     steps:
       - script: |
           sudo apt-get install clang-format-10 -y
-          bash ./.github/clang_format.sh
+          # copy over the clang-format config file
+          cp ../.github/.clang-format .
+          find . -iname '*.h' -o -iname '*.hpp' -o -iname '*.c' -o -iname '*.cpp' | xargs clang-format --verbose --dry-run --Werror -style=file
 

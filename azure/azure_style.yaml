@@ -123,15 +123,12 @@ jobs:
           # Install prerequisites
           sudo apt-get install clang-format-10 -y
 
-          # Debugging
-          pwd
-          ls -la
-          ls -la ../
-          ls -la .github/
-
           cd ${{ parameters.REPO_NAME }}
 
-          # copy over the clang-format config file, if not found we exit
-          cp ../.github/.clang-format . || exit 1
+          # if no local file is found in the repository, copy over the global .clang-format config file
+          if [[ ! -f ".clang-format" ]]; then
+            cp ../.github/.clang-format . || exit 1
+          fi
+
           find . -iname '*.h' -o -iname '*.hpp' -o -iname '*.c' -o -iname '*.cpp' | xargs clang-format --verbose --dry-run --Werror -style=file
 

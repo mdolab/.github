@@ -10,6 +10,8 @@ extend-ignore =
     E302,
     # do not use mutable data structures for argument defaults (too many false positives)
     B006,
+    # Do not treat line break before binary operator as an error, this is now the recommended style
+    W503,
     # ===== TODO: to be fixed:
     # invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
     W605,

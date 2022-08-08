@@ -48,6 +48,9 @@ parameters:
   - name: CLANG_FORMAT
     type: boolean
     default: false
+  - name: FPRETTIFY
+    type: boolean
+    default: false
   # Tapenade
   - name: TAPENADE
     type: boolean
@@ -107,6 +110,7 @@ stages:
           ISORT: ${{ parameters.ISORT }}
           PYLINT: ${{ parameters.PYLINT }}
           CLANG_FORMAT: ${{ parameters.CLANG_FORMAT }}
+          FPRETTIFY: ${{ parameters.FPRETTIFY }}
 
   - stage: Tapenade
     dependsOn: []

@@ -1,0 +1,6 @@
+[fprettify]
+
+i=4
+l=120
+whitespace-multdiv=True
+strict-indent

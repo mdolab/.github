@@ -32,6 +32,9 @@ parameters:
   - name: COVERAGE
     type: boolean
     default: false
+  - name: C_COVERAGE
+    type: boolean
+    default: false
   # Style checks
   - name: TIMEOUT_STYLE
     type: number
@@ -81,6 +84,7 @@ stages:
           TEST: ${{ parameters.TEST_REAL }}
           IMAGE: ${{ parameters.IMAGE }}
           COVERAGE: ${{ parameters.COVERAGE }}
+          C_COVERAGE: ${{ parameters.C_COVERAGE }}
 
   - stage: Test_Complex
     dependsOn: []
@@ -97,6 +101,7 @@ stages:
           TEST: ${{ parameters.TEST_COMPLEX }}
           IMAGE: ${{ parameters.IMAGE }}
           COVERAGE: ${{ parameters.COVERAGE }}
+          C_COVERAGE: ${{ parameters.C_COVERAGE }}
 
   - stage: Style
     dependsOn: []

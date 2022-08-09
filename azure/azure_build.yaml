@@ -15,6 +15,8 @@ parameters:
     type: string
   - name: COVERAGE
     type: boolean
+  - name: C_COVERAGE
+    type: boolean
 
 jobs:
   - job:
@@ -119,3 +121,46 @@ jobs:
           ./codecov $CODECOV_ARGS
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage
+              - script: |
+          cd ${{ parameters.REPO_NAME }}
+
+          # validate the uploader
+          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+          shasum -a 256 -c codecov.SHA256SUM
+
+          # exit if checksum fails
+          if [[ $? -ne 0 ]] ; then
+            echo "checksum failed"
+            exit 1
+          fi
+
+          # clean validation files
+          rm codecov.SHA256SUM*
+
+          # grab the token
+          if [[ ! -z $(${{ parameters.REPO_NAME }}_CODECOV_TOKEN) ]] ; then
+            echo "codecov token found!"
+            export CODECOV_TOKEN=$(${{ parameters.REPO_NAME }}_CODECOV_TOKEN)
+            export CODECOV_ARGS="-t $CODECOV_TOKEN"
+          else
+            export CODECOV_ARGS=""
+          fi
+
+          # convert coverage file to xml inside Docker
+          sudo docker exec app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
+          lcov --capture --directory . --output-file coverage.info && \
+          lcov --remove coverage.info '/usr/*' --output-file coverage.info && \
+          lcov --remove coverage.info '*mpi4py*' --output-file coverage.info"
+
+          # copy coverage file out of Docker
+          docker cp app:${{ variables.DOCKER_WORKING_DIR }}/coverage.info $(pwd)
+
+          # run codecov
+          chmod +x codecov
+          ./codecov $CODECOV_ARGS
+        condition: ${{ parameters.C_COVERAGE }}
+        displayName: C Coverage

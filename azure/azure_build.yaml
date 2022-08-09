@@ -68,7 +68,7 @@ jobs:
         displayName: Prepare Repository
       - script: docker exec -e CONFIG_FILE=$(CONFIG_FILE) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.BUILD }}"
         displayName: Build
-        condition: ne('${{ parameters.BUILD }}', 'None')
+        condition: and(succeeded(), ne('${{ parameters.BUILD }}', 'None'))
       - script: |
           set -e
           # Source the IMPI setup script on the TACC image
@@ -79,7 +79,7 @@ jobs:
           fi
           docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && $TACC_IMPI && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
         displayName: Run Tests
-        condition: ne('${{ parameters.TEST }}', 'None')
+        condition: and(succeeded(), ne('${{ parameters.TEST }}', 'None'))
       - script: |
           cd ${{ parameters.REPO_NAME }}
 
@@ -119,7 +119,7 @@ jobs:
           # run codecov
           chmod +x codecov
           ./codecov $CODECOV_ARGS
-        condition: ${{ parameters.COVERAGE }}
+        condition: and(succeeded(), ${{ parameters.COVERAGE }})
         displayName: Coverage
       - script: |
           cd ${{ parameters.REPO_NAME }}

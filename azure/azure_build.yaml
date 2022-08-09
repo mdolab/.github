@@ -121,7 +121,7 @@ jobs:
           ./codecov $CODECOV_ARGS
         condition: ${{ parameters.COVERAGE }}
         displayName: Coverage
-              - script: |
+      - script: |
           cd ${{ parameters.REPO_NAME }}
 
           # validate the uploader

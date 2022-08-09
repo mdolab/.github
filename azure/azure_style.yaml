@@ -17,6 +17,9 @@ parameters:
   - name: CLANG_FORMAT
     type: boolean
     default: false
+  - name: FPRETTIFY
+    type: boolean
+    default: false
 
 jobs:
   - job: flake8
@@ -132,3 +135,40 @@ jobs:
 
           find . -iname '*.h' -o -iname '*.hpp' -o -iname '*.c' -o -iname '*.cpp' | xargs clang-format --verbose --dry-run --Werror -style=file
 
+  - job: fprettify
+    pool:
+      vmImage: "ubuntu-20.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    condition: ${{ parameters.FPRETTIFY }}
+    steps:
+      - checkout: self
+      - checkout: azure_template
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.9"
+      - script: |
+          cd ${{ parameters.REPO_NAME }}
+
+          # If there is no local config file, copy over the global config file
+          if [[ ! -f ".fprettify.rc" ]]; then
+            cp ../.github/.fprettify.rc .
+          fi
+
+          # Install fprettify
+          pip install fprettify==0.3.7
+
+          # Run fprettify on non-differentiated Fortran 90 source files
+          find . -type f -iname '*.f90' ! -iname '*_b.f90' ! -iname '*_d.f90' -print0 | while read -d $'\0' file
+          do
+            echo Checking $file
+            fprettify $file
+
+            # Check if this file changed and print a message if it did
+            git diff --summary --exit-code $file
+            if [ $? -ne 0 ]; then
+              echo $file needs to be formatted
+            fi
+          done
+
+          # Exit with an error if any of the tracked files changed
+          git diff --summary --exit-code

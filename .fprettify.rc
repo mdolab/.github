@@ -2,5 +2,6 @@
 
 i=4
 l=120
-whitespace-multdiv=True
+whitespace-multdiv
 strict-indent
+enable-decl

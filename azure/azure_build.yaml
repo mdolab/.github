@@ -155,7 +155,7 @@ jobs:
           lcov --capture --directory . --output-file coverage.info && \
           lcov --remove coverage.info '/usr/*' --output-file coverage.info && \
           lcov --remove coverage.info '*/numpy/*' --output-file coverage.info && \
-          lcov --remove coverage.info '/home/mdolabuser/.pyenv/versions' --output-file coverage.info && \
+          lcov --remove coverage.info '*/.pyenv/versions' --output-file coverage.info && \
           lcov --remove coverage.info '*mpi4py*' --output-file coverage.info"
 
           # copy coverage file out of Docker

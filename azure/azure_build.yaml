@@ -154,6 +154,8 @@ jobs:
           sudo docker exec app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && \
           lcov --capture --directory . --output-file coverage.info && \
           lcov --remove coverage.info '/usr/*' --output-file coverage.info && \
+          lcov --remove coverage.info '*/numpy/*' --output-file coverage.info && \
+          lcov --remove coverage.info '*/.pyenv/versions' --output-file coverage.info && \
           lcov --remove coverage.info '*mpi4py*' --output-file coverage.info"
 
           # copy coverage file out of Docker

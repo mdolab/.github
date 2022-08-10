@@ -15,6 +15,8 @@ extend-ignore =
     W605,
     # line length, exceeded by some docstrings
     E501,
+    # Function definition does not bind loop variable, happens everywhere in our code
+    B023,
 
 select =
     # ===== built-in checks

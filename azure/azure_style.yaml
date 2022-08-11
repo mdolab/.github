@@ -128,12 +128,14 @@ jobs:
 
           cd ${{ parameters.REPO_NAME }}
 
-          # if no local file is found in the repository, copy over the global .clang-format config file
-          if [[ ! -f ".clang-format" ]]; then
-            cp ../.github/.clang-format . || exit 1
+          # Check if we can access script, if not exit
+          if [[ ! -f ../.github/azure/clang-format.sh ]]; then
+            echo "clang-format.sh .sh not found. Exiting."
+            exit 1
           fi
 
-          find . -iname '*.h' -o -iname '*.hpp' -o -iname '*.c' -o -iname '*.cpp' | xargs clang-format --verbose --dry-run --Werror -style=file
+          # Run the formatting
+          bash ../.github/azure/clang-format.sh --dry-run || exit $?
 
   - job: fprettify
     pool:
@@ -149,7 +151,7 @@ jobs:
       - script: |
           cd ${{ parameters.REPO_NAME }}
 
-          # Check if we can access script, if not exit immediate
+          # Check if we can access script, if not exit
           if [[ ! -f ../.github/azure/fprettify.sh ]]; then
             echo "fprettify.sh not found. Exiting."
             exit 1
@@ -159,7 +161,7 @@ jobs:
           pip install fprettify==0.3.7
 
           # Run the formatting
-          bash ../.github/azure/fprettify.sh . || exit $?
+          bash ../.github/azure/fprettify.sh || exit $?
 
           # Exit with an error if any of the tracked files changed
           git diff --summary --exit-code

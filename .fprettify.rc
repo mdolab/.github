@@ -1,7 +1,7 @@
 [fprettify]
 
-i=4
-l=120
+indent=4
+line-length=120
 whitespace-multdiv
 strict-indent
 enable-decl

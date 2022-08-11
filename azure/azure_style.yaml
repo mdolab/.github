@@ -130,7 +130,7 @@ jobs:
 
           # Check if we can access script, if not exit
           if [[ ! -f ../.github/azure/clang-format.sh ]]; then
-            echo "clang-format.sh .sh not found. Exiting."
+            echo "clang-format.sh not found. Exiting."
             exit 1
           fi
 

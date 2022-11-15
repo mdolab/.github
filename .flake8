@@ -23,11 +23,11 @@ select =
     # mccabe
   # C901,
     # pycodestyle errors
-    E,
+  # E,
     # pycodestyle warnings
-    W,
+  # W,
     # pyflakes
-    F,
+  # F,
     # ===== plugins
     # flake8-builtins
     A00,

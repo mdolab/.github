@@ -28,8 +28,8 @@ jobs:
         "c7-intel-impi-stable":
           DOCKER_TAG: c7-intel-impi-stable
           CONFIG_FILE: ${{ parameters.INTEL_CONFIG }}
-        "u20-gcc-ompi-latest":
-          DOCKER_TAG: u20-gcc-ompi-latest
+        "u22-gcc-ompi-latest":
+          DOCKER_TAG: u22-gcc-ompi-latest
           CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
         "u20-gcc-ompi-stable":
           DOCKER_TAG: u20-gcc-ompi-stable

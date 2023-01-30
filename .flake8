@@ -1,7 +1,7 @@
 [flake8]
 max-line-length = 120
 
-extend-ignore = 
+extend-ignore =
     # black
     E203,
     # too many leading '#' for block comment
@@ -17,30 +17,10 @@ extend-ignore =
     E501,
     # Function definition does not bind loop variable, happens everywhere in our code
     B023,
-
-select =
-    # ===== built-in checks
-    # mccabe
-  # C901,
-    # pycodestyle errors
-  # E,
-    # pycodestyle warnings
-  # W,
-    # pyflakes
-  # F,
-    # ===== plugins
-    # flake8-builtins
-    A00,
-    # bugbear
-    B,
-    # flake8-comprehensions
-  # C4,
     # pydocstyle
-  # D,
+    D
     # flake8-rst-docstrings
-  # RST,
-    # flake8-broken-line
-  # N400
+    RST
 
 # flake8-docstrings
 docstring-convention = numpy

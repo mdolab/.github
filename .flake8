@@ -22,6 +22,9 @@ extend-ignore =
     # flake8-rst-docstrings
     RST
 
+# Only add patterns here that are not included by the defaults of flake8 or other plugins
+# extend-select =
+
 # flake8-docstrings
 docstring-convention = numpy
 

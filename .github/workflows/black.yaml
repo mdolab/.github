@@ -4,7 +4,7 @@ on:
       black_version:
         required: false
         type: string
-        default: "22.3.0"
+        default: "23.1.0"
 
 jobs:
   black:

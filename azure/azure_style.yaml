@@ -68,7 +68,7 @@ jobs:
           versionSpec: "3.9"
       - script: |
           pip install wheel
-          pip install black==22.3.0
+          pip install black==23.1.0
           black . --check --diff -l 120 --target-version py38 --target-version py39
 
   - job: isort

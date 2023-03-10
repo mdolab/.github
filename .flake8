@@ -19,8 +19,6 @@ extend-ignore =
     B023,
     # pydocstyle
     D
-    # flake8-rst-docstrings
-    RST
 
 # Only add patterns here that are not included by the defaults of flake8 or other plugins
 # extend-select =

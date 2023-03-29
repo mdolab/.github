@@ -68,9 +68,9 @@ echo ""
 echo "setting up github actions runner"
 mkdir $HOME/actions-runner && cd $HOME/actions-runner
 # Download the latest runner package
-curl -o actions-runner-linux-x64-2.279.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.279.0/actions-runner-linux-x64-2.279.0.tar.gz
+curl -o actions-runner-linux-x64-2.303.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.303.0/actions-runner-linux-x64-2.303.0.tar.gz
 # Optional: Validate the hash
-echo "50d21db4831afe4998332113b9facc3a31188f2d0c7ed258abf6a0b67674413a  actions-runner-linux-x64-2.279.0.tar.gz" | shasum -a 256 -c
+echo "e4a9fb7269c1a156eb5d5369232d0cd62e06bec2fd2b321600e85ac914a9cc73  actions-runner-linux-x64-2.303.0.tar.gz" | shasum -a 256 -c
 if [ $? -ne 0 ]; then
     echo "The runner was not downloaded correctly"
     exit 1
@@ -81,7 +81,7 @@ echo ""
 echo ""
 echo ""
 echo "Installing github actions runner"
-tar xzf ./actions-runner-linux-x64-2.279.0.tar.gz
+tar xzf ./actions-runner-linux-x64-2.303.0.tar.gz
 # Create the runner and start the configuration experience
 ./config.sh --url https://github.com/mdolab --token $TOKEN --unattended
 # Set the runner as a service

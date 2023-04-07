@@ -33,6 +33,14 @@ rst-roles =
     ref,
     meth,
 
+rst-directives =
+    # Custom directives defined in the sphinx_mdolab_theme
+    embed-compare,
+    embed-bibtex,
+    embed-code,
+    embed-shell-cmd,
+    embed-n2,
+
 # mccabe complexity
 # max-complexity = 10
 

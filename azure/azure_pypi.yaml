@@ -9,7 +9,7 @@ parameters:
 jobs:
   - job: PyPI_Deploy
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     steps:
       - task: UsePythonVersion@0

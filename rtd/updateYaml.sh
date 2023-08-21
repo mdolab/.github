@@ -8,9 +8,10 @@ This script generates a .readthedocs.yaml file for a given repository and
 copies it to the proper location within the repository.
 
 Argument description:
-    -a|--commit            Commit yaml file changes to a new branch
-    -p|--push-branch       Push the branch to GH
-    -c|--create-gh-prs     Create GH PRs
+    -w|--work-level     1: Commit yaml file changes to a new branch
+                        2: Push the branch to GH
+                        3: Create GH PRs
+    -h|--help           Print this help
 "
 
 die () {
@@ -19,14 +20,12 @@ die () {
 }
 
 # Parse input
-COMMIT=0
-PUSH_BRANCH=0
-CREATE_GH_PRS=0
+WORK_LEVEL=0
+MANUAL_REPO=""
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        -a|--commit) COMMIT=1 ;;
-        -p|--push-branch ) PUSH_BRANCH=1 ;;
-        -c|--create-gh-prs ) CREATE_GH_PRS=1 ;;
+        -w|--work-level) WORK_LEVEL="$2"; shift ;;
+        -r|--repo ) MANUAL_REPO="$2"; shift ;;
         -h|--help) echo "$USAGE";  exit 1 ;;
         *) echo "Unknown parameter passed: $1"; echo "$USAGE"; exit 1 ;;
     esac
@@ -35,44 +34,67 @@ done
 
 ROOTDIR=$(pwd)
 
-REPOS=(
-#"adflow"
-#"baseclasses"
-#"cgnsutilities"
-# "CMPLXFOIL"
-# "complexify"
-# "dev-tutorials"
-# "idwarp"
-# "MACH-Aero"
-# "privat"
-# "multipoint"
-# "niceplots"
-# "OpenAeroStruct"
-# "openconcept"
-# "performancecalcs"
-# "prefoil"
-# "private-docs"
-# "pyaerostructure"
-# "pyfriction"
-# "pygeo"
-# "pyhyp"
-# "pylayout"
-# "pyoptsparse"
-# "pyspline"
-# "pysurf"
-# "pytacs"
-# "pyXDSM"
-# "tacs_orig"
-# "VACC"
-"weightandbalance"
-#"wimpresscalc"
-)
+# If input is specified then we only use that
+if [[ ! -z $MANUAL_REPO ]]; then
+    REPOS=("$MANUAL_REPO")
+else
+    # Set the default list firt
+    REPOS=(
+        "adflow"
+        "baseclasses"
+        "cgnsutilities"
+        "CMPLXFOIL"
+        "complexify"
+        "dev-tutorials"
+        "idwarp"
+        "MACH-Aero"
+        "private-mach-aero"
+        "multipoint"
+        "performancecalcs"
+        "prefoil"
+        "private-docs"
+        "pyaerostructure"
+        "pyfriction"
+        "pygeo"
+        "pyhyp"
+        "pylayout"
+        "pyoptsparse"
+        "pyspline"
+        "pysurf"
+        "pytacs"
+        "pyXDSM"
+        "tacs_orig"
+        "weightandbalance"
+        "wimpresscalc"
+    )
 
-BRANCH_NAME="updateRtdYaml"
+fi
 
 ## First create a tmp directory in the current directory
 WORKDIR="$ROOTDIR/tmp"
 rm -rf $WORKDIR && mkdir -p $WORKDIR
+
+BRANCH_NAME="updateRtdYaml"
+RTD_PR_TEMPATE_FILE=$WORKDIR/RTD_PR_TEMPATE.md
+
+cat > $RTD_PR_TEMPATE_FILE << EOF
+## Purpose
+Update \`.readthedocs.yaml\` file
+
+## Expected time until merged
+Few days
+
+## Type of change
+- [ ] Bugfix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (non-backwards-compatible fix or feature)
+- [ ] Code style update (formatting, renaming)
+- [ ] Refactoring (no functional changes, no API changes)
+- [x] Documentation update
+- [ ] Maintenance update
+- [ ] Other (please describe)
+EOF
+
 for i in ${!REPOS[@]}; do
     # Reset to
     cd $WORKDIR
@@ -87,17 +109,19 @@ for i in ${!REPOS[@]}; do
     # python genYaml.py
     cp $ROOTDIR/.rtd.yaml $REPODIR/.readthedocs.yaml
 
-    if [[ $COMMIT -eq 1 ]]; then
+    if [[ $WORK_LEVEL -ge 1 ]]; then
         git add .readthedocs.yaml
         git commit -m "update .readthedocs.yaml"
 
         # Push branch
-        if [[ $PUSH_BRANCH -eq 1 ]]; then
+        if [[ $WORK_LEVEL -ge 2 ]]; then
             git push --set-upstream origin $BRANCH_NAME
 
+            echo $PR_BODY
+
             # Create the PR on GH
-            if [[ $CREATE_GH_PRS -eq 1 ]]; then
-                gh pr create --fill
+            if [[ $WORK_LEVEL -ge 3 ]]; then
+                gh pr create --title "Update .readthedocs.yaml" --body-file "$RTD_PR_TEMPATE_FILE"
             fi
         fi
     fi

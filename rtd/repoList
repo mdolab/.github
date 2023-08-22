@@ -5,12 +5,10 @@ CMPLXFOIL
 complexify
 dev-tutorials
 idwarp
-MACH-Aero
-private-mach-aero
+private-mach-tutorial
 multipoint
 performancecalcs
 prefoil
-private-docs
 pyaerostructure
 pyfriction
 pygeo

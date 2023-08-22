@@ -8,9 +8,12 @@ This script generates a .readthedocs.yaml file for a given repository and
 copies it to the proper location within the repository.
 
 Argument description:
-    -w|--work-level     1: Commit yaml file changes to a new branch
+    -w|--work-level     0: Clone and copy yaml file to repository (default)
+                        1: Commit yaml file changes to a new branch
                         2: Push the branch to GH
                         3: Create GH PRs
+    -r|--repo           Repository that should be updated. If not specified
+                        an internal list of repositories will used.
     -h|--help           Print this help
 "
 
@@ -38,7 +41,7 @@ ROOTDIR=$(pwd)
 if [[ ! -z $MANUAL_REPO ]]; then
     REPOS=("$MANUAL_REPO")
 else
-    # Set the default list firt
+    # otherwise set use a default list
     REPOS=(
         "adflow"
         "baseclasses"
@@ -67,16 +70,14 @@ else
         "weightandbalance"
         "wimpresscalc"
     )
-
 fi
 
-## First create a tmp directory in the current directory
+# Create a working tmp directory to hold the working
 WORKDIR="$ROOTDIR/tmp"
 rm -rf $WORKDIR && mkdir -p $WORKDIR
 
 BRANCH_NAME="updateRtdYaml"
 RTD_PR_TEMPATE_FILE=$WORKDIR/RTD_PR_TEMPATE.md
-
 cat > $RTD_PR_TEMPATE_FILE << EOF
 ## Purpose
 Update \`.readthedocs.yaml\` file
@@ -91,8 +92,9 @@ Few days
 - [ ] Code style update (formatting, renaming)
 - [ ] Refactoring (no functional changes, no API changes)
 - [x] Documentation update
-- [ ] Maintenance update
+- [x] Maintenance update
 - [ ] Other (please describe)
+
 EOF
 
 for i in ${!REPOS[@]}; do
@@ -109,6 +111,7 @@ for i in ${!REPOS[@]}; do
     # python genYaml.py
     cp $ROOTDIR/.rtd.yaml $REPODIR/.readthedocs.yaml
 
+    # Commit the changes
     if [[ $WORK_LEVEL -ge 1 ]]; then
         git add .readthedocs.yaml
         git commit -m "update .readthedocs.yaml"
@@ -116,8 +119,6 @@ for i in ${!REPOS[@]}; do
         # Push branch
         if [[ $WORK_LEVEL -ge 2 ]]; then
             git push --set-upstream origin $BRANCH_NAME
-
-            echo $PR_BODY
 
             # Create the PR on GH
             if [[ $WORK_LEVEL -ge 3 ]]; then

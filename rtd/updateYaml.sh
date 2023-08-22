@@ -1,76 +1,76 @@
 #!/bin/bash
 
 USAGE="
-usage: -l LAYER -t DOCKER_TAG_NAME
+usage: updateYaml [-w WORK_LEVEL] [-r REPO_NAME] [-l REPO_LIST]
 
 Description:
 This script generates a .readthedocs.yaml file for a given repository and
-copies it to the proper location within the repository.
+copies it to the proper location within the repository. Depending on the
+work-level specified, it will copy the file, create a branch, commit, push,
+and create a PR on GitHub.
 
 Argument description:
     -w|--work-level     0: Clone and copy yaml file to repository (default)
                         1: Commit yaml file changes to a new branch
                         2: Push the branch to GH
                         3: Create GH PRs
-    -r|--repo           Repository that should be updated. If not specified
-                        an internal list of repositories will used.
+    -r|--repo           Name of a single repository that should be updated
+    -l|--repo-list      Text file with a list of repositories that should be updated
     -h|--help           Print this help
 "
 
 die () {
-    echo "Something went wrong. See logs for details... EXITING"
     exit 9
 }
 
 # Parse input
 WORK_LEVEL=0
 MANUAL_REPO=""
+REPO_LIST=""
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -w|--work-level) WORK_LEVEL="$2"; shift ;;
         -r|--repo ) MANUAL_REPO="$2"; shift ;;
+        -l|--repo-list ) REPO_LIST="$2"; shift ;;
         -h|--help) echo "$USAGE";  exit 1 ;;
         *) echo "Unknown parameter passed: $1"; echo "$USAGE"; exit 1 ;;
     esac
     shift
 done
 
-ROOTDIR=$(pwd)
+# Check input
+if [[ -z $MANUAL_REPO && -z $REPO_LIST ]]; then
+    echo "Insufficient inputs, see usage:"
+    echo "$USAGE"
+    die
+fi
 
 # If input is specified then we only use that
 if [[ ! -z $MANUAL_REPO ]]; then
     REPOS=("$MANUAL_REPO")
+elif [[ -f $REPO_LIST ]]; then
+    # Read the specified list
+    readarray -t REPOS < "$REPO_LIST"
 else
-    # otherwise set use a default list
-    REPOS=(
-        "adflow"
-        "baseclasses"
-        "cgnsutilities"
-        "CMPLXFOIL"
-        "complexify"
-        "dev-tutorials"
-        "idwarp"
-        "MACH-Aero"
-        "private-mach-aero"
-        "multipoint"
-        "performancecalcs"
-        "prefoil"
-        "private-docs"
-        "pyaerostructure"
-        "pyfriction"
-        "pygeo"
-        "pyhyp"
-        "pylayout"
-        "pyoptsparse"
-        "pyspline"
-        "pysurf"
-        "pytacs"
-        "pyXDSM"
-        "tacs_orig"
-        "weightandbalance"
-        "wimpresscalc"
-    )
+    echo "Repo file, $REPO_LIST, not found. Check input, exiting!"
+    die
 fi
+
+# Check and verify input
+echo "The following repo(s) will be updated:"
+for repo in ${REPOS[@]}; do
+    echo $repo
+done
+
+# Make sure everything is good, otherwise abort
+read -r -p "Are you sure? [y/N]:" response
+response=${response,,} # tolower
+if [[ ! "$response" =~ ^(yes|y)$ ]]; then
+    echo "Aborting..."
+    die
+fi
+
+ROOTDIR=$(pwd)
 
 # Create a working tmp directory to hold the working
 WORKDIR="$ROOTDIR/tmp"
@@ -97,10 +97,9 @@ Few days
 
 EOF
 
-for i in ${!REPOS[@]}; do
-    # Reset to
+for repo in ${REPOS[@]}; do
+    # Reset
     cd $WORKDIR
-    repo=${REPOS[$i]}
     REPODIR="$WORKDIR/$repo"
     echo "Updating $repo"
     git clone git@github.com:mdolab/"$repo".git

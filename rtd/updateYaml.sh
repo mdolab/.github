@@ -101,14 +101,10 @@ EOF
 # Init array to track progress
 declare -A REPO_STATUS
 
-repoFailed () {
-    REPO_STATUS["$1"]="Failed"
-    echo "ERROR: Repository, $1, failed. See output for details."
-}
-
 checkFailure () {
     if [[ $1 -ne 0 ]]; then
         REPO_STATUS["$2"]="Failed"
+        echo "ERROR: Repository, $2, failed. See output for details."
         return $1
     fi
     REPO_STATUS["$2"]="Success"

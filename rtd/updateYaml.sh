@@ -72,7 +72,7 @@ fi
 
 ROOTDIR=$(pwd)
 
-# Create a working tmp directory to hold the working
+# Create a working tmp directory
 WORKDIR="$ROOTDIR/tmp"
 rm -rf $WORKDIR && mkdir -p $WORKDIR
 
@@ -97,14 +97,37 @@ Few days
 
 EOF
 
+
+# Init array to track progress
+declare -A REPO_STATUS
+
+repoFailed () {
+    REPO_STATUS["$1"]="Failed"
+    echo "ERROR: Repository, $1, failed. See output for details."
+}
+
+checkFailure () {
+    if [[ $1 -ne 0 ]]; then
+        REPO_STATUS["$2"]="Failed"
+        return $1
+    fi
+    REPO_STATUS["$2"]="Success"
+    return 0
+}
+
+# Main loop
 for repo in ${REPOS[@]}; do
     # Reset
     cd $WORKDIR
     REPODIR="$WORKDIR/$repo"
-    echo "Updating $repo"
+    echo ""
+    echo "---------------- Updating $repo ------------------------"
     git clone git@github.com:mdolab/"$repo".git
+    checkFailure $? $repo || continue
+
     cd $REPODIR
     git checkout -b $BRANCH_NAME
+    checkFailure $? $repo || continue
 
     # Generate the yaml file (just copy for now)
     # python genYaml.py
@@ -113,16 +136,34 @@ for repo in ${REPOS[@]}; do
     # Commit the changes
     if [[ $WORK_LEVEL -ge 1 ]]; then
         git add .readthedocs.yaml
+        checkFailure $? $repo || continue
+
         git commit -m "update .readthedocs.yaml"
+        checkFailure $? $repo || continue
 
         # Push branch
         if [[ $WORK_LEVEL -ge 2 ]]; then
             git push --set-upstream origin $BRANCH_NAME
+            checkFailure $? $repo || continue
 
             # Create the PR on GH
             if [[ $WORK_LEVEL -ge 3 ]]; then
-                gh pr create --title "Update .readthedocs.yaml" --body-file "$RTD_PR_TEMPATE_FILE"
+                PR_LINK=$(gh pr create --title "Update .readthedocs.yaml" --body-file "$RTD_PR_TEMPATE_FILE")
+                checkFailure $? $repo || continue
+                # Overwrite the "success" with PR link for summary.
+                REPO_STATUS["$repo"]="$PR_LINK"
             fi
         fi
     fi
+done
+
+# Print summary at the end so we dont need to go through the output
+echo ""
+echo "----------------------"
+echo "       SUMMARY        "
+echo "----------------------"
+echo "Repository - Status/PR"
+echo "----------------------"
+for key in ${!REPO_STATUS[@]}; do
+    echo ${key} - ${REPO_STATUS[${key}]}
 done

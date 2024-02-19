@@ -24,7 +24,7 @@ parameters:
 jobs:
   - job: flake8
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     continueOnError: ${{ parameters.IGNORE_STYLE }}
     strategy:
@@ -59,7 +59,7 @@ jobs:
 
   - job: black
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     continueOnError: ${{ parameters.IGNORE_STYLE }}
     steps:
@@ -73,7 +73,7 @@ jobs:
 
   - job: isort
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.ISORT }}
     steps:
@@ -96,7 +96,7 @@ jobs:
 
   - job: pylint
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.PYLINT }}
     steps:
@@ -116,7 +116,7 @@ jobs:
 
   - job: clang_format
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.CLANG_FORMAT }}
     steps:
@@ -139,7 +139,7 @@ jobs:
 
   - job: fprettify
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     condition: ${{ parameters.FPRETTIFY }}
     steps:

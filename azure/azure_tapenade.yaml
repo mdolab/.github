@@ -11,7 +11,7 @@ parameters:
 jobs:
   - job: tapenade
     pool:
-      vmImage: "ubuntu-20.04"
+      vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     steps:
       - task: JavaToolInstaller@0
@@ -24,7 +24,8 @@ jobs:
             export TAPENADE_URL=http://umich.edu/~mdolaboratory/misc/tapenade3.10.tar
             export TAPENADE_HOME=$(pwd)/tapenade${{ parameters.TAPENADE_VERSION }}
           elif [[ "${{ parameters.TAPENADE_VERSION }}" == "3.16" ]]; then
-            export TAPENADE_URL=https://tapenade.gitlabpages.inria.fr/tapenade/distrib/tapenade_3.16.tar
+            # The following link corresponds to tapenade_3.16-v2-723-ge8da61555.tar
+            export TAPENADE_URL="https://gitlab.inria.fr/tapenade/tapenade/-/package_files/112870/download -O tapenade_3.16.tar"
             export TAPENADE_HOME=$(pwd)/tapenade_${{ parameters.TAPENADE_VERSION }}
           fi
 

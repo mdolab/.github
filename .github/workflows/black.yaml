@@ -13,5 +13,5 @@ jobs:
       - uses: actions/checkout@v4
       - uses: psf/black@stable
         with:
-          options: "--check --diff -l 120 --target-version py38 --target-version py39"
+          options: "--check --diff -l 120 --target-version py39 --target-version py312"
           version: ${{ inputs.black_version }}

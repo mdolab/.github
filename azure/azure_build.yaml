@@ -34,9 +34,6 @@ jobs:
         "u20-gcc-ompi-stable":
           DOCKER_TAG: u20-gcc-ompi-stable
           CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
-        "tacc-u18-gcc-impi-stable":
-          DOCKER_TAG: tacc-u18-gcc-impi-stable
-          CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
     variables:
       - group: Docker
       - group: Codecov
@@ -71,13 +68,7 @@ jobs:
         condition: and(succeeded(), ne('${{ parameters.BUILD }}', 'None'))
       - script: |
           set -e
-          # Source the IMPI setup script on the TACC image
-          if [[ "$(DOCKER_TAG)" =~ "tacc" ]] ; then
-            export TACC_IMPI=". \$HOME/set_local_impi_vars.sh"
-          else
-            export TACC_IMPI=":"
-          fi
-          docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && $TACC_IMPI && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
+          docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
         displayName: Run Tests
         condition: and(succeeded(), ne('${{ parameters.TEST }}', 'None'))
       - script: |

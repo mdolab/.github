@@ -25,6 +25,9 @@ jobs:
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     strategy:
       matrix:
+        "u20-intel-impi-latest":
+          DOCKER_TAG: u20-intel-impi-latest
+          CONFIG_FILE: ${{ parameters.INTEL_CONFIG }}
         "u22-intel-impi-latest":
           DOCKER_TAG: u22-intel-impi-latest
           CONFIG_FILE: ${{ parameters.INTEL_CONFIG }}

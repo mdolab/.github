@@ -25,17 +25,17 @@ jobs:
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     strategy:
       matrix:
-        "u20-intel-impi-latest":
-          DOCKER_TAG: u20-intel-impi-latest
-          CONFIG_FILE: ${{ parameters.INTEL_CONFIG }}
         "u22-intel-impi-latest":
           DOCKER_TAG: u22-intel-impi-latest
           CONFIG_FILE: ${{ parameters.INTEL_CONFIG }}
-        "u22-gcc-ompi-latest":
-          DOCKER_TAG: u22-gcc-ompi-latest
+        "u24-intel-impi-latest":
+          DOCKER_TAG: u24-intel-impi-latest
+          CONFIG_FILE: ${{ parameters.INTEL_CONFIG }}
+        "u24-gcc-ompi-latest":
+          DOCKER_TAG: u24-gcc-ompi-latest
           CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
-        "u20-gcc-ompi-stable":
-          DOCKER_TAG: u20-gcc-ompi-stable
+        "u22-gcc-ompi-stable":
+          DOCKER_TAG: u22-gcc-ompi-stable
           CONFIG_FILE: ${{ parameters.GCC_CONFIG }}
     variables:
       - group: Docker

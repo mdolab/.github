@@ -1,4 +1,4 @@
-flake8==5.0.4
+flake8==7.3.0
 flake8-bugbear
 flake8-builtins
 flake8-docstrings

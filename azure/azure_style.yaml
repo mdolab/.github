@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         "py311":
-          PYTHON_VERSION: "3.9"
+          PYTHON_VERSION: "3.11"
         "py313":
           PYTHON_VERSION: "3.13"
     steps:

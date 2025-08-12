@@ -2,7 +2,7 @@ on:
   workflow_call:
 
 jobs:
-  flake8:
+  format-and-lint:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -17,6 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           wget https://raw.githubusercontent.com/mdolab/.github/ruffConfig/.pre-commit-config.yaml
+          wget https://raw.githubusercontent.com/mdolab/.github/ruffConfig/ruff.toml
           pip install pre-commit
       - name: Run pre-commit checks
         run: |

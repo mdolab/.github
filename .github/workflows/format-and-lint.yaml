@@ -1,0 +1,23 @@
+on:
+  workflow_call:
+
+jobs:
+  flake8:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: [3.9, 3.11]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      # Change ruffConfig to main before merge
+      - name: Install dependencies
+        run: |
+          wget https://raw.githubusercontent.com/mdolab/.github/ruffConfig/.pre-commit-config.yaml
+          pip install pre-commit
+      - name: Run pre-commit checks
+        run: |
+          pre-commit run --all-files

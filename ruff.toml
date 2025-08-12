@@ -1,0 +1,40 @@
+# Minimum Python syntax support
+target-version = "py39"
+
+line-length = 120
+
+exclude = [
+    ".git",
+    "__pycache__",
+    "doc/conf.py",
+    "__init__.py",
+    "setup.py",
+]
+
+[lint]
+ignore = [
+    "B006", # do not use mutable data structures for argument defaults (too many false positives)
+    "B023", # Function definition does not bind loop variable, happens everywhere in our code
+    "D",    # pydocstyle
+    "E501", # line length, exceeded by some docstrings
+    "W605", # TODO (to be fixed) # invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
+]
+
+select = [
+    "B",
+    "D",
+    "E",
+    "F",
+    "W",
+]
+
+[lint.pydocstyle]
+convention = "numpy"
+
+[lint.pycodestyle]
+max-line-length = 120
+
+[format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true

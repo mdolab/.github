@@ -173,7 +173,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
-    condition: ${{ parameters.FPRETTIFY }}
+    condition: ${{ parameters.RUFF }}
     steps:
       - checkout: self
       - checkout: azure_template

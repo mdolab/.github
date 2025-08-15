@@ -13,11 +13,19 @@ exclude = [
 
 [lint]
 ignore = [
+    "E203", # whitespace before ':', conflicts with black
+    "E266", # expected 2 blank lines, found 1
+    "E302", # do not use mutable data structures for argument defaults (too many false positives)
     "B006", # do not use mutable data structures for argument defaults (too many false positives)
     "B023", # Function definition does not bind loop variable, happens everywhere in our code
-    "D",    # pydocstyle
     "E501", # line length, exceeded by some docstrings
-    "W605", # TODO (to be fixed) # invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
+    "W605", # TODO (to be fixed), invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
+    "D301", # Same reason as W605
+    "D10", # D100-107, missing docstring in public function, class etc (yes we should have docstrings for all public methods, but that is a pipe dream)
+    "D400", # First line of docstring should end with a period (assumes the summary fits on one line, which is not always the case)
+    "D205", # 1 blank line required between summary line and description (Makes same assumption as D400)
+    "D200", # One-line docstring should fit on one line, don't like this because it enforces inconsistent formatting between one-line and multi-line docstrings
+    "D401", # First line of docstring should be in imperative mood, silly rule.
 ]
 
 select = [
@@ -26,15 +34,19 @@ select = [
     "E",
     "F",
     "W",
+    "I",
 ]
 
 [lint.pydocstyle]
 convention = "numpy"
 
-[lint.pycodestyle]
-max-line-length = 120
+[lint.isort]
+force-sort-within-sections = true
 
 [format]
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
+
+[lint.per-file-ignores]
+"tests/*" = ["D"] # Ignore docstring checks in tests

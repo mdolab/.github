@@ -23,6 +23,12 @@ jobs:
           if [[ -f "ruff.toml-project" ]]; then
               sed -i '1s/^/extend = "ruff.toml-project" \n/' ruff.toml
           fi
+          echo "Ruff config:"
+          cat ruff.toml
+          if [[ -f "ruff.toml-project" ]]; then
+              echo "Ruff project config:"
+              cat ruff.toml-project
+          fi
       - name: Run pre-commit checks
         run: |
           pre-commit run --all-files --show-diff-on-failure

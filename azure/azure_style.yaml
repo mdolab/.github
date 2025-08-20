@@ -24,59 +24,11 @@ parameters:
     type: boolean
     default: false
 jobs:
-  - job: flake8
-    pool:
-      vmImage: "ubuntu-22.04"
-    timeoutInMinutes: ${{ parameters.TIMEOUT }}
-    continueOnError: ${{ parameters.IGNORE_STYLE }}
-    strategy:
-      matrix:
-        "py39":
-          PYTHON_VERSION: "3.9"
-        "py311":
-          PYTHON_VERSION: "3.11"
-    steps:
-      - checkout: self
-      - checkout: azure_template
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: $(PYTHON_VERSION)
-      - script: |
-          cd ${{ parameters.REPO_NAME }}
-          pip install wheel
-          pip install -r ../.github/flake8-requirements.txt
-
-          if [[ -f ".flake8" ]]; then
-            export FL8=.flake8-project
-            mv .flake8 $FL8; # rename the file from code repo; should have higher precedence in merge
-          fi
-
-          cp ../.github/.flake8 .
-
-          if [[ -f "$FL8" ]]; then
-              flake8 . --append-config $FL8 --count --show-source --statistics;
-          else
-              flake8 . --count --show-source --statistics;
-          fi
-
-  - job: black
-    pool:
-      vmImage: "ubuntu-22.04"
-    timeoutInMinutes: ${{ parameters.TIMEOUT }}
-    continueOnError: ${{ parameters.IGNORE_STYLE }}
-    steps:
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: "3.9"
-      - script: |
-          pip install wheel
-          pip install black==23.1.0
-          black . --check --diff -l 120 --target-version py39 --target-version py311
-
   - job: isort
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.ISORT }}
     steps:
       - checkout: self
@@ -100,6 +52,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.PYLINT }}
     steps:
       - checkout: self
@@ -120,6 +73,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.CLANG_FORMAT }}
     steps:
       - checkout: self
@@ -143,6 +97,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.FPRETTIFY }}
     steps:
       - checkout: self
@@ -173,6 +128,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.RUFF }}
     steps:
       - checkout: self

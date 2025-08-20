@@ -13,11 +13,8 @@ exclude = [
 
 [lint]
 ignore = [
-    "E203", # whitespace before ':', conflicts with black
-    "E266", # expected 2 blank lines, found 1
-    "E302", # do not use mutable data structures for argument defaults (too many false positives)
+    "E266", # Too many leading '#' for block comment
     "B006", # do not use mutable data structures for argument defaults (too many false positives)
-    "B023", # Function definition does not bind loop variable, happens everywhere in our code
     "E501", # line length, exceeded by some docstrings
     "W605", # TODO (to be fixed), invalid escape sequence, necessary for sphinx directives in docstrings but should switch to raw string
     "D301", # Same reason as W605
@@ -34,14 +31,10 @@ select = [
     "E",
     "F",
     "W",
-    "I",
 ]
 
 [lint.pydocstyle]
 convention = "numpy"
-
-[lint.isort]
-force-sort-within-sections = true
 
 [format]
 quote-style = "double"

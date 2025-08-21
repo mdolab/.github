@@ -24,6 +24,7 @@ ignore = [
     "D200", # One-line docstring should fit on one line, don't like this because it enforces inconsistent formatting between one-line and multi-line docstrings
     "D202", # No blank lines allowed after function docstring (silly rule, if formatter doesn't enforce it then checks shouldn't either)
     "D401", # First line of docstring should be in imperative mood (silly rule)
+    "D404", # First word of the docstring should not be "This" (Probably a good rule to follow going forward but it occurs in so many places in our code and it's not a big enough issue to warrant fixing)
 ]
 
 select = [

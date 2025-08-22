@@ -58,7 +58,7 @@ jobs:
           ruff check .
 
           # Run the formatting
-          ruff format .
+          ruff format --check .
 
   - job: isort
     pool:

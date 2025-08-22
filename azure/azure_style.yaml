@@ -8,7 +8,7 @@ parameters:
   - name: IGNORE_STYLE
     type: boolean
     default: false
-  - name: RUFF
+  - name: BASE_FORMAT_AND_LINT
     type: boolean
     default: true
   - name: ISORT
@@ -24,12 +24,12 @@ parameters:
     type: boolean
     default: false
 jobs:
-  - job: ruff
+  - job: Base format and lint
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     continueOnError: ${{ parameters.IGNORE_STYLE }}
-    condition: ${{ parameters.RUFF }}
+    condition: ${{ parameters.BASE_FORMAT_AND_LINT }}
     steps:
       - checkout: self
       - checkout: azure_template

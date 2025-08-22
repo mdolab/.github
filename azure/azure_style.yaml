@@ -38,7 +38,7 @@ jobs:
           versionSpec: "3.11"
       - script: |
           cd ${{ parameters.REPO_NAME }}
-          cp ../.github/.pre-commit-config.yaml
+          cp ../.github/.pre-commit-config.yaml .
           pip install pre-commit
 
           # If there's already a ruff.toml file in the repo, we should rename the global config to ruff.toml-global, then put the line `extend = "ruff.toml-global"` at the top of the local ruff.toml so that ruff will use both configurations.

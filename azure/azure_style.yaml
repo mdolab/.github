@@ -8,6 +8,9 @@ parameters:
   - name: IGNORE_STYLE
     type: boolean
     default: false
+  - name: RUFF
+    type: boolean
+    default: true
   - name: ISORT
     type: boolean
     default: false
@@ -20,61 +23,48 @@ parameters:
   - name: FPRETTIFY
     type: boolean
     default: false
-
 jobs:
-  - job: flake8
+  - job: ruff
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
     continueOnError: ${{ parameters.IGNORE_STYLE }}
-    strategy:
-      matrix:
-        "py39":
-          PYTHON_VERSION: "3.9"
-        "py311":
-          PYTHON_VERSION: "3.11"
+    condition: ${{ parameters.RUFF }}
     steps:
       - checkout: self
       - checkout: azure_template
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: $(PYTHON_VERSION)
-      - script: |
-          cd ${{ parameters.REPO_NAME }}
-          pip install wheel
-          pip install -r ../.github/flake8-requirements.txt
-
-          if [[ -f ".flake8" ]]; then
-            export FL8=.flake8-project
-            mv .flake8 $FL8; # rename the file from code repo; should have higher precedence in merge
-          fi
-
-          cp ../.github/.flake8 .
-
-          if [[ -f "$FL8" ]]; then
-              flake8 . --append-config $FL8 --count --show-source --statistics;
-          else
-              flake8 . --count --show-source --statistics;
-          fi
-
-  - job: black
-    pool:
-      vmImage: "ubuntu-22.04"
-    timeoutInMinutes: ${{ parameters.TIMEOUT }}
-    continueOnError: ${{ parameters.IGNORE_STYLE }}
-    steps:
-      - task: UsePythonVersion@0
-        inputs:
           versionSpec: "3.9"
       - script: |
-          pip install wheel
-          pip install black==23.1.0
-          black . --check --diff -l 120 --target-version py39 --target-version py311
+          cd ${{ parameters.REPO_NAME }}
+          pip install ruff==0.12.10
+
+          # If there's already a ruff.toml file in the repo, we should rename the global config to ruff.toml-global, then put the line `extend = "ruff.toml-global"` at the top of the local ruff.toml so that ruff will use both configurations.
+          globalConfigFile="../.github/ruff.toml"
+          if [[ -f "ruff.toml" ]]; then
+            cp $globalConfigFile ruff.toml-global
+            sed -i '1s/^/extend = "ruff.toml-global" \n/' ruff.toml
+          else
+            cp $globalConfigFile .
+          fi
+          echo "Ruff config:"
+          if [[ -f "ruff.toml-global" ]]; then
+              cat ruff.toml-global
+          fi
+          cat ruff.toml
+
+          # Run the linting
+          ruff check .
+
+          # Run the formatting
+          ruff format --check .
 
   - job: isort
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.ISORT }}
     steps:
       - checkout: self
@@ -98,6 +88,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.PYLINT }}
     steps:
       - checkout: self
@@ -118,6 +109,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.CLANG_FORMAT }}
     steps:
       - checkout: self
@@ -141,6 +133,7 @@ jobs:
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
     condition: ${{ parameters.FPRETTIFY }}
     steps:
       - checkout: self
@@ -165,3 +158,5 @@ jobs:
 
           # Exit with an error if any of the tracked files changed
           git diff --summary --exit-code
+
+

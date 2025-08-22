@@ -8,6 +8,9 @@ parameters:
   - name: IGNORE_STYLE
     type: boolean
     default: false
+  - name: RUFF
+    type: boolean
+    default: true
   - name: ISORT
     type: boolean
     default: false
@@ -20,10 +23,43 @@ parameters:
   - name: FPRETTIFY
     type: boolean
     default: false
-  - name: RUFF
-    type: boolean
-    default: false
 jobs:
+  - job: ruff
+    pool:
+      vmImage: "ubuntu-22.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
+    condition: ${{ parameters.RUFF }}
+    steps:
+      - checkout: self
+      - checkout: azure_template
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.9"
+      - script: |
+          cd ${{ parameters.REPO_NAME }}
+          pip install ruff==0.12.10
+
+          # If there's already a ruff.toml file in the repo, we should rename the global config to ruff.toml-global, then put the line `extend = "ruff.toml-global"` at the top of the local ruff.toml so that ruff will use both configurations.
+          globalConfigFile="../.github/ruff.toml"
+          if [[ -f "ruff.toml" ]]; then
+            cp $globalConfigFile ruff.toml-global
+            sed -i '1s/^/extend = "ruff.toml-global" \n/' ruff.toml
+          else
+            cp $globalConfigFile .
+          fi
+          echo "Ruff config:"
+          if [[ -f "ruff.toml-global" ]]; then
+              cat ruff.toml-global
+          fi
+          cat ruff.toml
+
+          # Run the linting
+          ruff check .
+
+          # Run the formatting
+          ruff format .
+
   - job: isort
     pool:
       vmImage: "ubuntu-22.04"
@@ -124,29 +160,3 @@ jobs:
           git diff --summary --exit-code
 
 
-  - job: ruff
-    pool:
-      vmImage: "ubuntu-22.04"
-    timeoutInMinutes: ${{ parameters.TIMEOUT }}
-    continueOnError: ${{ parameters.IGNORE_STYLE }}
-    condition: ${{ parameters.RUFF }}
-    steps:
-      - checkout: self
-      - checkout: azure_template
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: "3.9"
-      - script: |
-          cd ${{ parameters.REPO_NAME }}
-          pip install ruff
-
-          # Check if we have a local file, if not copy over the global
-          if [[ ! -f "ruff.toml" ]]; then
-            cp ../.github/ruff.toml .
-          fi
-
-          # Run the linting
-          ruff check .
-
-          # Run the formatting
-          ruff format .

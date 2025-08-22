@@ -25,6 +25,7 @@ The templates are organized into the following files:
 | `COVERAGE`         | boolean | `false`                     | Flag to report test coverage to `codecov`                                                                                                   |
 | `TIMEOUT_STYLE`    | number  | `10`                        | Runtime allowed for each style check, in minutes                                                                                            |
 | `IGNORE_STYLE`     | boolean | `false`                     | Flag to allow `formatting and linting` checks to fail without failing the pipeline                                                          |
+| `RUFF`             | boolean | `false`                     | Flag to trigger the `ruff` check                                                                                                            |
 | `ISORT`            | boolean | `false`                     | Flag to trigger the `isort` check                                                                                                           |
 | `PYLINT`           | boolean | `false`                     | Flag to trigger the `pylint` check                                                                                                          |
 | `CLANG_FORMAT`     | boolean | `false`                     | Flag to trigger the `clang-format` check                                                                                                    |

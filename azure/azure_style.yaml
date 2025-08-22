@@ -24,7 +24,7 @@ parameters:
     type: boolean
     default: false
 jobs:
-  - job: Base format and lint
+  - job: base_format_and_lint
     pool:
       vmImage: "ubuntu-22.04"
     timeoutInMinutes: ${{ parameters.TIMEOUT }}

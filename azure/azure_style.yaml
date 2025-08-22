@@ -35,10 +35,11 @@ jobs:
       - checkout: azure_template
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.9"
+          versionSpec: "3.11"
       - script: |
           cd ${{ parameters.REPO_NAME }}
-          pip install ruff==0.12.10
+          cp ../.github/.pre-commit-config.yaml
+          pip install pre-commit
 
           # If there's already a ruff.toml file in the repo, we should rename the global config to ruff.toml-global, then put the line `extend = "ruff.toml-global"` at the top of the local ruff.toml so that ruff will use both configurations.
           globalConfigFile="../.github/ruff.toml"
@@ -54,11 +55,8 @@ jobs:
           fi
           cat ruff.toml
 
-          # Run the linting
-          ruff check .
-
-          # Run the formatting
-          ruff format --check .
+          # Run the pre-commit checks
+          pre-commit run --all-files --show-diff-on-failure
 
   - job: isort
     pool:
@@ -71,7 +69,7 @@ jobs:
       - checkout: azure_template
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.9"
+          versionSpec: "3.11"
       - script: |
           cd ${{ parameters.REPO_NAME }}
 
@@ -95,7 +93,7 @@ jobs:
       - checkout: azure_template
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.9"
+          versionSpec: "3.11"
       - script: |
           cd ${{ parameters.REPO_NAME }}
 
@@ -140,7 +138,7 @@ jobs:
       - checkout: azure_template
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.9"
+          versionSpec: "3.11"
       - script: |
           cd ${{ parameters.REPO_NAME }}
 

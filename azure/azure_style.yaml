@@ -20,6 +20,9 @@ parameters:
   - name: FPRETTIFY
     type: boolean
     default: false
+  - name: RUFF
+    type: boolean
+    default: false
 jobs:
   - job: isort
     pool:
@@ -119,3 +122,31 @@ jobs:
 
           # Exit with an error if any of the tracked files changed
           git diff --summary --exit-code
+
+
+  - job: ruff
+    pool:
+      vmImage: "ubuntu-22.04"
+    timeoutInMinutes: ${{ parameters.TIMEOUT }}
+    continueOnError: ${{ parameters.IGNORE_STYLE }}
+    condition: ${{ parameters.RUFF }}
+    steps:
+      - checkout: self
+      - checkout: azure_template
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.9"
+      - script: |
+          cd ${{ parameters.REPO_NAME }}
+          pip install ruff
+
+          # Check if we have a local file, if not copy over the global
+          if [[ ! -f "ruff.toml" ]]; then
+            cp ../.github/ruff.toml .
+          fi
+
+          # Run the linting
+          ruff check .
+
+          # Run the formatting
+          ruff format .

@@ -14,18 +14,18 @@ jobs:
         run: |
           wget https://raw.githubusercontent.com/mdolab/.github/main/.pre-commit-config.yaml
           pip install pre-commit
-          # If there's already a ruff.toml file in the repo, we should rename the file we're downloading to ruff.toml-global
+
+          # Set the ruff config in the .github repo as the global config, then the local config should extend it by including the line `extend = "~/.config/ruff/ruff.toml"`
+          mkdir -p ~/.config/ruff
           url=https://raw.githubusercontent.com/mdolab/.github/main/ruff.toml
-          if [[ -f "ruff.toml" ]]; then
-            wget $url -O ruff.toml-global;
-          else
-            wget $url
-          fi
+          wget $url -O ~/.config/ruff/ruff.toml
+
           echo "Ruff config:"
-          if [[ -f "ruff.toml-global" ]]; then
-              cat ruff.toml-global
+          cat ~/.config/ruff/ruff.toml
+          if [[ -f "ruff.toml" ]]; then
+              cat ruff.toml
           fi
-          cat ruff.toml
+
       - name: Run pre-commit checks
         run: |
           pre-commit run --all-files --show-diff-on-failure

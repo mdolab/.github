@@ -41,18 +41,15 @@ jobs:
           cp ../.github/.pre-commit-config.yaml .
           pip install pre-commit
 
-          # If there's already a ruff.toml file in the repo, we should rename the global config to ruff.toml-global
-          globalConfigFile="../.github/ruff.toml"
-          if [[ -f "ruff.toml" ]]; then
-            cp $globalConfigFile ruff.toml-global
-          else
-            cp $globalConfigFile .
-          fi
+          # Set the ruff config in the .github repo as the global config, then the local config should extend it by including the line `extend = "~/.config/ruff/ruff.toml"`
+          mkdir -p ~/.config/ruff
+          cp ../.github/ruff.toml ~/.config/ruff/ruff.toml
+
           echo "Ruff config:"
-          if [[ -f "ruff.toml-global" ]]; then
-              cat ruff.toml-global
+          cat ~/.config/ruff/ruff.toml
+          if [[ -f "ruff.toml" ]]; then
+              cat ruff.toml
           fi
-          cat ruff.toml
 
           # Run the pre-commit checks
           pre-commit run --all-files --show-diff-on-failure

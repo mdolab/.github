@@ -71,7 +71,7 @@ jobs:
         condition: and(succeeded(), ne('${{ parameters.BUILD }}', 'None'))
       - script: |
           set -e
-          docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && /bin/bash ${{ parameters.TEST }}"
+          docker exec -e AGENT_NAME="$AGENT_NAME" -e BUILD_REASON=$(Build.Reason) app /bin/bash -c ". ${{ variables.BASHRC }} && cd ${{ variables.DOCKER_WORKING_DIR }} && source ~/MPIOversubscribe.sh && /bin/bash ${{ parameters.TEST }}"
         displayName: Run Tests
         condition: and(succeeded(), ne('${{ parameters.TEST }}', 'None'))
       - script: |

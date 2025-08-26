@@ -6,8 +6,8 @@ line-length = 120
 exclude = [
     ".git",
     "**/__pycache__",
-    "doc/conf.py",
-    "**/__init__.py",
+    "/**/doc/conf.py",
+    "/**/__init__.py",
     "setup.py",
 ]
 

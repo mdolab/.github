@@ -1,4 +1,11 @@
-exclude: ^.*\.(cgns|CGNS)$
+# pre-commit doesn't recognize cgns files as binary and tries to format them, so we need to exclude them.
+# Also exclude Tapenade-generated Fortran files (ending with _d.f90 or _b.f90 in our codes) because we run checks that expect these files to be exactly as Tapenade generated them.
+exclude: |
+            (?x)^(
+                .*\.cgns|
+                ^src\/.*_d\.f90|
+                ^src\/.*_b\.f90
+            )$
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0

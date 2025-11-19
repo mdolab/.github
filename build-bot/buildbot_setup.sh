@@ -83,12 +83,19 @@ echo ""
 echo ""
 echo "Installing github actions runner"
 tar xzf ./actions-runner-linux-x64-${GHA_RUNNER_VERSION}.tar.gz
+
+# Remove configuration if present
+./config.sh remove $TOKEN
 # Create the runner and start the configuration experience
 ./config.sh --url https://github.com/mdolab --token $TOKEN --unattended
+
+# Remove existing service if present
+sudo ./svc.sh uninstall
 # Set the runner as a service
 sudo ./svc.sh install
 # Start the service
 sudo ./svc.sh start
+
 echo ""
 echo ""
 echo ""

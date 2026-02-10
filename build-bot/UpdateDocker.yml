@@ -1,0 +1,88 @@
+---
+- name: Install/Update Docker CE (Official Repo)
+  hosts: bbots_linux
+  become: yes
+  vars:
+    # We define the list of old packages to remove exactly as listed in your command
+    conflicting_packages:
+      - docker.io
+      - docker-compose
+      - docker-compose-v2
+      - docker-doc
+      - podman-docker
+      - containerd
+      - runc
+
+  tasks:
+    # --- NEW: CLEANUP SECTION ---
+    - name: Remove legacy Docker source list file
+      file:
+        path: /etc/apt/sources.list.d/docker.list
+        state: absent
+
+    - name: Remove legacy Docker GPG key (optional but good for hygiene)
+      file:
+        path: /usr/share/keyrings/docker-archive-keyring.gpg
+        state: absent
+    # ----------------------------
+    # 1. Uninstall all conflicting packages
+    # Equivalent to: sudo apt remove ...
+    - name: Remove conflicting/old Docker packages
+      apt:
+        name: "{{ conflicting_packages }}"
+        state: absent
+        purge: yes
+
+    # 2. Setup Keyrings Directory
+    # Equivalent to: sudo install -m 0755 -d /etc/apt/keyrings
+    - name: Create directory for apt keyrings
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    # 3. Download Docker's GPG Key
+    # Equivalent to: sudo curl ... -o /etc/apt/keyrings/docker.asc
+    - name: Download Docker's official GPG key
+      get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: '0644' # Equivalent to chmod a+r
+
+    # 4. Add the Repository
+    # Equivalent to: sudo tee /etc/apt/sources.list.d/docker.sources ...
+    # We use {{ ansible_distribution_release }} to automatically fetch "jammy", "noble", etc.
+    - name: Add Docker repository to Apt sources
+      copy:
+        dest: /etc/apt/sources.list.d/docker.sources
+        content: |
+          Types: deb
+          URIs: https://download.docker.com/linux/ubuntu
+          Suites: {{ ansible_distribution_release }}
+          Components: stable
+          Signed-By: /etc/apt/keyrings/docker.asc
+        mode: '0644'
+
+    # 5. Install Docker
+    # Equivalent to: sudo apt update && sudo apt install ...
+    - name: Install the latest version of Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: latest
+        update_cache: yes
+
+    # 6. Verify Installation
+    # Equivalent to: sudo docker run hello-world
+    - name: Verify Docker installation
+      command: docker run --rm hello-world
+      register: docker_test
+      changed_when: false
+
+    - name: Show verification output
+      debug:
+        msg: "{{ docker_test.stdout_lines }}"

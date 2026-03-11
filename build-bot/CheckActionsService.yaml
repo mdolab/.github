@@ -1,0 +1,20 @@
+---
+- name: Check for Actions Runner Service
+  hosts: bbots_linux
+  gather_facts: no  # Skips gathering OS info to make it run faster
+
+  tasks:
+    - name: Search for the service
+      # We use 'shell' instead of 'command' so we can use the pipe (|)
+      shell: "systemctl list-units --type=service --state=running | grep actions.runner"
+      register: grep_output
+      # Grep returns exit code 1 if nothing is found. 
+      # We tell Ansible: "Only consider this a failure if the code is > 1" (actual errors)
+      failed_when: grep_output.rc > 1
+      changed_when: false
+
+    - name: Display the found line
+      debug:
+        msg: "{{ grep_output.stdout }}"
+      # Only print the message if grep actually found something (return code 0)
+      when: grep_output.rc == 0

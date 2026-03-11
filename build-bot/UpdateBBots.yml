@@ -1,0 +1,35 @@
+---
+- name: Update MDOLAB BuildBots
+  hosts: bbots_linux
+  become: yes  # Requires sudo password
+  timeout: 1200 # 20 minute time limit
+
+  tasks:
+    - name: Update apt repo and cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages (dist-upgrade)
+      apt:
+        upgrade: dist
+
+    - name: Remove useless packages
+      apt:
+        autoclean: yes
+
+    - name: Remove unused dependencies
+      apt:
+        autoremove: yes
+
+    - name: Check for reboot required
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+
+    - name: Reboot if required
+      reboot:
+        msg: "Rebooting for updates"
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+      when: reboot_required_file.stat.exists

@@ -1,10 +1,6 @@
 name: Auto-Release on Version Bump
 
-on:
-  workflow_call:
-    secrets:
-      GITHUB_TOKEN:
-        required: true
+on: workflow_call
 
 # We need write permissions to create tags and releases
 permissions:

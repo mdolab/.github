@@ -1,11 +1,10 @@
 name: Auto-Release on Version Bump
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**/__init__.py' # Only run this check if an __init__.py file is modified, which is where the version to be defined
+  workflow_call:
+    secrets:
+      GITHUB_TOKEN:
+        required: true
 
 # We need write permissions to create tags and releases
 permissions:

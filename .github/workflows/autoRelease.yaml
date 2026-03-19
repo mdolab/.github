@@ -1,0 +1,99 @@
+name: Auto-Release on Version Bump
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/__init__.py' # Only run this check if an __init__.py file is modified, which is where the version to be defined
+
+# We need write permissions to create tags and releases
+permissions:
+  contents: write
+
+jobs:
+  check-and-release:
+    name: Check Version and Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ensure GitHub CLI is Installed
+        run: |
+          if ! command -v gh &> /dev/null; then
+            echo "GitHub CLI not found. Installing via apt..."
+            # 1. Create keyring directory
+            sudo mkdir -p -m 755 /etc/apt/keyrings
+            # 2. Download GitHub's GPG key
+            wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+            # 3. Add the GitHub repo to sources
+            sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            # 4. Update and install
+            sudo apt update
+            sudo apt install gh -y
+          else
+            echo "GitHub CLI is already installed."
+          fi
+
+       # The checkout action is needed to access the repository files, including __init__.py for version extraction
+      - name: Checkout Package Repository
+        uses: actions/checkout@v4
+
+      - name: Extract Version from __init__.py
+        id: get_version
+        run: |
+          # Strip the 'org-name/' prefix to get just the package name
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+
+          # Execute the central script, passing the clean repo name
+          wget https://raw.githubusercontent.com/mdolab/.github/refs/heads/AutoReleaseAction/findVersion.py
+          VERSION=$(python findVersion.py "$REPO_NAME")
+
+          echo "Found version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get Latest Release Tag
+        id: get_latest_release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fetch the latest release, defaulting to v0.0.0 if none exists
+          # -R ensures gh cli context is strictly bound to this repository
+          LATEST_TAG=$(gh release view -R $GITHUB_REPOSITORY --json tagName -q .tagName 2>/dev/null || echo "v0.0.0")
+
+          # Strip the 'v' prefix for a clean comparison
+          LATEST_VERSION="${LATEST_TAG#v}"
+
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Compare Versions and Create Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CURRENT_VERSION: ${{ steps.get_version.outputs.version }}
+          LATEST_VERSION: ${{ steps.get_latest_release.outputs.latest_version }}
+        run: |
+          echo "Latest published release: $LATEST_VERSION"
+          echo "Current file version:     $CURRENT_VERSION"
+
+          if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
+            echo "Versions are identical. No release needed."
+          else
+            # Use 'sort -V' to determine which version string is the highest
+            HIGHEST_VERSION=$(printf '%s\n' "$LATEST_VERSION" "$CURRENT_VERSION" | sort -V | tail -n1)
+
+            if [ "$HIGHEST_VERSION" != "$CURRENT_VERSION" ]; then
+              # This catches typos or regressions where the file version is LOWER than the release
+              echo "::warning::Current version ($CURRENT_VERSION) is lower than the latest release ($LATEST_VERSION). Skipping release."
+
+            else
+              echo "Valid version bump detected ($LATEST_VERSION -> $CURRENT_VERSION)! Creating release..."
+
+              gh release create "v$CURRENT_VERSION" \
+                -R $GITHUB_REPOSITORY \
+                --title "v$CURRENT_VERSION" \
+                --generate-notes \
+                --target main
+
+              echo "Release created successfully."
+            fi
+          fi

@@ -23,6 +23,8 @@ echo ""
 echo "Installing docker"
 sudo apt-get install -yq \
     apt-transport-https \
+    libssl-dev \
+    libffi-dev \
     ca-certificates \
     curl \
     gnupg \

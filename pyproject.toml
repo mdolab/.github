@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mdolab-precommit-hooks"
+version = "1.0.0"
+description = "mdolab's repackaged pre-commit hooks with pinned tools and shared configs."
+requires-python = ">=3.9"
+
+# Intentionally empty. The package itself is pure-stdlib (see cli.py), so the
+# base `pip install` that pre-commit runs for every hook pulls in NO tools.
+# Each hook pins and installs only the tool it needs via additional_dependencies
+# in .pre-commit-hooks.yaml. Enabling only the ruff hooks therefore never
+# installs isort / pylint / clang-format / fprettify.
+dependencies = []
+
+[project.optional-dependencies]
+# Local development / testing convenience only. Consumers never need this --
+# pre-commit installs the per-hook pins from .pre-commit-hooks.yaml. These pins
+# are kept identical to the manifest by tests/test_pin_consistency.py.
+dev = [
+  "ruff==0.15.17",
+  "isort==8.0.1",
+  "pylint==4.0.6",
+  "clang-format==22.1.5",
+  "fprettify==0.3.7",
+  "pytest",
+  "pyyaml",
+  "tomli; python_version < '3.11'",
+]
+
+[project.scripts]
+mdolab-ruff-check   = "cli:ruff_check"
+mdolab-ruff-format  = "cli:ruff_format"
+mdolab-isort        = "cli:isort"
+mdolab-pylint       = "cli:pylint"
+mdolab-clang-format = "cli:clang_format"
+mdolab-fprettify    = "cli:fprettify"
+
+# src-layout: importable code lives under pre-commit/, not the repo root.
+# cli.py is a standalone top-level module (py-modules); _config is a tiny
+# package that exists only to ship the bundled tool configs as package data.
+[tool.setuptools]
+package-dir = {"" = "pre-commit"}
+py-modules = ["cli"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["pre-commit"]
+
+# The shared configs are dotfiles, so the leading-dot glob is required --
+# a bare "*" does not match names beginning with ".".
+[tool.setuptools.package-data]
+_config = ["*", ".*"]

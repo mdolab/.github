@@ -2,8 +2,7 @@
 
 Each entry point:
   1. locates its bundled config, shipped as package data (importlib.resources),
-  2. locates the pinned tool installed in the SAME isolated environment that
-     pre-commit built (beside this interpreter), and
+  2. locates the pinned tool installed in the SAME isolated environment that pre-commit built
   3. execs the tool against the files pre-commit passes as argv.
 
 Nothing here relies on a globally installed tool or on PATH ordering.
@@ -104,19 +103,11 @@ def _ruff(subcommand: str, *extra: str) -> None:
 
 
 def ruff_check() -> None:
-    # --fix / --exit-non-zero-on-fix mirror the CI style hook
-    # (.pre-commit-config.yaml): autofix on commit, but still fail the run when a
-    # fix had to be applied so nothing silently sneaks through.
     _ruff("check", "--fix", "--exit-non-zero-on-fix")
 
 
 def ruff_format() -> None:
     _ruff("format")
-
-
-# --------------------------------------------------------------------------- #
-# the rest: fixed bundled config, no merging
-# --------------------------------------------------------------------------- #
 
 
 def _has_local_isort_config() -> bool:

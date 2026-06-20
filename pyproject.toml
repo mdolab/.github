@@ -20,7 +20,7 @@ dependencies = []
 # pre-commit installs the per-hook pins from .pre-commit-hooks.yaml. These pins
 # are kept identical to the manifest by tests/test_pin_consistency.py.
 dev = [
-  "ruff==0.15.17",
+  "ruff==0.15.16",
   "isort==8.0.1",
   "pylint==4.0.6",
   "clang-format==22.1.5",

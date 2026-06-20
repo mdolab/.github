@@ -24,7 +24,7 @@ done
 # Set some constants
 CLANGFORMAT_CONFIG_FILE=""
 LOCAL_CONFIG_FILE=".clang-format"
-GLOBAL_CONFIG_FILE="../.github/.clang-format"
+GLOBAL_CONFIG_FILE="../.github/pre-commit/_config/.clang-format"
 
 # Initialize variables
 global=0

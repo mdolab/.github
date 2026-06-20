@@ -87,7 +87,7 @@ def _resolve_ruff_config(global_cfg: str) -> tuple[str, bool]:
     return tmp, True
 
 
-def _ruff(subcommand: str) -> None:
+def _ruff(subcommand: str, *extra: str) -> None:
     with _config("ruff.toml") as global_cfg:
         cfg, is_temp = _resolve_ruff_config(global_cfg)
         try:
@@ -95,7 +95,7 @@ def _ruff(subcommand: str) -> None:
             # and ruff checks explicitly-named files even when they match the
             # config's exclude/extend-exclude unless this flag is set. Without
             # it, a consuming repo's excludes are silently ignored on commit.
-            rc = _run("ruff", [subcommand, "--force-exclude", "--config", cfg, *_argv_files()])
+            rc = _run("ruff", [subcommand, *extra, "--force-exclude", "--config", cfg, *_argv_files()])
         finally:
             if is_temp:
                 with contextlib.suppress(FileNotFoundError):
@@ -104,8 +104,10 @@ def _ruff(subcommand: str) -> None:
 
 
 def ruff_check() -> None:
-    # add "--fix" to the arg list here if you want autofix-on-commit
-    _ruff("check")
+    # --fix / --exit-non-zero-on-fix mirror the CI style hook
+    # (.pre-commit-config.yaml): autofix on commit, but still fail the run when a
+    # fix had to be applied so nothing silently sneaks through.
+    _ruff("check", "--fix", "--exit-non-zero-on-fix")
 
 
 def ruff_format() -> None:

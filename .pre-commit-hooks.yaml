@@ -41,7 +41,7 @@
   description: clang-format using mdolab's shared style file.
   entry: mdolab-clang-format
   language: python
-  additional_dependencies: ["clang-format==22.1.5"]
+  additional_dependencies: ["clang-format==10.0.1.1"]
   types_or: [c, c++, cuda]
   require_serial: true
 

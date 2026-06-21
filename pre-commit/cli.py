@@ -153,9 +153,25 @@ def pylint() -> None:
 
 
 def clang_format() -> None:
-    # --style=file:<path> accepts an arbitrary path (need not be named .clang-format)
+    # clang-format < 14 has no `--style=file:<path>`; it only discovers a file
+    # literally named `.clang-format` by walking up from each input file. We pin
+    # clang-format to match the CI version (10.x), so mirror the CI script:
+    #   - prefer the consuming repo's own .clang-format when present, otherwise
+    #   - stage the bundled shared config at the repo root for the run and remove
+    #     it afterward.
+    # pre-commit's cwd is the repo root, an ancestor of every file it passes, so
+    # a .clang-format there is always discovered.
+    staged = os.path.join(os.getcwd(), ".clang-format")  # pre-commit cwd == repo root
+    if os.path.isfile(staged):
+        sys.exit(_run("clang-format", ["-style=file", "-i", *_argv_files()]))
     with _config(".clang-format") as cfg:
-        sys.exit(_run("clang-format", [f"--style=file:{cfg}", "-i", *_argv_files()]))
+        shutil.copyfile(cfg, staged)
+        try:
+            rc = _run("clang-format", ["-style=file", "-i", *_argv_files()])
+        finally:
+            with contextlib.suppress(FileNotFoundError):
+                os.unlink(staged)
+    sys.exit(rc)
 
 
 def fprettify() -> None:

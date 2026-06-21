@@ -110,39 +110,16 @@ def ruff_format() -> None:
     _ruff("format")
 
 
-def _has_local_isort_config() -> bool:
-    """True if the consuming repo defines its own isort configuration.
-
-    Mirrors isort's own discovery (and the CI style job): a dedicated
-    .isort.cfg, or an [isort] section in setup.cfg / tox.ini, or a
-    [tool.isort] table in pyproject.toml. pre-commit runs hooks from the
-    repo root, so we look there.
-    """
-    root = os.getcwd()
-    if os.path.isfile(os.path.join(root, ".isort.cfg")):
-        return True
-    for fname, section in (
-        ("setup.cfg", "[isort]"),
-        ("tox.ini", "[isort]"),
-        ("pyproject.toml", "[tool.isort]"),
-    ):
-        path = os.path.join(root, fname)
-        if os.path.isfile(path):
-            with open(path, encoding="utf-8") as fh:
-                if section in fh.read():
-                    return True
-    return False
-
-
 def isort() -> None:
-    # Prefer the consuming repo's own isort config when present (matching the
-    # CI style job); otherwise impose the shared bundled config.
+    # Prefer the consuming repo's own .isort.cfg when present (matching the CI
+    # style job); otherwise impose the shared bundled config.
     # --filter-files: isort's skip / skip_glob only apply during directory
     # recursion; pre-commit passes an explicit file list, so without this flag
     # skipped files (e.g. __init__.py) would still be sorted. Mirrors ruff's
     # --force-exclude.
-    if _has_local_isort_config():
-        sys.exit(_run("isort", ["--filter-files", *_argv_files()]))
+    local = os.path.join(os.getcwd(), ".isort.cfg")  # pre-commit cwd == repo root
+    if os.path.isfile(local):
+        sys.exit(_run("isort", ["--settings-path", local, "--filter-files", *_argv_files()]))
     with _config(".isort.cfg") as cfg:
         sys.exit(_run("isort", ["--settings-path", cfg, "--filter-files", *_argv_files()]))
 

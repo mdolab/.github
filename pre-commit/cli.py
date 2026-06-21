@@ -66,11 +66,6 @@ def _run_with_local_config(tool: str, config_name: str, flag: str, *extra: str) 
         sys.exit(_run(tool, [flag, cfg, *extra, *_argv_files()]))
 
 
-# --------------------------------------------------------------------------- #
-# ruff: shared base config, optionally extended by a local ./ruff.toml
-# --------------------------------------------------------------------------- #
-
-
 def _resolve_ruff_config(global_cfg: str) -> tuple[str, bool]:
     """Return (config_path, is_temp).
 
@@ -126,8 +121,6 @@ def ruff_format() -> None:
 
 
 def isort() -> None:
-    # Prefer the consuming repo's own .isort.cfg when present (matching the CI
-    # style job); otherwise impose the shared bundled config.
     # --filter-files: isort's skip / skip_glob only apply during directory
     # recursion; pre-commit passes an explicit file list, so without this flag
     # skipped files (e.g. __init__.py) would still be sorted. Mirrors ruff's
@@ -136,18 +129,14 @@ def isort() -> None:
 
 
 def pylint() -> None:
-    # Prefer the consuming repo's own .pylintrc when present; otherwise impose
-    # the shared bundled config.
     _run_with_local_config("pylint", ".pylintrc", "--rcfile")
 
 
 def clang_format() -> None:
     # clang-format < 14 has no `--style=file:<path>`; it only discovers a file
-    # literally named `.clang-format` by walking up from each input file. We pin
-    # clang-format to match the CI version (10.x), so mirror the CI script:
+    # literally named `.clang-format` by walking up from each input file:
     #   - prefer the consuming repo's own .clang-format when present, otherwise
-    #   - stage the bundled shared config at the repo root for the run and remove
-    #     it afterward.
+    #   - stage the bundled shared config at the repo root for the run and remove it afterward.
     # pre-commit's cwd is the repo root, an ancestor of every file it passes, so
     # a .clang-format there is always discovered.
     staged = os.path.join(os.getcwd(), ".clang-format")  # pre-commit cwd == repo root
@@ -164,6 +153,4 @@ def clang_format() -> None:
 
 
 def fprettify() -> None:
-    # Prefer the consuming repo's own .fprettify.rc when present (matching the CI
-    # script); otherwise impose the shared bundled config.
     _run_with_local_config("fprettify", ".fprettify.rc", "-c")

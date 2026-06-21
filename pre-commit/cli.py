@@ -175,5 +175,10 @@ def clang_format() -> None:
 
 
 def fprettify() -> None:
+    # Prefer the consuming repo's own .fprettify.rc when present (matching the CI
+    # script); otherwise impose the shared bundled config.
+    local = os.path.join(os.getcwd(), ".fprettify.rc")  # pre-commit cwd == repo root
+    if os.path.isfile(local):
+        sys.exit(_run("fprettify", ["-c", local, *_argv_files()]))
     with _config(".fprettify.rc") as cfg:
         sys.exit(_run("fprettify", ["-c", cfg, *_argv_files()]))

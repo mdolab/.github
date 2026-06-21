@@ -51,6 +51,21 @@ def _argv_files() -> list[str]:
     return sys.argv[1:]
 
 
+def _run_with_local_config(tool: str, config_name: str, flag: str, *extra: str) -> None:
+    """Run `tool` over pre-commit's file list, preferring a repo-local config.
+
+    The config is passed by path via `flag` (e.g. "-c" or "--settings-path").
+    If the consuming repo ships its own `config_name` at the repo root
+    (pre-commit's cwd), that wins; otherwise the bundled shared config is used.
+    `extra` args are inserted after the config and before the file list.
+    """
+    local = os.path.join(os.getcwd(), config_name)  # pre-commit cwd == repo root
+    if os.path.isfile(local):
+        sys.exit(_run(tool, [flag, local, *extra, *_argv_files()]))
+    with _config(config_name) as cfg:
+        sys.exit(_run(tool, [flag, cfg, *extra, *_argv_files()]))
+
+
 # --------------------------------------------------------------------------- #
 # ruff: shared base config, optionally extended by a local ./ruff.toml
 # --------------------------------------------------------------------------- #
@@ -117,11 +132,7 @@ def isort() -> None:
     # recursion; pre-commit passes an explicit file list, so without this flag
     # skipped files (e.g. __init__.py) would still be sorted. Mirrors ruff's
     # --force-exclude.
-    local = os.path.join(os.getcwd(), ".isort.cfg")  # pre-commit cwd == repo root
-    if os.path.isfile(local):
-        sys.exit(_run("isort", ["--settings-path", local, "--filter-files", *_argv_files()]))
-    with _config(".isort.cfg") as cfg:
-        sys.exit(_run("isort", ["--settings-path", cfg, "--filter-files", *_argv_files()]))
+    _run_with_local_config("isort", ".isort.cfg", "--settings-path", "--filter-files")
 
 
 def pylint() -> None:
@@ -154,8 +165,4 @@ def clang_format() -> None:
 def fprettify() -> None:
     # Prefer the consuming repo's own .fprettify.rc when present (matching the CI
     # script); otherwise impose the shared bundled config.
-    local = os.path.join(os.getcwd(), ".fprettify.rc")  # pre-commit cwd == repo root
-    if os.path.isfile(local):
-        sys.exit(_run("fprettify", ["-c", local, *_argv_files()]))
-    with _config(".fprettify.rc") as cfg:
-        sys.exit(_run("fprettify", ["-c", cfg, *_argv_files()]))
+    _run_with_local_config("fprettify", ".fprettify.rc", "-c")

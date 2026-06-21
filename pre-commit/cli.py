@@ -136,8 +136,9 @@ def isort() -> None:
 
 
 def pylint() -> None:
-    with _config(".pylintrc") as cfg:
-        sys.exit(_run("pylint", ["--rcfile", cfg, *_argv_files()]))
+    # Prefer the consuming repo's own .pylintrc when present; otherwise impose
+    # the shared bundled config.
+    _run_with_local_config("pylint", ".pylintrc", "--rcfile")
 
 
 def clang_format() -> None:

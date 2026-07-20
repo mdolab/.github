@@ -1,0 +1,55 @@
+- id: mdolab-ruff-check
+  name: mdolab ruff (lint)
+  description: >
+    Ruff lint using mdolab's shared ruff.toml. A consuming repo's ./ruff.toml
+    (override keys only) is layered on top via ruff's `extend`.
+  entry: mdolab-ruff-check
+  language: python
+  additional_dependencies: ["ruff==0.15.16"]
+  types_or: [python, pyi]
+  require_serial: true
+
+- id: mdolab-ruff-format
+  name: mdolab ruff (format)
+  description: Ruff formatter using mdolab's shared ruff.toml (extendable locally).
+  entry: mdolab-ruff-format
+  language: python
+  additional_dependencies: ["ruff==0.15.16"]
+  types_or: [python, pyi]
+  require_serial: true
+
+- id: mdolab-isort
+  name: mdolab isort
+  description: isort using mdolab's shared isort.cfg.
+  entry: mdolab-isort
+  language: python
+  additional_dependencies: ["isort==8.0.1"]
+  types: [python]
+  require_serial: true
+
+- id: mdolab-pylint
+  name: mdolab pylint
+  description: pylint using mdolab's shared pylintrc.
+  entry: mdolab-pylint
+  language: python
+  additional_dependencies: ["pylint==4.0.6"]
+  types: [python]
+  require_serial: true
+
+- id: mdolab-clang-format
+  name: mdolab clang-format
+  description: clang-format using mdolab's shared style file.
+  entry: mdolab-clang-format
+  language: python
+  additional_dependencies: ["clang-format==10.0.1.1"]
+  types_or: [c, c++, cuda]
+  require_serial: true
+
+- id: mdolab-fprettify
+  name: mdolab fprettify
+  description: fprettify using mdolab's shared fprettify.rc.
+  entry: mdolab-fprettify
+  language: python
+  additional_dependencies: ["fprettify==0.3.7"]
+  files: '\.([fF]|[fF]9[05]|[fF]0[38])$'
+  require_serial: true

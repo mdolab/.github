@@ -14,6 +14,6 @@ jobs:
         run: |
           # copy over the isort config file
           if [[ ! -f ".isort.cfg" ]]; then
-            wget https://raw.githubusercontent.com/mdolab/.github/main/.isort.cfg
+            wget https://raw.githubusercontent.com/mdolab/.github/main/pre-commit/_config/.isort.cfg
           fi
       - uses: isort/isort-action@master

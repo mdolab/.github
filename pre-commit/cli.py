@@ -1,11 +1,7 @@
-"""Console-script entry points for mdolab's repackaged pre-commit hooks.
+"""Console-script entry points for mdolab's pre-commit hooks.
 
-Each entry point:
-  1. locates its bundled config, shipped as package data (importlib.resources),
-  2. locates the pinned tool installed in the SAME isolated environment that pre-commit built
-  3. execs the tool against the files pre-commit passes as argv.
-
-Nothing here relies on a globally installed tool or on PATH ordering.
+Each entry point runs a pinned tool from the hook's isolated environment with the shared config bundled in
+_config/, or with the consuming repo's own config when one exists at the repo root.
 """
 
 import contextlib
@@ -27,11 +23,9 @@ def _config(name: str):
 
 
 def _tool(name: str) -> str:
-    """Absolute path to a pinned tool installed beside this interpreter.
+    """Absolute path to a tool, preferring the one installed beside this interpreter in the hook environment.
 
-    pre-commit's venv puts the interpreter and the tool console scripts in the
-    same bin/ directory, so resolving relative to sys.executable is exact and
-    PATH-independent. Falls back to PATH only as a courtesy.
+    Falls back to PATH if the tool is not found there.
     """
     bindir = os.path.dirname(sys.executable)
     for candidate in (os.path.join(bindir, name), os.path.join(bindir, name + ".exe")):
@@ -47,36 +41,29 @@ def _run(tool: str, args: list[str]) -> int:
     return subprocess.call([_tool(tool), *args])
 
 
-def _argv_files() -> list[str]:
+def _hook_args() -> list[str]:
+    """Arguments from pre-commit: any `args:` set by the consuming repo, followed by the file list."""
     return sys.argv[1:]
 
 
 def _run_with_local_config(tool: str, config_name: str, flag: str, *extra: str) -> None:
-    """Run `tool` over pre-commit's file list, preferring a repo-local config.
+    """Run `tool` with the repo-root `config_name` if present, else the shared one, passed via `flag`.
 
-    The config is passed by path via `flag` (e.g. "-c" or "--settings-path").
-    If the consuming repo ships its own `config_name` at the repo root
-    (pre-commit's cwd), that wins; otherwise the bundled shared config is used.
-    `extra` args are inserted after the config and before the file list.
+    `extra` args are inserted after the config and before the hook args.
     """
     local = os.path.join(os.getcwd(), config_name)  # pre-commit cwd == repo root
     if os.path.isfile(local):
-        sys.exit(_run(tool, [flag, local, *extra, *_argv_files()]))
+        sys.exit(_run(tool, [flag, local, *extra, *_hook_args()]))
     with _config(config_name) as cfg:
-        sys.exit(_run(tool, [flag, cfg, *extra, *_argv_files()]))
+        sys.exit(_run(tool, [flag, cfg, *extra, *_hook_args()]))
 
 
 def _resolve_ruff_config(global_cfg: str) -> tuple[str, bool]:
-    """Return (config_path, is_temp).
+    """Return (config_path, is_temp) for ruff.
 
-    - No local ./ruff.toml          -> use the shared base directly.
-    - Local ./ruff.toml present     -> synthesize a temp config:
-          extend = '<base>'
-          <local overrides>
-      so the shared base is inherited and the local file layers on top. Ruff
-      does not merge configs implicitly; `extend` is the supported mechanism,
-      and an absolute path sidesteps the unknown pre-commit cache location.
-    - Local file already declares its own top-level `extend` -> respect it.
+    With no local ruff.toml, the shared config is used. A local ruff.toml is layered on top of the shared one by
+    writing a temporary copy with `extend = '<shared path>'` prepended. A local file that already sets its own
+    `extend` is used as-is.
     """
     local = os.path.join(os.getcwd(), "ruff.toml")  # pre-commit cwd == repo root
     if not os.path.isfile(local):
@@ -100,11 +87,8 @@ def _ruff(subcommand: str, *extra: str) -> None:
     with _config("ruff.toml") as global_cfg:
         cfg, is_temp = _resolve_ruff_config(global_cfg)
         try:
-            # --force-exclude: pre-commit always passes an explicit file list,
-            # and ruff checks explicitly-named files even when they match the
-            # config's exclude/extend-exclude unless this flag is set. Without
-            # it, a consuming repo's excludes are silently ignored on commit.
-            rc = _run("ruff", [subcommand, *extra, "--force-exclude", "--config", cfg, *_argv_files()])
+            # --force-exclude: apply exclude/extend-exclude to the explicit file list pre-commit passes
+            rc = _run("ruff", [subcommand, *extra, "--force-exclude", "--config", cfg, *_hook_args()])
         finally:
             if is_temp:
                 with contextlib.suppress(FileNotFoundError):
@@ -121,10 +105,7 @@ def ruff_format() -> None:
 
 
 def isort() -> None:
-    # --filter-files: isort's skip / skip_glob only apply during directory
-    # recursion; pre-commit passes an explicit file list, so without this flag
-    # skipped files (e.g. __init__.py) would still be sorted. Mirrors ruff's
-    # --force-exclude.
+    # --filter-files: apply skip/skip_glob to the explicit file list pre-commit passes
     _run_with_local_config("isort", ".isort.cfg", "--settings-path", "--filter-files")
 
 
@@ -133,19 +114,15 @@ def pylint() -> None:
 
 
 def clang_format() -> None:
-    # clang-format < 14 has no `--style=file:<path>`; it only discovers a file
-    # literally named `.clang-format` by walking up from each input file:
-    #   - prefer the consuming repo's own .clang-format when present, otherwise
-    #   - stage the bundled shared config at the repo root for the run and remove it afterward.
-    # pre-commit's cwd is the repo root, an ancestor of every file it passes, so
-    # a .clang-format there is always discovered.
+    # clang-format < 14 has no `--style=file:<path>` and only finds a `.clang-format` above each input file, so
+    # the shared config is temporarily copied to the repo root unless the repo has its own.
     staged = os.path.join(os.getcwd(), ".clang-format")  # pre-commit cwd == repo root
     if os.path.isfile(staged):
-        sys.exit(_run("clang-format", ["-style=file", "-i", *_argv_files()]))
+        sys.exit(_run("clang-format", ["-style=file", "-i", *_hook_args()]))
     with _config(".clang-format") as cfg:
         shutil.copyfile(cfg, staged)
         try:
-            rc = _run("clang-format", ["-style=file", "-i", *_argv_files()])
+            rc = _run("clang-format", ["-style=file", "-i", *_hook_args()])
         finally:
             with contextlib.suppress(FileNotFoundError):
                 os.unlink(staged)

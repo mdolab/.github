@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "mdolab-precommit-hooks"
 version = "1.0.0"
 description = "mdolab's repackaged pre-commit hooks with pinned tools and shared configs."
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 # Intentionally empty. Deps and pinned versions come from pre-commit.
 dependencies = []

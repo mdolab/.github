@@ -12,25 +12,20 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
-mdolab-ruff-check   = "cli:ruff_check"
-mdolab-ruff-format  = "cli:ruff_format"
-mdolab-isort        = "cli:isort"
-mdolab-pylint       = "cli:pylint"
-mdolab-clang-format = "cli:clang_format"
-mdolab-fprettify    = "cli:fprettify"
+mdolab-ruff-check   = "mdolab_precommit.cli:ruff_check"
+mdolab-ruff-format  = "mdolab_precommit.cli:ruff_format"
+mdolab-isort        = "mdolab_precommit.cli:isort"
+mdolab-pylint       = "mdolab_precommit.cli:pylint"
+mdolab-clang-format = "mdolab_precommit.cli:clang_format"
+mdolab-fprettify    = "mdolab_precommit.cli:fprettify"
 
-# src-layout: importable code lives under pre-commit/, not the repo root.
-# cli.py is a standalone top-level module (py-modules); _config is a tiny
-# package that exists only to ship the bundled tool configs as package data.
+# The pre-commit/ directory is installed as the mdolab_precommit package; _config
+# is a subpackage that only ships the shared tool configs as package data.
 [tool.setuptools]
-package-dir = {"" = "pre-commit"}
-py-modules = ["cli"]
-include-package-data = true
-
-[tool.setuptools.packages.find]
-where = ["pre-commit"]
+package-dir = {"mdolab_precommit" = "pre-commit"}
+packages = ["mdolab_precommit", "mdolab_precommit._config"]
 
 # The shared configs are dotfiles, so the leading-dot glob is required --
 # a bare "*" does not match names beginning with ".".
 [tool.setuptools.package-data]
-_config = ["*", ".*"]
+"mdolab_precommit._config" = ["*", ".*"]

@@ -21,7 +21,7 @@ from importlib.resources import as_file, files
 @contextlib.contextmanager
 def _config(name: str):
     """Yield a real filesystem path to a bundled config file."""
-    resource = files("_config").joinpath(name)
+    resource = files("mdolab_precommit._config").joinpath(name)
     with as_file(resource) as path:
         yield str(path)
 

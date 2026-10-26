@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mdolab-precommit-hooks"
+version = "1.0.0"
+description = "mdolab's repackaged pre-commit hooks with pinned tools and shared configs."
+requires-python = ">=3.10"
+
+# Intentionally empty. Deps and pinned versions come from pre-commit.
+dependencies = []
+
+[project.scripts]
+mdolab-ruff-check   = "mdolab_precommit.cli:ruff_check"
+mdolab-ruff-format  = "mdolab_precommit.cli:ruff_format"
+mdolab-isort        = "mdolab_precommit.cli:isort"
+mdolab-pylint       = "mdolab_precommit.cli:pylint"
+mdolab-clang-format = "mdolab_precommit.cli:clang_format"
+mdolab-fprettify    = "mdolab_precommit.cli:fprettify"
+
+# The pre-commit/ directory is installed as the mdolab_precommit package; _config
+# is a subpackage that only ships the shared tool configs as package data.
+[tool.setuptools]
+package-dir = {"mdolab_precommit" = "pre-commit"}
+packages = ["mdolab_precommit", "mdolab_precommit._config"]
+
+# The shared configs are dotfiles, so the leading-dot glob is required --
+# a bare "*" does not match names beginning with ".".
+[tool.setuptools.package-data]
+"mdolab_precommit._config" = ["*", ".*"]

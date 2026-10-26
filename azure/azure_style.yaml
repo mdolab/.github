@@ -43,7 +43,7 @@ jobs:
 
           # Set the ruff config in the .github repo as the global config, then the local config should extend it by including the line `extend = "~/.config/ruff/ruff.toml"`
           mkdir -p ~/.config/ruff
-          cp ../.github/ruff.toml ~/.config/ruff/ruff.toml
+          cp ../.github/pre-commit/_config/ruff.toml ~/.config/ruff/ruff.toml
 
           echo "Ruff config:"
           cat ~/.config/ruff/ruff.toml
@@ -71,7 +71,7 @@ jobs:
 
           # copy over the isort config file
           if [[ ! -f ".isort.cfg" ]]; then
-            cp ../.github/.isort.cfg .
+            cp ../.github/pre-commit/_config/.isort.cfg .
           fi
 
           pip install wheel
@@ -94,7 +94,7 @@ jobs:
           cd ${{ parameters.REPO_NAME }}
 
           # copy over the pylint config file
-          cp ../.github/.pylintrc .
+          cp ../.github/pre-commit/_config/.pylintrc .
 
           pip install pylint
           find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint

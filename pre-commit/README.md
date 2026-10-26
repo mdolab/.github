@@ -2,7 +2,7 @@
 
 Repackaged pre-commit hooks that run pinned tools against mdolab's shared
 configs, so every consuming repo lints and formats identically without
-relying on globally installed tools or PATH ordering.
+relying on globally installed tools.
 
 ## Using the hooks
 
@@ -46,6 +46,38 @@ A consuming repo can override by placing its own config at the repo root:
 
 Ruff is special: a local `./ruff.toml` is *merged on top of* the shared base.
 The other tools take the local file as-is.
+
+### Extending the ruff config
+
+Only list what differs from the shared config, and do not set `extend` (the hook adds it):
+
+```toml
+extend-exclude = ["src/generated/*.py"]
+
+[lint]
+ignore = ["E741"]
+
+[lint.extend-per-file-ignores]
+"examples/*" = ["D"]
+```
+
+Plain settings (e.g. `line-length`) and `exclude`, `select`, `per-file-ignores` replace the shared value; use
+`extend-exclude`, `extend-select`, `extend-per-file-ignores` to add to it instead. `ignore` adds to the shared
+ignores.
+
+A local `ruff.toml` that already sets `extend` (e.g. the legacy `extend = "~/.config/ruff/ruff.toml"`) is used
+as-is, without the bundled config. Remove that line when migrating a repo to these hooks.
+
+## Passing extra arguments
+
+Each hook forwards `args:` to the tool, after the config and before the file list. Standard pre-commit keys
+such as `files`, `exclude`, and `additional_dependencies` also work:
+
+```yaml
+      - id: mdolab-pylint
+        args: [--disable=fixme]
+        exclude: ^doc/
+```
 
 ## Internals
 

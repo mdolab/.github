@@ -49,8 +49,7 @@ The other tools take the local file as-is.
 
 ## Internals
 
-- [cli.py](cli.py) - the console-script entry points. Each resolves its bundled
-  config (`_config`, shipped as package data) and the pinned tool installed
-  beside `sys.executable` in pre-commit's isolated environment, then execs the
-  tool against the files pre-commit passes as argv.
+- [cli.py](cli.py) - the console-script entry points. Each runs the pinned tool
+  from pre-commit's isolated environment with the local or bundled config,
+  against the files pre-commit passes as argv.
 - [_config/](_config/) - the shared configs, shipped as package data.

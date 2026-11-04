@@ -17,5 +17,5 @@ jobs:
       - name: Run pylint
         run: |
           # copy over the pylint config file
-          wget https://raw.githubusercontent.com/mdolab/.github/main/.pylintrc
+          wget https://raw.githubusercontent.com/mdolab/.github/main/pre-commit/_config/.pylintrc
           find . -type f -name "*.py" -not -path "*/doc/*" | xargs pylint

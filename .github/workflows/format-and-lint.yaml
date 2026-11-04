@@ -17,7 +17,7 @@ jobs:
 
           # Set the ruff config in the .github repo as the global config, then the local config should extend it by including the line `extend = "~/.config/ruff/ruff.toml"`
           mkdir -p ~/.config/ruff
-          url=https://raw.githubusercontent.com/mdolab/.github/main/ruff.toml
+          url=https://raw.githubusercontent.com/mdolab/.github/main/pre-commit/_config/ruff.toml
           wget $url -O ~/.config/ruff/ruff.toml
 
           echo "Ruff config:"

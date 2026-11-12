@@ -29,13 +29,28 @@ sudo apt-get install -yq \
     curl \
     gnupg \
     lsb-release
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo \
-  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Create the keyrings directory if it doesn't exist
+sudo install -m 0755 -d /etc/apt/keyrings
+
+# Download the official Docker GPG key to the new modern location
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
 sudo apt-get update
-sudo apt-get -y install docker-ce docker-ce-cli containerd.io
-# add docker to the sudo group
+sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Create the docker group and add the current user
 sudo groupadd docker -f
 sudo usermod -aG docker $USER
 
@@ -88,6 +103,7 @@ tar xzf ./actions-runner-linux-x64-${GHA_RUNNER_VERSION}.tar.gz
 
 # Remove configuration if present
 ./config.sh remove $TOKEN
+
 # Create the runner and start the configuration experience
 ./config.sh --url https://github.com/mdolab --token $TOKEN --unattended
 
@@ -97,7 +113,6 @@ sudo ./svc.sh uninstall
 sudo ./svc.sh install
 # Start the service
 sudo ./svc.sh start
-
 echo ""
 echo ""
 echo ""
